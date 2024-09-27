@@ -1,6 +1,7 @@
 {
-    "title":"Blog Title",
-    "subTitle":"Blog description",
-    "avatarUrl":"https://github.githubassets.com/favicons/favicon.svg",
+    "title":"Ma's bioinfo notebook",
+    "subTitle":"记录学习点滴",
+    "avatarUrl":"https://avatars.githubusercontent.com/u/103297347?v=4",
+    "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>",
     "GMEEK_VERSION":"last"
 }
