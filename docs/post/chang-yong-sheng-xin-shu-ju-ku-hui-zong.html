@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="## **非肿瘤数据库**
+
+1. MalaCards（综合性的人类疾病数据库网站，收录并整合72个数据库信息）
+https://www.malacards.org
+
+2. peoteomexchange 数据库（蛋白质组学的数据库，包含各种疾病和各种组织）
+http://www.proteomexchange.org/
+
+3. ClinVar数据库（ClinVar是NCBI下的与疾病相关的人类基因组变异数据库）
+https://www.ncbi.nlm.nih.gov/clinvar/
+
+4. ArrayExpress数据库（整合高通量功能基因组数据，是常用的微阵列公共数据库）
+https://www.ebi.ac.uk/arrayexpress/
+
+5. Vesiclepedia数据库（细胞外囊泡分子数据库，数据公开且免费）
+http://microvesicles.org/index.html
+
+6. 在线外泌体数据库exoRBase
+http://www.exorbase.org/exoRBase/toIndex
+
+7. miRBase数据库（专门收录miRNA序列数据）
+http://www.mirbase.org/
+
+  
+
+## **肿瘤信息网站**
+
+[NCI's CancerNet](http://cancernet.nci.nih.gov)  
+美国肿瘤研究所的CancerNet网站为用户和专业人员提供肿瘤相关信息，内容包括肿瘤类型、治疗选择、临床试验、遗传学病因和危险因素、预防、检测、支持资源及其它。">
+<meta property="og:title" content="常用生信数据库汇总">
+<meta property="og:description" content="## **非肿瘤数据库**
+
+1. MalaCards（综合性的人类疾病数据库网站，收录并整合72个数据库信息）
+https://www.malacards.org
+
+2. peoteomexchange 数据库（蛋白质组学的数据库，包含各种疾病和各种组织）
+http://www.proteomexchange.org/
+
+3. ClinVar数据库（ClinVar是NCBI下的与疾病相关的人类基因组变异数据库）
+https://www.ncbi.nlm.nih.gov/clinvar/
+
+4. ArrayExpress数据库（整合高通量功能基因组数据，是常用的微阵列公共数据库）
+https://www.ebi.ac.uk/arrayexpress/
+
+5. Vesiclepedia数据库（细胞外囊泡分子数据库，数据公开且免费）
+http://microvesicles.org/index.html
+
+6. 在线外泌体数据库exoRBase
+http://www.exorbase.org/exoRBase/toIndex
+
+7. miRBase数据库（专门收录miRNA序列数据）
+http://www.mirbase.org/
+
+  
+
+## **肿瘤信息网站**
+
+[NCI's CancerNet](http://cancernet.nci.nih.gov)  
+美国肿瘤研究所的CancerNet网站为用户和专业人员提供肿瘤相关信息，内容包括肿瘤类型、治疗选择、临床试验、遗传学病因和危险因素、预防、检测、支持资源及其它。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/chang-yong-sheng-xin-shu-ju-ku-hui-zong.html">
+<meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
+<title>常用生信数据库汇总</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">常用生信数据库汇总</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/2" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h2><strong>非肿瘤数据库</strong></h2>
+<ol>
+<li>
+<p>MalaCards（综合性的人类疾病数据库网站，收录并整合72个数据库信息）<br>
+<a href="https://www.malacards.org" rel="nofollow">https://www.malacards.org</a></p>
+</li>
+<li>
+<p>peoteomexchange 数据库（蛋白质组学的数据库，包含各种疾病和各种组织）<br>
+<a href="http://www.proteomexchange.org/" rel="nofollow">http://www.proteomexchange.org/</a></p>
+</li>
+<li>
+<p>ClinVar数据库（ClinVar是NCBI下的与疾病相关的人类基因组变异数据库）<br>
+<a href="https://www.ncbi.nlm.nih.gov/clinvar/" rel="nofollow">https://www.ncbi.nlm.nih.gov/clinvar/</a></p>
+</li>
+<li>
+<p>ArrayExpress数据库（整合高通量功能基因组数据，是常用的微阵列公共数据库）<br>
+<a href="https://www.ebi.ac.uk/arrayexpress/" rel="nofollow">https://www.ebi.ac.uk/arrayexpress/</a></p>
+</li>
+<li>
+<p>Vesiclepedia数据库（细胞外囊泡分子数据库，数据公开且免费）<br>
+<a href="http://microvesicles.org/index.html" rel="nofollow">http://microvesicles.org/index.html</a></p>
+</li>
+<li>
+<p>在线外泌体数据库exoRBase<br>
+<a href="http://www.exorbase.org/exoRBase/toIndex" rel="nofollow">http://www.exorbase.org/exoRBase/toIndex</a></p>
+</li>
+<li>
+<p>miRBase数据库（专门收录miRNA序列数据）<br>
+<a href="http://www.mirbase.org/" rel="nofollow">http://www.mirbase.org/</a></p>
+</li>
+</ol>
+<h2><strong>肿瘤信息网站</strong></h2>
+<p><a href="http://cancernet.nci.nih.gov" rel="nofollow">NCI's CancerNet</a><br>
+美国肿瘤研究所的CancerNet网站为用户和专业人员提供肿瘤相关信息，内容包括肿瘤类型、治疗选择、临床试验、遗传学病因和危险因素、预防、检测、支持资源及其它。关于前列腺特异性抗体(PSA)检测的回答，临床研究的发现，护理人员的资源，并且在主页上主要标题的副标题会讨论一些治疗的副作用。</p>
+<p>OncoLink <br>
+<a href="http://www.oncolink.upenn.edu" rel="nofollow">http://www.oncolink.upenn.edu</a><br>
+OncoLink是Pennsylvania大学肿瘤中心关于肿瘤学问题的综合性互联网资源。用户可以通过左侧导航栏找到题目，或拖动滚动条查到如肿瘤特殊类型，医学专业，预防和筛查，临床试验等主题的信息。此站点每天更新，在新闻部分可查到最近的新闻。书籍评述提供由OncoLink 的肿瘤专家推荐的读物。这个站点还包括有关学术会议和肿瘤涉及的经济问题的信息。</p>
+<p>Cancer Information Network <br>
+<a href="http://www.cancernetwork.com" rel="nofollow">http://www.cancernetwork.com</a><br>
+肿瘤信息网络是为医疗专业人员提供全文肿瘤信息综合性站点。用户必须通过左侧导航栏登录后才能获得信息。此网站的设计非常便于浏览。同时提供医学继续教育、会议、研讨会的信息，并能看到一些临床期刊的信息。</p>
+<p>Cancer Education <br>
+<a href="http://www.cancereducation.com" rel="nofollow">http://www.cancereducation.com</a><br>
+Cancer Education.com是一个盈利性机构，主要在国际互联网上为专业人员和患者提供肿瘤相关信息，此网站亦据此分类。网站内容包括在线医学会议、主要肿瘤中心的大巡诊、家庭论坛、圆桌讨论会、目前和既往的活动、继续教育学分、录音和录像及检索功能。患者如果想了解关于某个肿瘤的更多信息，可以在主页点击相应的链接。在那里，他们可以阅读新闻，研究的新方向及其它主题，或直接点击右侧导航栏上的主题可以查询关于某种肿瘤的预防、症状、治疗、援助资源等更多的信息。专业人员在主页观看录像或使用右侧导航栏查询医学继续教育、剂量计算器、治疗总结及更多信息。可以从左侧导航栏查看专业的留言板。此综合站点另一特色就是列出了来自全美的医学顾问。</p>
+<p>CancerSourceMD.com <br>
+<a href="http://www.cancersourcemd.com" rel="nofollow">http://www.cancersourcemd.com</a><br>
+CancerSource是为专业人员、患者、用户及护士创建的提供综合性肿瘤信息的盈利性机构。通过直接与CancerSourceMD的链接，医生可以查寻新闻，药物数据库，患者教育及更多内容。可以通过左侧导航栏进入这些内容，然而有关临床试验，继续医学教育等内容的网页仍在建设中。“患者教育向导”的互动工具使医生能按患者的需要制做提供给患者的资料。在进入患者教育部分内容前，用户必须进行免费注册。</p>
+<p>World Oncology Network <br>
+<a href="http://www.worldoncology.net" rel="nofollow">http://www.worldoncology.net</a><br>
+世界肿瘤学网络(WON)是从事临床肿瘤学、妇科肿瘤学、放射肿瘤学、外科肿瘤学、血液病学及相关领域的医生和护士的世界性网络。此网站的目的是为护理在国外旅行的患者提供方便，WON每年为其会员提供免费指南，它的使用可以通过左侧导航栏在线获得。在导航栏列出的其它主题可以允许用户链接到其它网站的相同主题。作为一个链接到链接的网站，搜集信息资源需要花许多时间并浏览许多网站。此网站还有如下语言的版本：法语、德语、意大利语、挪威语、葡萄牙语、西班牙语和瑞典语。</p>
+<p>Oncology Channel <br>
+<a href="http://www.oncologychannel.com" rel="nofollow">http://www.oncologychannel.com</a><br>
+OncologyChannel.com 来自Healthcommunities.com，为用户提供一个在线肿瘤医学信息互动式的健康网站。此网站包括的信息是医生监控的且包括关于疾病、症状、诊断、治疗、管理和资源的描述。此网站的其它内容包括与医生或患者与患者的在线聊天。右侧导航栏列有新闻、书籍，查找肿瘤学家的链接。</p>
+<p>Biooncology <br>
+<a href="http://www.biooncology.com" rel="nofollow">http://www.biooncology.com</a><br>
+“肿瘤资源中心”提供了在线教学幻灯片及PowerPoint格式的教学幻灯片供下载。“患者咨询资源”提供各种肿瘤相关的主题如单克隆抗体、基本肿瘤治疗和临床综述的实例表。此网站在“特殊肿瘤”下提供了关于乳腺癌和淋巴瘤相关的信息。</p>
+<p>Bloodline <br>
+<a href="http://www.bloodline.net" rel="nofollow">http://www.bloodline.net</a><br>
+Bloodline是一个提供血液病学相关综合信息的站点，设计合理，便于浏览。用户可以在主页上阅读到最近的新闻，通常是以摘要的形式，并提供可下载的PDF格式文件。用户可从左侧导航栏进入许多资源网站。某些区域如“专业”提供专门的血液领域的信息，包括儿科，脐带血等，要求用户填写免费注册表。其它领域包括“特色教育和资源”部分。“特色教育”部分包括在线图谱，可下载的PDF文件格式的会议综述。“资源” 部分包括其它的链接和关于会议，基金和奖学金方面的信息。</p>
+<p>Guide to Internet Resources for Cancer <br>
+<a href="http://www.cancerindex.org/clinks1.htm" rel="nofollow">http://www.cancerindex.org/clinks1.htm</a><br>
+互联网癌症资源向导是国际互联网上通往肿瘤相关网站和主页的门户。用户先选择他们感兴趣的部分包括患者、家庭和公众、专业人员和研究人员。在感兴趣的领域下的链接按疾病的种类，专业和其它副标题进行分类。从那里，用户可以在副标题下链接到感兴趣的网站。</p>
+<p>Cancerlinks <br>
+<a href="http://www.cancerlinks.org" rel="nofollow">http://www.cancerlinks.org</a><br>
+Cancerlinks网站由一位炎性乳腺癌的生存者维护，它的使命是为了在互联网上发现肿瘤相关信息更容易。因此，它是链接到某种肿瘤信息的门户并且提供到其它有关此疾病状况网站的链接。用户只需要在某个感兴趣的肿瘤项目上点击，下拉滚动条下查寻所列的网站，包括不同语言的网站。</p>
+<p>Bioinfoseek <br>
+<a href="http://www.bioinfoseek.com" rel="nofollow">http://www.bioinfoseek.com</a><br>
+进入Bioinfoseek.com 网站并且从列表上选择你要进入的部分。BioInformation列出了在左侧导航栏上目录与其它生物技术相关的网站的连接. 从此页面，用户能检索超过3000多个有关生物技术公司、学会、法规资源、研究资源和聊天室的网站。Bioinfoseek 的BioCareer部分列出了与生物技术方面职业相关网站的连接。BioEvents部分列出了与在线大会日程，新闻，期刊的链接。</p>
+<h2><strong>单细胞数据库</strong></h2>
+<p>Human cell atlas（HCA）：人类细胞图谱计划。聚焦人正常组织，以项目名展现</p>
+<p><a href="https://data.humancellatlas.org/" rel="nofollow">https://data.humancellatlas.org/</a></p>
+<p>Jingle Bells：根据单细胞文献将单细胞数据划分为免疫和非免疫类</p>
+<p><a href="http://jinglebells.bgu.ac.il/" rel="nofollow">http://jinglebells.bgu.ac.il/</a></p>
+<p>CancerSEA：第一个专门解析癌症单细胞状态图谱的数据库</p>
+<p><a href="http://biocc.hrbmu.edu.cn/CancerSEA/" rel="nofollow">http://biocc.hrbmu.edu.cn/CancerSEA/</a></p>
+<p>Cell Blast：用于细胞类型鉴定和注释</p>
+<p><a href="https://cblast.gao-lab.org/" rel="nofollow">https://cblast.gao-lab.org/</a></p>
+<p>scTPA：单细胞转录组生物途径注释工具</p>
+<p><a href="http://sctpa.bio-data.cn:8888/sctpa/" rel="nofollow">http://sctpa.bio-data.cn:8888/sctpa/</a></p>
+<p>PanglaoDB：单细胞转录组数据库</p>
+<p><a href="https://panglaodb.se/index.html" rel="nofollow">https://panglaodb.se/index.html</a></p>
+<p>SC2disease：用于疾病分析</p>
+<p><a href="http://easybioai.com/sc2disease/" rel="nofollow">http://easybioai.com/sc2disease/</a></p>
+<p>CellMarkrer：整理人类158种组织、467个细胞类型的13605个Marker基因</p>
+<p><a href="http://bio-bigdata.hrbmu.edu.cn/CellMarker/" rel="nofollow">http://bio-bigdata.hrbmu.edu.cn/CellMarker/</a></p>
+<p>scQuery：对比分析单细胞转录组数据</p>
+<p><a href="https://scquery.cs.cmu.edu/" rel="nofollow">https://scquery.cs.cmu.edu/</a></p>
+<p>BloodSpot：健康和血液病单细胞转录组数据库</p>
+<p><a href="http://servers.binf.ku.dk/bloodspot/" rel="nofollow">http://servers.binf.ku.dk/bloodspot/</a></p>
+<p>SCPortalen：日本单细胞测序数据库</p>
+<p><a href="http://single-cell.clst.riken.jp/" rel="nofollow">http://single-cell.clst.riken.jp/</a></p>
+<p>scRNASeqDB：专门收集人类单细胞测序的数据库，涵盖200种细胞系和14000个样本</p>
+<p><a href="https://bioinfo.uth.edu/scrnaseqdb/" rel="nofollow">https://bioinfo.uth.edu/scrnaseqdb/</a></p>
+<p>Single Cell Portal：目前收录99个study中的340万种细胞</p>
+<p><a href="https://singlecell.broadinstitute.org/single_cell" rel="nofollow">https://singlecell.broadinstitute.org/single_cell</a></p>
+<p>SCDevDB：深度组学数据</p>
+<p><a href="https://scdevdb.deepomics.org/" rel="nofollow">https://scdevdb.deepomics.org/</a></p>
+<p>SignatureDB：单细胞标记</p>
+<p><a href="https://singlecell.broadinstitute.org/single_cell" rel="nofollow">https://singlecell.broadinstitute.org/single_cell</a></p>
+<p>KIT：肾脏单细胞数据库：</p>
+<p><a href="http://humphreyslab.com/SingleCell/" rel="nofollow">http://humphreyslab.com/SingleCell/</a></p>
+<p>血管单细胞数据库：</p>
+<p><a href="http://betsholtzlab.org/VascularSingleCells/database.html" rel="nofollow">http://betsholtzlab.org/VascularSingleCells/database.html</a></p>
+<p>脑细胞数据库：</p>
+<p><a href="https://web.stanford.edu/group/barres_lab/brain_rnaseq.html" rel="nofollow">https://web.stanford.edu/group/barres_lab/brain_rnaseq.html</a></p>
+<p>Single Cell Expression Atlas：单细胞表达图谱</p>
+<p><a href="https://www.ebi.ac.uk/gxa/sc/home" rel="nofollow">https://www.ebi.ac.uk/gxa/sc/home</a></p>
+<p>非小细胞肺癌数据库（不错的网站，亲测）</p>
+<p><a href="http://lung.cancer-pku.cn/index.php" rel="nofollow">http://lung.cancer-pku.cn/index.php</a></p>
+<h2><strong>免疫分析数据库</strong></h2>
+<p>TIMER（免疫浸润分析首选）</p>
+<p><a href="https://cistrome.shinyapps.io/timer/" rel="nofollow">https://cistrome.shinyapps.io/timer/</a></p>
+<p>TISIDB（全景式反应与免疫分子的关系，与TIMER呼应，次选）</p>
+<p><a href="http://cis.hku.hk/TISIDB/" rel="nofollow">http://cis.hku.hk/TISIDB/</a></p>
+<p>Kaplan-Meier Plotter（结合TIMER分析肿瘤微环境中的免疫细胞浸润情况）</p>
+<p><a href="http://kmplot.com/analysis/" rel="nofollow">http://kmplot.com/analysis/</a></p>
+<p>CIBERSORT（注册和R语言基础）</p>
+<p><a href="https://cibersort.stanford.edu/" rel="nofollow">https://cibersort.stanford.edu/</a></p>
+<p>EPIC（上传数据，R语言基础）</p>
+<p><a href="https://gfellerlab.shinyapps.io/EPIC_1-1/" rel="nofollow">https://gfellerlab.shinyapps.io/EPIC_1-1/</a></p>
+<p>Immune CellAI（上传数据，R语言基础）</p>
+<p><a href="http://bioinfo.life.hust.edu.cn/web/ImmuCellAI/" rel="nofollow">http://bioinfo.life.hust.edu.cn/web/ImmuCellAI/</a></p>
+<p>ABIS（上传数据，最好有R语言基础）</p>
+<p><a href="https://giannimonaco.shinyapps.io/ABIS/" rel="nofollow">https://giannimonaco.shinyapps.io/ABIS/</a></p>
+<h2><strong>相关分析数据库</strong></h2>
+<p>Kaplan-Meier Plotter（临床相关性分析权威数据库，推荐）</p>
+<p><a href="http://kmplot.com/analysis/" rel="nofollow">http://kmplot.com/analysis/</a></p>
+<p>GEPIA（病理分期相关性分析）</p>
+<p><a href="http://gepia.cancer-pku.cn/detail.php?gene=&amp;clicktag=survival" rel="nofollow">http://gepia.cancer-pku.cn/detail.php?gene=&amp;clicktag=survival</a></p>
+<p>UALCAN（种族、年龄、吸烟、突变等相关性分析，与km plotter的结果呼应）</p>
+<p><a href="http://ualcan.path.uab.edu/" rel="nofollow">http://ualcan.path.uab.edu/</a></p>
+<p>Coexpedia数据库（共表达分析）</p>
+<p><a href="http://www.coexpedia.org/search.php" rel="nofollow">http://www.coexpedia.org/search.php</a></p>
+<p>TIMER数据库（免疫细胞分子共表达分析）</p>
+<p><a href="https://cistrome.shinyapps.io/timer/" rel="nofollow">https://cistrome.shinyapps.io/timer/</a></p>
+<p>TISIDB数据库（基因表达与全死亡率、病理分期和临床分级）</p>
+<p><a href="http://cis.hku.hk/TISIDB/" rel="nofollow">http://cis.hku.hk/TISIDB/</a></p>
+<p>STRING（相互作用分子的分析）</p>
+<p><a href="https://string-db.org/cgi/input.pl?sessionId=iCNtss66oYVc&amp;input_page_show_search=on" rel="nofollow">https://string-db.org/cgi/input.pl?sessionId=iCNtss66oYVc&amp;input_page_show_search=on</a></p>
+<p>cBioPortal（Top50临近基因的相互作用分析）</p>
+<p><a href="https://www.cbioportal.org/" rel="nofollow">https://www.cbioportal.org/</a></p>
+<h2><strong>生存分析数据库</strong></h2>
+<p>Kaplan-Meier Plotter数据库（生存分析经典数据库，首选）</p>
+<p><a href="http://kmplot.com/analysis/" rel="nofollow">http://kmplot.com/analysis/</a></p>
+<p>PrognoScan数据库（生存分析信息最全面的数据库，次选）</p>
+<p><a href="http://dna00.bio.kyutech.ac.jp/PrognoScan/index.html" rel="nofollow">http://dna00.bio.kyutech.ac.jp/PrognoScan/index.html</a></p>
+<p>GEPIA（国人之光，相关性分析是特色）</p>
+<p><a href="http://gepia.cancer-pku.cn/detail.php?gene=&amp;clicktag=survival" rel="nofollow">http://gepia.cancer-pku.cn/detail.php?gene=&amp;clicktag=survival</a></p>
+<p>UALCAN（甲基化是特色）</p>
+<p><a href="http://ualcan.path.uab.edu/" rel="nofollow">http://ualcan.path.uab.edu/</a></p>
+<p>Oncolnc数据库（连mRNA, miRNA, or lncRNA也可以做生存分析）</p>
+<p><a href="http://www.oncolnc.org/" rel="nofollow">http://www.oncolnc.org/</a></p>
+<p>cBioPortal（组学分析神器也能做生存分析）</p>
+<p><a href="https://www.cbioportal.org/" rel="nofollow">https://www.cbioportal.org/</a></p>
+<h2><strong>差异分析数据库</strong></h2>
+<p>oncomine数据库（差异分析首选）</p>
+<p><a href="https://www.oncomine.org/resource/main.html" rel="nofollow">https://www.oncomine.org/resource/main.html</a></p>
+<p>GEPIA数据库（共表达是特色）</p>
+<p><a href="http://gepia.cancer-pku.cn/index.html" rel="nofollow">http://gepia.cancer-pku.cn/index.html</a></p>
+<p>TIMER（免疫浸润分析是特色）</p>
+<p><a href="https://cistrome.shinyapps.io/timer/" rel="nofollow">https://cistrome.shinyapps.io/timer/</a></p>
+<p>HCCDB（肝癌数据库）</p>
+<p><a href="http://lifeome.net/database/hccdb/home.html" rel="nofollow">http://lifeome.net/database/hccdb/home.html</a></p>
+<p>UALCAN（甲基化是特色）</p>
+<p><a href="http://ualcan.path.uab.edu/" rel="nofollow">http://ualcan.path.uab.edu/</a></p>
+<p>CCLE（基因在细胞系的表达）</p>
+<p><a href="https://portals.broadinstitute.org/ccle/" rel="nofollow">https://portals.broadinstitute.org/ccle/</a></p>
+<p>THE HUMAN PROTEIN ATLAS  （人类蛋白图谱）</p>
+<p><a href="https://www.proteinatlas.org/" rel="nofollow">https://www.proteinatlas.org/</a></p>
+<p>Gene Expression Omnibus  （基因表达数据库，R语言基础）</p>
+<p><a href="https://www.ncbi.nlm.nih.gov/geo/" rel="nofollow">https://www.ncbi.nlm.nih.gov/geo/</a></p>
+<h2><strong>综合性肿瘤数据库</strong></h2>
+<p>TCGA（The cancer genome atlas），最常用的肿瘤数据库</p>
+<p><a href="https://portal.gdc.cancer.gov/" rel="nofollow">https://portal.gdc.cancer.gov/</a></p>
+<p>ICGC（International Cancer Genome Consortium），肿瘤基因组异常数据库</p>
+<p><a href="https://daco.icgc.org/" rel="nofollow">https://daco.icgc.org/</a></p>
+<p>COSMIC：<br>
+<a href="https://cancer.sanger.ac.uk/cosmic/" rel="nofollow">https://cancer.sanger.ac.uk/cosmic/</a><br>
+全球最全面的体细胞突变数据库，用于探索人类癌症中体细胞突变的影响。</p>
+<p>cBioPortal：<br>
+<a href="https://www.cbioportal.org/" rel="nofollow">https://www.cbioportal.org/</a></p>
+<p>综合展示体细胞突变、DNA拷贝数改变、m/miRNA表达量、甲基化及临床数据等。</p>
+<p>UCSC Cancer Genomics Browser：<br>
+<a href="http://genome.ucsc.edu/" rel="nofollow">http://genome.ucsc.edu/</a></p>
+<p>全面分析癌症基因组和临床数据的数据库。</p>
+<p>canEvolve：<br>
+<a href="http://www.canevolve.org/" rel="nofollow">http://www.canevolve.org/</a></p>
+<p>对肿瘤基因组数据进行综合分析和结果查询的数据库。</p>
+<p>CGWB(Cancer Genome Workbench )</p>
+<p><a href="https://www.g6g-softwaredirectory.com/bio/genomics/genetic-analysis/20773-CGWB.php" rel="nofollow">https://www.g6g-softwaredirectory.com/bio/genomics/genetic-analysis/20773-CGWB.php</a></p>
+<p>综合分析网络数据库的网站。</p>
+<h2><strong>肿瘤基因组数据库</strong></h2>
+<p>ArrayMap：<br>
+<a href="https://arraymap.progenetix.org/" rel="nofollow">https://arraymap.progenetix.org/</a></p>
+<p>BioMuta:<br>
+<a href="https://hive.biochemistry.gwu.edu/biomuta/norecord" rel="nofollow">https://hive.biochemistry.gwu.edu/biomuta/norecord</a></p>
+<p>BioMuta是一个单核苷酸变异(SNV)和疾病关联数据库。</p>
+<p>Cancer Hotspots：<br>
+<a href="https://www.cancerhotspots.org/#/home" rel="nofollow">https://www.cancerhotspots.org/#/home</a></p>
+<p>肿瘤热点突变数据库，已确定1165个具有统计学意义的热点突变。</p>
+<p>Mitelman Database：<br>
+<a href="https://mitelmandatabase.isb-cgc.org/" rel="nofollow">https://mitelmandatabase.isb-cgc.org/</a></p>
+<p>染色体畸变和基因融合数据库。</p>
+<p>SomamiR：<br>
+<a href="http://compbio.uthsc.edu/SomamiR/" rel="nofollow">http://compbio.uthsc.edu/SomamiR/</a></p>
+<p>miRNA癌体细胞突变及其靶点的数据库。</p>
+<p>CGP (The Cancer Genome Project)<br>
+<a href="https://cancer.sanger.ac.uk/cosmic" rel="nofollow">https://cancer.sanger.ac.uk/cosmic</a></p>
+<p>收录体细胞突变和肿瘤发生相关基因的数据库。</p>
+<h2><strong>遗传变异数据库</strong></h2>
+<p>ClinVar：NCBI主办的与疾病相关的人类基因组变异数据库。<br>
+<a href="https://www.ncbi.nlm.nih.gov/clinvar/" rel="nofollow">https://www.ncbi.nlm.nih.gov/clinvar/</a></p>
+<p>dbVar：NCBI的基因组结构变异数据库。<br>
+<a href="http://www.ncbi.nlm.nih.gov/dbvar" rel="nofollow">http://www.ncbi.nlm.nih.gov/dbvar</a></p>
+<p>DECIPHER：DECIPHER被用来储存遗传变异及其相关表型的数据库。<br>
+<a href="https://decipher.sanger.ac.uk/" rel="nofollow">https://decipher.sanger.ac.uk/</a></p>
+<p>DGV (Database of Genomic Variants)：基因组结构变异。<br>
+<a href="http://dgv.tcag.ca/dgv/app/home" rel="nofollow">http://dgv.tcag.ca/dgv/app/home</a></p>
+<p>DGVa (The Database of Genomic Variants archive)：<br>
+<a href="http://www.ebi.ac.uk/dgva" rel="nofollow">http://www.ebi.ac.uk/dgva</a></p>
+<p>提供所有物种中公开可用的基因组结构变异体的存档、附加和分布的知识库。</p>
+<p>EGA（European Genome-phenome Archive）：<br>
+<a href="https://ega-archive.org/" rel="nofollow">https://ega-archive.org/</a></p>
+<p>遗传和表型数据库。</p>
+<p>gnomAD：<br>
+<a href="https://gnomad.broadinstitute.org/" rel="nofollow">https://gnomad.broadinstitute.org/</a></p>
+<p>HMGD :<br>
+<a href="http://www.hgmd.cf.ac.uk/ac/index.php" rel="nofollow">http://www.hgmd.cf.ac.uk/ac/index.php</a></p>
+<p>全称Human Gene Mutation Database, 是一个全面的基因生殖系突变的数据库。</p>
+<p>MoKCa：Mutations, Oncogenes, Knowledge &amp; Cancer</p>
+<p><a href="http://strubiol.icr.ac.uk/extra/mokca/" rel="nofollow">http://strubiol.icr.ac.uk/extra/mokca/</a></p>
+<p>从结构上和功能上注释，并在可能的情况下预测突变与癌症相关的表型。</p>
+<p>RefSeqGene：<br>
+<a href="https://www.ncbi.nlm.nih.gov/refseq/rsg/" rel="nofollow">https://www.ncbi.nlm.nih.gov/refseq/rsg/</a></p>
+<p>HRC：<br>
+<a href="http://www.haplotype-reference-consortium.org/" rel="nofollow">http://www.haplotype-reference-consortium.org/</a></p>
+<p>大型的人类单倍型参考背景数据库。 </p>
+<p>dbSNP：<br>
+<a href="https://www.ncbi.nlm.nih.gov/SNP/" rel="nofollow">https://www.ncbi.nlm.nih.gov/SNP/</a></p>
+<p>不同物种内部和跨物种的遗传变异的免费公共档案。</p>
+<p>HGVS：<br>
+<a href="http://www.hgvs.org/" rel="nofollow">http://www.hgvs.org/</a></p>
+<p>该数据库旨在促进发现和表征基因组变异。</p>
+<h2><strong>肿瘤DNA甲基化数据库</strong></h2>
+<p>MethHC：<br>
+<a href="http://methhc.mbc.nctu.edu.tw" rel="nofollow">http://methhc.mbc.nctu.edu.tw</a></p>
+<p>专注于人类疾病DNA甲基化的数据库。</p>
+<p>MethyCancer：<br>
+<a href="http://methycancer.psych.ac.cn/" rel="nofollow">http://methycancer.psych.ac.cn/</a></p>
+<p>研究DNA甲基化、基因表达与癌症相互作用的数据库。</p>
+<p>MethDB：<br>
+<a href="http://www.methdb.net/" rel="nofollow">http://www.methdb.net/</a></p>
+<p>该数据库的未来发展将集中于环境对DNA甲基化的影响。</p>
+<p>NGSmethDB：<br>
+<a href="http://www.methdb.net/" rel="nofollow">http://www.methdb.net/</a></p>
+<p>NGSmethDB存储了由亚硫酸氢盐测序技术获得的短读数据集生成的甲基化数据。</p>
+<p>PubMeth：<br>
+<a href="http://www.pubmeth.org/" rel="nofollow">http://www.pubmeth.org/</a></p>
+<p>整合文献中与癌症相关的甲基化数据。</p>
+<p>SurvivalMeth：<br>
+<a href="http://bio-bigdata.hrbmu.edu.cn/survivalmeth" rel="nofollow">http://bio-bigdata.hrbmu.edu.cn/survivalmeth</a>  </p>
+<p>哈尔滨医科大学李霞教授团队开发的数据库。</p>
+<p>MethDB（DNA Methylation database）数据库: <br>
+<a href="http://www.methdb.de" rel="nofollow">http://www.methdb.de</a></p>
+<p>包含多种组织、多种表型的甲基化模式、甲基化谱和总甲基化内容的数据库。</p>
+<p>DiseaseMeth2: <br>
+<a href="http://bioinfo.hrbmu.edu.cn/diseasemeth%C2%A0" rel="nofollow">http://bioinfo.hrbmu.edu.cn/diseasemeth </a></p>
+<p>人类疾病甲基化数据库。</p>
+<p>MethSurv：<br>
+<a href="https://biit.cs.ut.ee/methsurv/%C2%A0" rel="nofollow">https://biit.cs.ut.ee/methsurv/ </a></p>
+<p>可用于探索与癌症患者生存相关的甲基化生物标记物。</p>
+<p>MethBank：<br>
+<a href="http://bigd.big.ac.cn/methbank" rel="nofollow">http://bigd.big.ac.cn/methbank</a></p>
+<p>中国科学院研发的甲基化数据库。</p>
+<p>Lnc2Meth:<a href="http://www.bio-bigdata.com/Lnc2Meth/%C2%A0" rel="nofollow">http://www.bio-bigdata.com/Lnc2Meth/ </a></p>
+<p>哈尔滨医科大学李霞课题组开发，用于研究lncRNA与DNA甲基化调控关联的数据库。</p>
+<p>MEXPRESS: <br>
+<a href="https://mexpress.be/" rel="nofollow">https://mexpress.be/</a></p>
+<p>一个可视化TCGA的DNA甲基化，表达和临床数据，以及它们之间的工具。</p>
+<p>EWAS（Epigenome-wide Association Study）</p>
+<p><a href="https://bigd.big.ac.cn/ewas/datahub/index" rel="nofollow">https://bigd.big.ac.cn/ewas/datahub/index</a></p>
+<p>中国科学院开发的数据库。</p>
+<p>IHEC Data Portal：<br>
+<a href="https://epigenomesportal.ca/ihec/" rel="nofollow">https://epigenomesportal.ca/ihec/</a></p>
+<p>网站提供来自七个国际联盟——ENCODE、NIH Roadmap、CEEHRC、Blueprint、DEEP、AMED-CREST和KNIH——的数据，包括来自600多个不同组织的7000多个表观基因组参考数据集。</p>
+<p>Blueprint Data Analysis Portal：<br>
+<a href="http://blueprint-data.bsc.es" rel="nofollow">http://blueprint-data.bsc.es</a></p>
+<p>可视化展示血细胞表观基因组和转录组的数据库。</p>
+<p>eFORGE：<br>
+<a href="http://eforge.cs.ucl.ac.uk/" rel="nofollow">http://eforge.cs.ucl.ac.uk/</a></p>
+<p>可从表观基因组关联分析中筛选与疾病相关细胞类型的数据库。</p>
+<p>iMETHYL：<br>
+<a href="http://imethyl.iwate-megabank.org/index.html" rel="nofollow">http://imethyl.iwate-megabank.org/index.html</a></p>
+<p>大约100名受试者CD4+T淋巴细胞、单核细胞和中性粒细胞的全DNA甲基化、全基因组和全转录组信息的数据库。</p>
+<p>HeteroMeth：<br>
+<a href="http://qianlab.genetics.ac.cn/HeteroMeth" rel="nofollow">http://qianlab.genetics.ac.cn/HeteroMeth</a></p>
+<p>中国科学院开发的首个DNA甲基化异质性数据库。</p>
+<p>Whistle：<br>
+<a href="http://180.208.58.19/whistle/index.html" rel="nofollow">http://180.208.58.19/whistle/index.html</a></p>
+<p>预测转录组m6A RNA甲基化位点的数据库。</p>
+<p>RMBase v2.0：<br>
+<a href="http://rna.sysu.edu.cn/rmbase/%C2%A0" rel="nofollow">http://rna.sysu.edu.cn/rmbase/ </a></p>
+<p>用于探索RNA转录后修饰及其与miRNA结合、疾病相关的单核苷酸多态性(SNPs)和RNA结合蛋白(RBPs)关系的数据库。</p>
+<p>MeT-DB V2.0: <br>
+<a href="http://www.xjtlu.edu.cn/metdb2%C2%A0" rel="nofollow">http://www.xjtlu.edu.cn/metdb2 </a></p>
+<p>该数据库收集了8个m6A相关调控因子（FTO, KIAA1429, METTL14, METTL3, WTAP, HNRNPC, YTHDC1, YTHDF1）的 ParCLIP-seq 和 MeRIP-seq 数据。</p>
+<p>REPIC (RNA EPItranscriptome Collection)：<br>
+<a href="https://repicmod.uchicago.edu/repic" rel="nofollow">https://repicmod.uchicago.edu/repic</a></p>
+<p>完整展示m6A甲基化位点图谱的数据库。</p>
+<p>m6A2Target：<br>
+<a href="http://m6a2target.canceromics.org/#/%C2%A0" rel="nofollow">http://m6a2target.canceromics.org/#/ </a></p>
+<p>完整展示m6A修饰writers, erasers 和readers (WERs)靶基因的数据库。</p>
+<h2><strong>肿瘤转录组数据库</strong></h2>
+<p>Oncomine：<br>
+<a href="https://www.oncomine.org/" rel="nofollow">https://www.oncomine.org/</a></p>
+<p>GEO（Gene Expression Omnibus）：<br>
+<a href="https://www.ncbi.nlm.nih.gov/gds" rel="nofollow">https://www.ncbi.nlm.nih.gov/gds</a></p>
+<p>ArrayExpress：<br>
+<a href="https://www.ebi.ac.uk/arrayexpress/" rel="nofollow">https://www.ebi.ac.uk/arrayexpress/</a></p>
+<p>ChiTaRS：<br>
+<a href="http://chitars.md.biu.ac.il/" rel="nofollow">http://chitars.md.biu.ac.il/</a></p>
+<p>miRCancer：<br>
+<a href="http://mircancer.ecu.edu/" rel="nofollow">http://mircancer.ecu.edu/</a></p>
+<p>人类癌症中microRNA表达谱的数据库。</p>
+<p>OncomiRDB：收录癌症中miRNA失调的数据库。<br>
+<a href="http://www.oncomir.org/" rel="nofollow">http://www.oncomir.org/</a></p>
+<p>UALCAN：<br>
+<a href="http://ualcan.path.uab.edu/index.html" rel="nofollow">http://ualcan.path.uab.edu/index.html</a></p>
+<p>CRN (Cancer RNA-Seq Nexus)：<br>
+<a href="http://syslab4.nchu.edu.tw/" rel="nofollow">http://syslab4.nchu.edu.tw/</a></p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Blog Title</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+
+
+</html>

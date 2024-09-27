@@ -1,2 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Blog Title</title><link>https://bionoob7.github.io</link><description>Blog description</description><copyright>Blog Title</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://github.githubassets.com/favicons/favicon.svg</url><title>avatar</title><link>https://bionoob7.github.io</link></image><lastBuildDate>Fri, 27 Sep 2024 13:31:30 +0000</lastBuildDate><managingEditor>Blog Title</managingEditor><ttl>60</ttl><webMaster>Blog Title</webMaster><item><title>HELLO WORLD</title><link>https://bionoob7.github.io/post/HELLO%20WORLD.html</link><description>hello world。</description><guid isPermaLink="true">https://bionoob7.github.io/post/HELLO%20WORLD.html</guid><pubDate>Fri, 27 Sep 2024 13:31:03 +0000</pubDate></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Blog Title</title><link>https://bionoob7.github.io</link><description>Blog description</description><copyright>Blog Title</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://github.githubassets.com/favicons/favicon.svg</url><title>avatar</title><link>https://bionoob7.github.io</link></image><lastBuildDate>Fri, 27 Sep 2024 13:37:43 +0000</lastBuildDate><managingEditor>Blog Title</managingEditor><ttl>60</ttl><webMaster>Blog Title</webMaster><item><title>常用生信数据库汇总</title><link>https://bionoob7.github.io/post/chang-yong-sheng-xin-shu-ju-ku-hui-zong.html</link><description>## **非肿瘤数据库**&#13;
+&#13;
+1. MalaCards（综合性的人类疾病数据库网站，收录并整合72个数据库信息）&#13;
+https://www.malacards.org&#13;
+&#13;
+2. peoteomexchange 数据库（蛋白质组学的数据库，包含各种疾病和各种组织）&#13;
+http://www.proteomexchange.org/&#13;
+&#13;
+3. ClinVar数据库（ClinVar是NCBI下的与疾病相关的人类基因组变异数据库）&#13;
+https://www.ncbi.nlm.nih.gov/clinvar/&#13;
+&#13;
+4. ArrayExpress数据库（整合高通量功能基因组数据，是常用的微阵列公共数据库）&#13;
+https://www.ebi.ac.uk/arrayexpress/&#13;
+&#13;
+5. Vesiclepedia数据库（细胞外囊泡分子数据库，数据公开且免费）&#13;
+http://microvesicles.org/index.html&#13;
+&#13;
+6. 在线外泌体数据库exoRBase&#13;
+http://www.exorbase.org/exoRBase/toIndex&#13;
+&#13;
+7. miRBase数据库（专门收录miRNA序列数据）&#13;
+http://www.mirbase.org/&#13;
+&#13;
+  &#13;
+&#13;
+## **肿瘤信息网站**&#13;
+&#13;
+[NCI's CancerNet](http://cancernet.nci.nih.gov)  &#13;
+美国肿瘤研究所的CancerNet网站为用户和专业人员提供肿瘤相关信息，内容包括肿瘤类型、治疗选择、临床试验、遗传学病因和危险因素、预防、检测、支持资源及其它。</description><guid isPermaLink="true">https://bionoob7.github.io/post/chang-yong-sheng-xin-shu-ju-ku-hui-zong.html</guid><pubDate>Fri, 27 Sep 2024 13:37:10 +0000</pubDate></item><item><title>HELLO WORLD</title><link>https://bionoob7.github.io/post/HELLO%20WORLD.html</link><description>hello world。</description><guid isPermaLink="true">https://bionoob7.github.io/post/HELLO%20WORLD.html</guid><pubDate>Fri, 27 Sep 2024 13:31:03 +0000</pubDate></item></channel></rss>
