@@ -1,5 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Ma's bioinfo notebook</title><link>https://bionoob7.github.io</link><description>记录学习点滴</description><copyright>Ma's bioinfo notebook</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/103297347?v=4</url><title>avatar</title><link>https://bionoob7.github.io</link></image><lastBuildDate>Sat, 28 Sep 2024 02:47:52 +0000</lastBuildDate><managingEditor>Ma's bioinfo notebook</managingEditor><ttl>60</ttl><webMaster>Ma's bioinfo notebook</webMaster><item><title>快速有效的文献阅读方式，适用于大学生，硕士，博士</title><link>https://bionoob7.github.io/post/kuai-su-you-xiao-de-wen-xian-yue-du-fang-shi-%EF%BC%8C-shi-yong-yu-da-xue-sheng-%EF%BC%8C-shuo-shi-%EF%BC%8C-bo-shi.html</link><description>&gt; [快速有效的文献阅读方式，适用于各年级同学](https://www.bilibili.com/video/BV1ce4y1y7qi/?share_source=copy_web&amp;vd_source=6f95fd8f53f20b10e971aa846dc05537)&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Ma's bioinfo notebook</title><link>https://bionoob7.github.io</link><description>记录学习点滴</description><copyright>Ma's bioinfo notebook</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/103297347?v=4</url><title>avatar</title><link>https://bionoob7.github.io</link></image><lastBuildDate>Sat, 28 Sep 2024 02:57:31 +0000</lastBuildDate><managingEditor>Ma's bioinfo notebook</managingEditor><ttl>60</ttl><webMaster>Ma's bioinfo notebook</webMaster><item><title>如何回复审稿人＋总结</title><link>https://bionoob7.github.io/post/ru-he-hui-fu-shen-gao-ren-%EF%BC%8B-zong-jie.html</link><description>&gt;https://www.bilibili.com/video/BV1bW411y7Sm/?spm_id_from=333.999.0.0&amp;vd_source=38212d51866e630fb4b3a6edbd1a7af0&#13;
+&#13;
+# 原则&#13;
+## 逐一回答每一条审稿意见&#13;
+不要避重就轻&#13;
+&#13;
+## 清晰直接的标明文章中的所有修改&#13;
+![[Pasted image 20230621155258.png]]&#13;
+&#13;
+## 礼貌，客气&#13;
+- Peer review 没有报酬，懂得感激编委和评审的时间(SSS)。</description><guid isPermaLink="true">https://bionoob7.github.io/post/ru-he-hui-fu-shen-gao-ren-%EF%BC%8B-zong-jie.html</guid><pubDate>Sat, 28 Sep 2024 01:34:30 +0000</pubDate></item><item><title>快速有效的文献阅读方式，适用于大学生，硕士，博士</title><link>https://bionoob7.github.io/post/kuai-su-you-xiao-de-wen-xian-yue-du-fang-shi-%EF%BC%8C-shi-yong-yu-da-xue-sheng-%EF%BC%8C-shuo-shi-%EF%BC%8C-bo-shi.html</link><description>&gt; [快速有效的文献阅读方式，适用于各年级同学](https://www.bilibili.com/video/BV1ce4y1y7qi/?share_source=copy_web&amp;vd_source=6f95fd8f53f20b10e971aa846dc05537)&#13;
 &#13;
 # 不要看摘要&#13;
 1. 直接看figure，顺着figure，自己一步步向下推理&#13;
