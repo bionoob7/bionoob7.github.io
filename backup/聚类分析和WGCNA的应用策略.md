@@ -32,7 +32,9 @@ K-means聚类(Clustering)
 	相关概念：分类，聚类，降维，PCA
 
 ## 4.WGCNA
-![[Pasted image 20230512105029.png]]
+
+![Pasted image 20230512105029](https://github.com/user-attachments/assets/e7c9aa62-aff0-46ce-abc1-0c4b099ff24a)
+
 
 ### 1.共表达网络
 颜色越深，gene之间相关性越强
