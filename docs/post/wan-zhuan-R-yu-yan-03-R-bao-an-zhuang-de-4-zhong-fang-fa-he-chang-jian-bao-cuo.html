@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="## 什么是R包？
+
+R包是别人整理好的工具包，内置各种函数以及帮助文档等信息，可以用来实现特定的功能。">
+<meta property="og:title" content="玩转R语言03-R包安装的4种方法和常见报错">
+<meta property="og:description" content="## 什么是R包？
+
+R包是别人整理好的工具包，内置各种函数以及帮助文档等信息，可以用来实现特定的功能。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/wan-zhuan-R-yu-yan-03-R-bao-an-zhuang-de-4-zhong-fang-fa-he-chang-jian-bao-cuo.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>玩转R语言03-R包安装的4种方法和常见报错</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">玩转R语言03-R包安装的4种方法和常见报错</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/9" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h2>什么是R包？</h2>
+<p>R包是别人整理好的工具包，内置各种函数以及帮助文档等信息，可以用来实现特定的功能。</p>
+<p><strong>R包相当于手机里的APP，不同的APP有不同的功能</strong>，不同的R包也有不同的功能，比如：有些R包是专门用来画热图的（<code class="notranslate">pheatmap</code>、<code class="notranslate">complexheatmap</code>等），有些R包是专门用来做生存分析（<code class="notranslate">survival</code>、<code class="notranslate">survminer</code>等）的，等。</p>
+<p>R语言在安装时会有很多自带的R包（包括<code class="notranslate">base</code>、<code class="notranslate">datasets</code>、<code class="notranslate">utils</code>、<code class="notranslate">grDevices</code>、<code class="notranslate">graphics</code>、<code class="notranslate">stats</code>、<code class="notranslate">methods</code>），这些R包不需要额外安装，都是出场自带的，安装好R语言就能用了。类似于刚买的新手机有很多内置APP，这些内置APP是不用自己额外安装的。</p>
+<h2>R包安装</h2>
+<p>R包就相当于手机里的各种APP，自带的APP很明显是无法满足日常使用的，所以我们需要自己安装其他APP。同理，R自带的R包也是无法满足我们要求的，所以我们也要自己安装其他R包。</p>
+<p><strong>安装R包就类似于给手机安装APP</strong>，安装方式有多种。比如：</p>
+<ul>
+<li>
+<p>小米手机可以从<em>小米应用商店</em>安装APP，也可以从<em>酷安</em>安装APP，还可以从<em>Google   play</em>安装，还可以从<em>官网下载apk</em>文件到本地安装，等；</p>
+</li>
+<li>
+<p>苹果手机可以从<em>App Store</em>安装，还可以通过<em>巨魔商店</em>安装，也可以<em>本地安装</em>。</p>
+</li>
+</ul>
+<p>R包安装也有多种方法，不同的R包是存放在不同的<em>应用商店</em>的。比较常见的R包安装主要是4种：</p>
+<ul>
+<li>
+<p>从<code class="notranslate">CRAN</code>安装，</p>
+</li>
+<li>
+<p>从<code class="notranslate">bioconductor</code>安装，</p>
+</li>
+<li>
+<p>从<code class="notranslate">github</code>安装，</p>
+</li>
+<li>
+<p>下载安装包<code class="notranslate">本地安装</code>。</p>
+</li>
+</ul>
+<p>随着学习的深入你还会遇见其他安装方法，我列举的这几种是最常见的。</p>
+<p>R语言是老外发明的东西，我们<strong>要访问老外的东西，由于众所周知的原因，是很困难的</strong>。不只是R，其他的东西比如Python、Linux等，都是这样。</p>
+<p>所以在安装R包时，我们一定要先<strong>修改镜像</strong>（mirror）（或者你可以使用魔法，就像你使用Google play需要魔法一样，如果你在国外的话自然是不需要这一步的）。镜像可以简单理解为中国人为了方便自己下载安装，把国外的东西完整复制了一份放到国内，而且会随着国外的更新而更新。使用镜像的好处的不需要魔法我们也可以流畅快速地下载安装R包。</p>
+<p>一个R包只需要安装一次即可重复使用，R包也可以更新、卸载、重装，这个道理和手机APP简直是一模一样。</p>
+<p>以下是4种R包安装方法的详细介绍，这部分我在哔哩哔哩也有相应的视频介绍，点击即可观看：R语言零基础入门</p>
+<h3>从CRAN安装</h3>
+<p>CRAN是最主要的存储R包的仓库，大多数R包都是存储在这里的。</p>
+<p>要从CRAN安装，我们首先要修改镜像（如果你人在国外是不需要这一步的）。这个过程在安装好Rstudio之后非常简单，依次点击：<code class="notranslate">Tools</code>-<code class="notranslate">Global Options</code>：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/c74d513b16bc075f075c2cf877ad6b24447496a6b7d0059442867cdd3f455bb2/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e484544723665703641744d58534f71747447774a39616963564462564f6c4133675754795855633742676563556961663268756b305356512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/c74d513b16bc075f075c2cf877ad6b24447496a6b7d0059442867cdd3f455bb2/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e484544723665703641744d58534f71747447774a39616963564462564f6c4133675754795855633742676563556961663268756b305356512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNHEDr6ep6AtMXSOqttGwJ9aicVDbVOlA3gWTyXUc7BgecUiaf2huk0SVQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNHEDr6ep6AtMXSOqttGwJ9aicVDbVOlA3gWTyXUc7BgecUiaf2huk0SVQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>然后按照下图所示依次点击，在列出的镜像中<strong>任选一个中国的镜像</strong>即可（比如我选择了上海交通大学的镜像），选好之后点击<code class="notranslate">OK</code>即可。这样就修改好镜像了，下面就可以畅快的安装R包了。这种修改镜像只需要1次修改即可，以后从CRAN安装R包都会默认使用你选择的这个镜像，不用每次都改。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/f31f92f1fdc772912929f3735a003a4ba40a4b044eb684b4ab1bc77bbdb7fae6/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e50637458384369624d344f4a396961396f714e684f4e4f4a556c564c4d69635a524d483544344e6b445437663752675545794b5131524b48412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/f31f92f1fdc772912929f3735a003a4ba40a4b044eb684b4ab1bc77bbdb7fae6/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e50637458384369624d344f4a396961396f714e684f4e4f4a556c564c4d69635a524d483544344e6b445437663752675545794b5131524b48412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNPctX8CibM4OJ9ia9oqNhONOJUlVLMicZRMH5D4NkDT7f7RgUEyKQ1RKHA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNPctX8CibM4OJ9ia9oqNhONOJUlVLMicZRMH5D4NkDT7f7RgUEyKQ1RKHA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>比如我们现在想要安装<code class="notranslate">ggplot2</code>这个R包，使用以下代码即可：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">install.packages(<span class="pl-s"><span class="pl-pds">"</span>ggplot2<span class="pl-pds">"</span></span>)</pre></div>
+<blockquote>
+<p>安装R包时一定要注意，R包的名字不能拼错，大小写也不能错，而且必须加引号，双引号或者单引号都可以，但是必须是英文状态下的！加载R包不需要引号。</p>
+</blockquote>
+<h3>从bioconductor安装</h3>
+<p>医学生/医生学习R语言有相当一部分人是想做<strong>生信分析</strong>的，绝大多数做生信分析的R包都不在CRAN中，而是存储在bioconductor中，这个网站是专门存储生物信息学分析所用R包的。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/fdbd6689a38101ffad3174ef467d6132ab430ff7dc0dfd7e8f577e8197b0ae8c/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6963586134544f44544a7a304d454959427253316b7342515962334861673847384a654162527559715967494431497943334678656d412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/fdbd6689a38101ffad3174ef467d6132ab430ff7dc0dfd7e8f577e8197b0ae8c/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6963586134544f44544a7a304d454959427253316b7342515962334861673847384a654162527559715967494431497943334678656d412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNicXa4TODTJz0MEIYBrS1ksBQYb3Hag8G8JeAbRuYqYgID1IyC3FxemA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNicXa4TODTJz0MEIYBrS1ksBQYb3Hag8G8JeAbRuYqYgID1IyC3FxemA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>这个仓库也是老外建立维护的，所以要安装这里的R包，自然也是先要更改镜像的。</p>
+<p>从bioconductor的官方镜像列表中可知，目前中国镜像有以下4个，分别是<strong>清华大学的镜像、南京大学的镜像、中国科学技术大学的镜像、西湖大学的镜像</strong>，如下所示：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/42c0d018191662ad65219c6692f393d79666403ca7030e4ac6c4d6fb783a87c7/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6d35624f646c766e696358443468764f773847773757696178726d6274433338734e6754494c69616869637237314d536d4339436f575a6c37512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/42c0d018191662ad65219c6692f393d79666403ca7030e4ac6c4d6fb783a87c7/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6d35624f646c766e696358443468764f773847773757696178726d6274433338734e6754494c69616869637237314d536d4339436f575a6c37512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNm5bOdlvnicXD4hvOw8Gw7WiaxrmbtC38sNgTILiahicr71MSmC9CoWZl7Q/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNm5bOdlvnicXD4hvOw8Gw7WiaxrmbtC38sNgTILiahicr71MSmC9CoWZl7Q/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p><strong>每次</strong>在安装bioconductor的R包之前，都要先运行以下代码更换镜像，<strong>任选一个运行</strong>即可，目前我推荐你使用西湖大学的镜像，原因请看<a href="https://mp.weixin.qq.com/s?__biz=MzAxMDkxODM1Ng==&amp;mid=2247530731&amp;idx=1&amp;sn=da0ef2e23e24313c4462f7835a7d8879&amp;scene=21#wechat_redirect" rel="nofollow">bioconductor有新的镜像选择啦</a></p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 使用清华大学的镜像</span>
+options(<span class="pl-v">BioC_mirror</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>https://mirrors.tuna.tsinghua.edu.cn/bioconductor<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 使用南京大学的镜像</span>
+options(<span class="pl-v">BioC_mirror</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>https://mirrors.nju.edu.cn/bioconductor/<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 使用中国科学技术大学的镜像</span>
+options(<span class="pl-v">BioC_mirror</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>https://mirrors.ustc.edu.cn/bioc/<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 使用西湖大学的镜像</span>
+options(<span class="pl-v">BioC_mirror</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>https://mirrors.westlake.edu.cn/bioconductor<span class="pl-pds">"</span></span>)</pre></div>
+<blockquote>
+<p>bioconductor的镜像不像CRAN那样只需要改一次，每次在安装bioconductor的包之前，都需要运行一下修改镜像的代码。但是随着学习的深入，你以后也可以通过修改<code class="notranslate">.Rporfile</code>文件实现1次修改，永久使用！建议初学者就别搞这些花里胡哨的操作了，还是每次都运行一下吧。</p>
+</blockquote>
+<p>运行外以上代码更改好镜像之后，我们还需要<strong>先安装一个bioconductor的R包管理器</strong>，才能安装bioconductor中的R包，使用以下代码安装bioconductor的R包管理器，也就是<code class="notranslate">BiocManager</code>包：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> R4.3.x对应的bioconductor版本是3.18，R4.4.x对应的版本就是3.19了，注意不要搞错，</span>
+<span class="pl-c"><span class="pl-c">#</span> 否则会报错哦</span>
+<span class="pl-k">if</span> (<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>BiocManager<span class="pl-pds">"</span></span>, <span class="pl-v">quietly</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>))
+    install.packages(<span class="pl-s"><span class="pl-pds">"</span>BiocManager<span class="pl-pds">"</span></span>)
+<span class="pl-e">BiocManager</span><span class="pl-k">::</span>install(<span class="pl-v">version</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>3.18<span class="pl-pds">"</span></span>)</pre></div>
+<p>安装好这个包管理器之后，就可以安装bioconductor的R包了。以后再安装bioconductor的R包时，也不需要再重新安装这个包管理器了。</p>
+<blockquote>
+<p>R语言每年会进行1次版本大更新，时间大约是每年的4月份，bioconductor每年会进行两次更新，时间大约是每年的4月份和10月份。bioconductor的版本和R的版本是有对应关系的，比如R4.2.x对应的bioconductor版本是3.17，R4.3.x对应的bioconductor版本是3.18，R4.4.x对应的是3.19。对于初学者来说，不建议跨版本使用。</p>
+</blockquote>
+<p>通常来说R语言不需要频繁的更新，一般不会影响使用，但是如果你一定要更新的话，建议每年的5月份进行更新，刚好是R和bioconductor同时更新的时间，此时的版本刚好匹配，初学者安装R包出错的概率要小一些。</p>
+<p>比如我们要安装一个做差异分析的R包：<code class="notranslate">limma</code>，就可以使用以下代码：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 每次都要先改镜像</span>
+options(<span class="pl-v">BioC_mirror</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>https://mirrors.westlake.edu.cn/bioconductor<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 改完镜像再安装</span>
+<span class="pl-e">BiocManager</span><span class="pl-k">::</span>install(<span class="pl-s"><span class="pl-pds">"</span>limma<span class="pl-pds">"</span></span>)</pre></div>
+<p>这样<code class="notranslate">limma</code>包就安装好了。以后你要安装bioconductor中的R包，就先改镜像，然后使用<code class="notranslate">BiocManager::install("xxx")</code>即可。</p>
+<h3>从github安装</h3>
+<p>有一些R包既不在CRAN，也不在bioconductor，而是在github中。要安装github中的R包，建议借助<code class="notranslate">devtools</code>或者<code class="notranslate">remotes</code>包实现。</p>
+<blockquote>
+<p><code class="notranslate">remotes</code>可以认为是<code class="notranslate">devtools</code>的精简版，其实区别不大，所以我个人比较推荐使用<code class="notranslate">devtools</code>。</p>
+</blockquote>
+<p>首先从CRAN安装<code class="notranslate">devtools</code>包：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 没改镜像的记得先改镜像</span>
+install.packages(<span class="pl-s"><span class="pl-pds">"</span>devtools<span class="pl-pds">"</span></span>)</pre></div>
+<p>安装好之后再使用<code class="notranslate">install_github()</code>安装github中的R包，比如，我现在想要安装<code class="notranslate">easyTCGA</code>这个包，使用以下代码即可：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">library(<span class="pl-smi">devtools</span>)
+install_github(<span class="pl-s"><span class="pl-pds">"</span>ayueme/easyTCGA<span class="pl-pds">"</span></span>)</pre></div>
+<p>其中<code class="notranslate">easyTCGA</code>是R包的名字，前面的<code class="notranslate">ayueme</code>是仓库所有者的名字。千万不要写错，写错必然报错！</p>
+<p>一般你找到这个R包都会有介绍如何安装，直接复制粘贴即可，github左上角也会有名字的，照抄就行，比如：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4b16f09853cdf077a04190311c7bc1099fc098f12f853933cdea391c9fb4afd3/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e45696337676466576b74556a46696137427076545069636a7551716f304f69636254696239714c3963774e646e545662646f3971596643716a4c672f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/4b16f09853cdf077a04190311c7bc1099fc098f12f853933cdea391c9fb4afd3/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e45696337676466576b74556a46696137427076545069636a7551716f304f69636254696239714c3963774e646e545662646f3971596643716a4c672f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNEic7gdfWktUjFia7BpvTPicjuQqo0OicbTib9qL9cwNdnTVbdo9qYfCqjLg/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNEic7gdfWktUjFia7BpvTPicjuQqo0OicbTib9qL9cwNdnTVbdo9qYfCqjLg/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>但是<strong>国内访问github是有困难的，如果你的网络不行，那么这个方式大概率你会失败</strong>。有的时候即使你能打开github的网页，也不见得你用以上方法就能安装成功。那么这时你可以尝试下面介绍的<strong>本地安装</strong>。</p>
+<h3>本地安装</h3>
+<p>本地安装R包就和本地安装手机APP没有任何区别，把安装包下载下来，然后安装就好了。</p>
+<p>还是以上面的<code class="notranslate">easyTCGA</code>为例，如果你要本地安装，首先你得下载这个R包到你的电脑上，所以你得找到这个R包的下载地址才行！</p>
+<p>在github上面的R包的下载地址都是有规律的，通常都是：<a href="https://github.com/xxxx/R%E5%8C%85%E5%90%8D%E5%AD%97">https://github.com/xxxx/R包名字</a></p>
+<p>比如：<code class="notranslate">easyTCGA</code>包的下载地址是：<a href="https://github.com/ayueme/easyTCGA">https://github.com/ayueme/easyTCGA</a></p>
+<p>打开网址后，按照顺序依次点击：Code-Download ZIP，即可把R包下载到本地了（对你的网络有要求，因为这个网站也是老外的！）。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/8f3c17af7bb5b09ecfc8de185ed07551581c2addc175d496d510f4e0af9e3f02/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e59453677784857394c78343667394d4e687639565535696263705a7136516169625349504f684f506769624857527477646c69626a55797063412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/8f3c17af7bb5b09ecfc8de185ed07551581c2addc175d496d510f4e0af9e3f02/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e59453677784857394c78343667394d4e687639565535696263705a7136516169625349504f684f506769624857527477646c69626a55797063412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNYE6wxHW9Lx46g9MNhv9VU5ibcpZq6QaibSIPOhOPgibHWRtwdlibjUypcA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNYE6wxHW9Lx46g9MNhv9VU5ibcpZq6QaibSIPOhOPgibHWRtwdlibjUypcA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>下载github的R包</p>
+<p>我下载的R包存放在我的<strong>E盘-R-R包，这个文件夹里面</strong>，所以存放路径是：<code class="notranslate">E:/R/R包/easyTCGA-main.zip</code></p>
+<p>此时安装包已经下载好了，我们可以借助<code class="notranslate">devtools</code>里面的<code class="notranslate">install_local()</code>函数安装本地R包：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">library(<span class="pl-smi">devtools</span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 注意你的R包存放路径不要写错！写错必报错！</span>
+install_local(<span class="pl-s"><span class="pl-pds">"</span>E:/R/R包/easyTCGA-main.zip<span class="pl-pds">"</span></span>)</pre></div>
+<p>本地安装需要注意<strong>R包依赖</strong>的问题。R包依赖的意思是有些R包是建立在其他R包的基础上的，所以你在安装时需要注意先后顺序，必须先安装某个包然后才能安装另一个包，否则就会出现安装失败。比如<code class="notranslate">easyTCGA</code>就是建立在很多R包之上，所以如果你没提前安装<code class="notranslate">easyTCGA</code>的依赖包，那么在进行本地安装时也会报错。</p>
+<p>这是本地安装最大的弊端，<code class="notranslate">install.packages()</code>和<code class="notranslate">BiocManager::install()</code>在安装R包时会自动帮你先安装依赖包，所以不会有问题。</p>
+<p><code class="notranslate">easyTCGA</code>有以下依赖包，需要你先安装好下面的依赖包，才能安装<code class="notranslate">easyTCGA</code>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 安装bioconductor上面的依赖R包</span>
+<span class="pl-c"><span class="pl-c">#</span> 首先要改镜像，下面是清华的镜像，有时会有问题，可更改其他镜像试试</span>
+options(<span class="pl-v">BioC_mirror</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>https://mirrors.tuna.tsinghua.edu.cn/bioconductor<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>BiocManager<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>BiocManager<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>TCGAbiolinks<span class="pl-pds">"</span></span>)) <span class="pl-e">BiocManager</span><span class="pl-k">::</span>install(<span class="pl-s"><span class="pl-pds">"</span>TCGAbiolinks<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>SummarizedExperiment<span class="pl-pds">"</span></span>)) <span class="pl-e">BiocManager</span><span class="pl-k">::</span>install(<span class="pl-s"><span class="pl-pds">"</span>SummarizedExperiment<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>DESeq2<span class="pl-pds">"</span></span>)) <span class="pl-e">BiocManager</span><span class="pl-k">::</span>install(<span class="pl-s"><span class="pl-pds">"</span>DESeq2<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>edgeR<span class="pl-pds">"</span></span>)) <span class="pl-e">BiocManager</span><span class="pl-k">::</span>install(<span class="pl-s"><span class="pl-pds">"</span>edgeR<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>limma<span class="pl-pds">"</span></span>)) <span class="pl-e">BiocManager</span><span class="pl-k">::</span>install(<span class="pl-s"><span class="pl-pds">"</span>limma<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 安装cran上面的依赖R包</span>
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>survival<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>survival<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>broom<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>broom<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>devtools<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>devtools<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>reshape2<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>reshape2<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>data.table<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>data.table<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>ggplot2<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>ggplot2<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-s"><span class="pl-pds">"</span>ggpubr<span class="pl-pds">"</span></span>)) install.packages(<span class="pl-s"><span class="pl-pds">"</span>ggpubr<span class="pl-pds">"</span></span>)</pre></div>
+<p>以上安装R包的代码我加了一个<code class="notranslate">if</code>判断语句，意思是：如果我已经安装了这个R包，就不要重复安装了，如果没安装，就帮我安装。</p>
+<h2>其他安装方法</h2>
+<p>除了以上介绍的安装方法外，还有一些R包的安装方法比较特殊，这里给大家简单介绍下，就以<code class="notranslate">mlr3proba</code>为例。这个R包由于一些原因不在CRAN中，如果你要安装Github版本，可以按照以下代码安装：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-e">remotes</span><span class="pl-k">::</span>install_github(<span class="pl-s"><span class="pl-pds">"</span>mlr-org/mlr3proba<span class="pl-pds">"</span></span>)</pre></div>
+<p>但是如果你要使用<code class="notranslate">install.packages()</code>函数安装，需要按照如下方式进行：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">install.packages(<span class="pl-s"><span class="pl-pds">"</span>mlr3proba<span class="pl-pds">"</span></span>, <span class="pl-v">repos</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>https://mlr-org.r-universe.dev<span class="pl-pds">"</span></span>)</pre></div>
+<h2>终极大法</h2>
+<p>直接谷歌、必应或者ChatGPT。</p>
+<p>比如一个叫<code class="notranslate">linkET</code>的包，你不知道怎么安装，直接搜索啊：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/37e6d768afe0c19e39cb1741cacf178e2459fe617405ba9c28fa13557d36584b/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e365a6a395049715649744d644b4e576962346c77784932767545536648324445505a4263357472696153386c31727a6a5244633049516c412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/37e6d768afe0c19e39cb1741cacf178e2459fe617405ba9c28fa13557d36584b/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e365a6a395049715649744d644b4e576962346c77784932767545536648324445505a4263357472696153386c31727a6a5244633049516c412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflN6Zj9PIqVItMdKNWib4lwxI2vuESfH2DEPZBc5triaS8l1rzjRDc0IQlA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflN6Zj9PIqVItMdKNWib4lwxI2vuESfH2DEPZBc5triaS8l1rzjRDc0IQlA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<h2>R包常见报错</h2>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c1">1</span><span class="pl-smi">.</span> 载入了名字空间‘<span class="pl-smi">rlang</span>’ <span class="pl-c1">1.0.1</span>，但需要的是<span class="pl-k">&gt;</span><span class="pl-k">=</span> <span class="pl-c1">1.0.2</span>
+
+<span class="pl-smi">`rlang`</span>包的版本太低了，你需要先安装<span class="pl-c1">1.0.2</span>以上版本的<span class="pl-smi">`rlang`</span>，记得直接关闭<span class="pl-smi">Rstudio</span>，重新打开再安装
+
+<span class="pl-c1">2</span><span class="pl-smi">.</span> 不存在叫‘<span class="pl-smi">latticeExtra</span>’这个名字的程辑包
+
+首先看看自己的拼写错了吗？标点符号有错误吗？没问题就安装这个<span class="pl-smi">`latticeExtra`</span>包即可
+
+<span class="pl-c1">3</span><span class="pl-smi">.</span> 程序包安装入‘<span class="pl-smi">C</span><span class="pl-k">:</span><span class="pl-k">/</span><span class="pl-smi">Users</span><span class="pl-k">/</span><span class="pl-smi">xxx</span><span class="pl-k">/</span><span class="pl-smi">AppData</span><span class="pl-k">/</span><span class="pl-smi">Local</span><span class="pl-k">/</span><span class="pl-smi">R</span><span class="pl-k">/</span><span class="pl-smi">win</span><span class="pl-k">-</span><span class="pl-smi">library</span><span class="pl-k">/</span><span class="pl-c1">4.2</span>’(因为‘<span class="pl-smi">lib</span>’没有被指定)
+<span class="pl-smi">Warning</span> <span class="pl-k">in</span> <span class="pl-smi">install.packages</span> <span class="pl-k">:</span> <span class="pl-smi">package</span> ‘<span class="pl-smi">limma</span>’ <span class="pl-smi">is</span> <span class="pl-smi">not</span> <span class="pl-smi">available</span> <span class="pl-k">for</span> <span class="pl-smi">this</span> <span class="pl-smi">version</span> <span class="pl-smi">of</span> <span class="pl-smi">R</span>
+<span class="pl-smi">A</span> <span class="pl-smi">version</span> <span class="pl-smi">of</span> <span class="pl-smi">this</span> <span class="pl-smi">package</span> <span class="pl-k">for</span> <span class="pl-smi">your</span> <span class="pl-smi">version</span> <span class="pl-smi">of</span> <span class="pl-smi">R</span> <span class="pl-smi">might</span> <span class="pl-smi">be</span> <span class="pl-smi">available</span> <span class="pl-smi">elsewhere</span>
+
+<span class="pl-smi">`limma`</span>包在<span class="pl-smi">bioconductor</span>上，不在<span class="pl-smi">CRAN</span>上，要通过<span class="pl-smi">`BiocManager`</span>安装。
+
+<span class="pl-c1">4</span><span class="pl-smi">.</span> 安装程序包‘<span class="pl-smi">mapproj</span>’时退出狀態的值不是<span class="pl-c1">0</span>
+
+大概率依赖包没装好。
+
+<span class="pl-c1">5</span><span class="pl-smi">.</span> library(<span class="pl-smi">lsmeans</span>) <span class="pl-smi">Error</span><span class="pl-k">:</span> 找不到‘<span class="pl-smi">lsmeans</span>’所需要的程辑包‘<span class="pl-smi">emmeans</span>’
+
+缺什么就安装什么。找不到<span class="pl-smi">`lsmeans`</span>就安装<span class="pl-smi">`lsmeans`</span>。
+
+<span class="pl-c1">6</span><span class="pl-smi">.</span> 用<span class="pl-smi">devtools</span>从<span class="pl-smi">github</span>安装包，无论是直接安装还是本地安装，都报<span class="pl-smi">timeout</span>错误
+
+<span class="pl-smi">github</span>在国外，访问国外的网站你得科学上网，你网络行吗？你能访问谷歌不代表你能从<span class="pl-smi">github</span>下载东西。
+
+<span class="pl-c1">7</span><span class="pl-smi">.</span> 安装<span class="pl-smi">r</span>包时出现：<span class="pl-smi">update</span> <span class="pl-smi">all</span><span class="pl-k">/</span><span class="pl-smi">some</span><span class="pl-k">/</span><span class="pl-smi">none</span>?
+
+问你要不要：更新所有<span class="pl-smi">R</span>包<span class="pl-k">/</span>部分<span class="pl-smi">R</span>包<span class="pl-k">/</span>不更新？输入<span class="pl-smi">n</span>就行了，表示不更新。
+
+<span class="pl-c1">8</span><span class="pl-smi">.</span> library(<span class="pl-smi">tidyverse</span>)出现一大推字
+
+── <span class="pl-smi">Attaching</span> <span class="pl-smi">core</span> <span class="pl-smi">tidyverse</span> <span class="pl-smi">packages</span> ────── <span class="pl-smi">tidyverse</span> <span class="pl-c1">2.0.0</span> ──
+✔ <span class="pl-smi">dplyr</span>     <span class="pl-c1">1.1.2</span>     ✔ <span class="pl-smi">readr</span>     <span class="pl-c1">2.1.4</span>
+✔ <span class="pl-smi">forcats</span>   <span class="pl-c1">1.0.0</span>     ✔ <span class="pl-smi">stringr</span>   <span class="pl-c1">1.5.0</span>
+✔ <span class="pl-smi">ggplot2</span>   <span class="pl-c1">3.4.2</span>     ✔ <span class="pl-smi">tibble</span>    <span class="pl-c1">3.2.1</span>
+✔ <span class="pl-smi">lubridate</span> <span class="pl-c1">1.9.2</span>     ✔ <span class="pl-smi">tidyr</span>     <span class="pl-c1">1.3.0</span>
+✔ <span class="pl-smi">purrr</span>     <span class="pl-c1">1.0.1</span>     
+── <span class="pl-smi">Conflicts</span> ──────────────────────── tidyverse_conflicts() ──
+✖ <span class="pl-e">dplyr</span><span class="pl-k">::</span>filter() <span class="pl-smi">masks</span> <span class="pl-e">stats</span><span class="pl-k">::</span>filter()
+✖ <span class="pl-e">dplyr</span><span class="pl-k">::</span>lag()    <span class="pl-smi">masks</span> <span class="pl-e">stats</span><span class="pl-k">::</span>lag()
+ℹ <span class="pl-smi">Use</span> <span class="pl-smi">the</span> <span class="pl-smi">conflicted</span> <span class="pl-smi">package</span> <span class="pl-smi">to</span> <span class="pl-smi">force</span> <span class="pl-smi">all</span> <span class="pl-smi">conflicts</span> <span class="pl-smi">to</span> <span class="pl-smi">become</span> <span class="pl-smi">errors</span>
+
+正常的，不用管，只要没有<span class="pl-smi">`Error`</span>就没事。</pre></div></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
