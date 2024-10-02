@@ -10,17 +10,13 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="今天介绍R语言里面的数据框，这是对一个初学者来说，R语言中最重要的内容，没有之一！
-
-## 数据框
-
-数据框，data.frame，可能是大家最常用的数据结构了。">
+<meta name="description" content="今天介绍R语言里面的数据框，
+> [!NOTE]
+> 这是对一个初学者来说，R语言中最常用，重要的内容，没有之一。">
 <meta property="og:title" content="玩转R语言08-数据框（最常用的数据结构！）">
-<meta property="og:description" content="今天介绍R语言里面的数据框，这是对一个初学者来说，R语言中最重要的内容，没有之一！
-
-## 数据框
-
-数据框，data.frame，可能是大家最常用的数据结构了。">
+<meta property="og:description" content="今天介绍R语言里面的数据框，
+> [!NOTE]
+> 这是对一个初学者来说，R语言中最常用，重要的内容，没有之一。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bionoob7.github.io/post/wan-zhuan-R-yu-yan-08--shu-ju-kuang-%EF%BC%88-zui-chang-yong-de-shu-ju-jie-gou-%EF%BC%81%EF%BC%89.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
@@ -61,7 +57,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     font-size: 12px;
 }
 </style>
-
+<style>.markdown-alert{padding:0.5rem 1rem;margin-bottom:1rem;border-left:.25em solid var(--borderColor-default,var(--color-border-default));}.markdown-alert .markdown-alert-title {display:flex;font-weight:var(--base-text-weight-medium,500);align-items:center;line-height:1;}.markdown-alert>:first-child {margin-top:0;}.markdown-alert>:last-child {margin-bottom:0;}</style><style>.markdown-alert.markdown-alert-note {border-left-color:var(--borderColor-accent-emphasis, var(--color-accent-emphasis));background-color:var(--color-accent-subtle);}.markdown-alert.markdown-alert-note .markdown-alert-title {color: var(--fgColor-accent,var(--color-accent-fg));}</style>
 
 
 
@@ -91,7 +87,9 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>今天介绍R语言里面的数据框，这是对一个初学者来说，R语言中最重要的内容，没有之一！</p>
+<div class="markdown-body" id="postBody"><p>今天介绍R语言里面的数据框，</p>
+<div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p><p>这是对一个初学者来说，R语言中最常用，重要的内容，没有之一。</p>
+</div>
 <h2>数据框</h2>
 <p>数据框，data.frame，可能是大家最常用的数据结构了。我们的excel数据读进来一般默认都是数据框结构。</p>
 <p>数据框由不同的行和列构成，不同的列可以是不同类型（数值型、字符型、逻辑型等）的数据，比如可以其中一列是数值型，另一列是逻辑型，另一列是字符型，等。但是同一列中必须是相同的类型。</p>
