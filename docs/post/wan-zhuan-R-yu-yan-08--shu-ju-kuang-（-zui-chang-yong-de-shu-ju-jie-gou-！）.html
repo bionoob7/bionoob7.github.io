@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="今天介绍R语言里面的数据框，这是对一个初学者来说，R语言中最重要的内容，没有之一！
+
+## 数据框
+
+数据框，data.frame，可能是大家最常用的数据结构了。">
+<meta property="og:title" content="玩转R语言08-数据框（最常用的数据结构！）">
+<meta property="og:description" content="今天介绍R语言里面的数据框，这是对一个初学者来说，R语言中最重要的内容，没有之一！
+
+## 数据框
+
+数据框，data.frame，可能是大家最常用的数据结构了。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/wan-zhuan-R-yu-yan-08--shu-ju-kuang-%EF%BC%88-zui-chang-yong-de-shu-ju-jie-gou-%EF%BC%81%EF%BC%89.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>玩转R语言08-数据框（最常用的数据结构！）</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">玩转R语言08-数据框（最常用的数据结构！）</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/15" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>今天介绍R语言里面的数据框，这是对一个初学者来说，R语言中最重要的内容，没有之一！</p>
+<h2>数据框</h2>
+<p>数据框，data.frame，可能是大家最常用的数据结构了。我们的excel数据读进来一般默认都是数据框结构。</p>
+<p>数据框由不同的行和列构成，不同的列可以是不同类型（数值型、字符型、逻辑型等）的数据，比如可以其中一列是数值型，另一列是逻辑型，另一列是字符型，等。但是同一列中必须是相同的类型。</p>
+<h3>创建数据框</h3>
+<p>数据框可通过函数<code class="notranslate">data.frame()</code>创建，使用方式如下：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">mydata</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(<span class="pl-smi">col1</span>, <span class="pl-smi">col2</span>, <span class="pl-smi">col3</span>,<span class="pl-k">...</span>)</pre></div>
+<p>其中的列向量<code class="notranslate">col1</code>、<code class="notranslate">col2</code>、<code class="notranslate">col3</code>等可为任何类型（如字符型、数值型或逻辑型）。</p>
+<p>以下代码会创建一个数据框，这个数据框有4列，第一列的名字是<code class="notranslate">patientID</code>，是数值型；第二列的名字是<code class="notranslate">age</code>，也是数值型；第三列的名字是<code class="notranslate">diabetes</code>，是字符型；第4列的名字是<code class="notranslate">status</code>，也是字符型：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 创建4个向量</span>
+<span class="pl-smi">patientID</span> <span class="pl-k">&lt;-</span> c(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>)
+<span class="pl-smi">age</span> <span class="pl-k">&lt;-</span> c(<span class="pl-c1">25</span>, <span class="pl-c1">34</span>, <span class="pl-c1">28</span>, <span class="pl-c1">52</span>)
+<span class="pl-smi">diabetes</span> <span class="pl-k">&lt;-</span> c(<span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type2<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>)
+<span class="pl-smi">status</span> <span class="pl-k">&lt;-</span> c(<span class="pl-s"><span class="pl-pds">"</span>Poor<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Improved<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Excellent<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Poor<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 把4个向量放到一个数据框中</span>
+<span class="pl-smi">patientdata</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(<span class="pl-smi">patientID</span>, <span class="pl-smi">age</span>, <span class="pl-smi">diabetes</span>, <span class="pl-smi">status</span>)
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span></pre></div>
+<p>我们首先建立了4个向量，然后使用函数<code class="notranslate">data.frame()</code>将4个向量组合在一起，就变成了一个数据框<code class="notranslate">data.frame</code>，所以你也可以把<strong>数据框看成是多个向量的组合</strong>。</p>
+<p>当你对这个操作足够熟悉后，你也可以直接这样写：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(
+  <span class="pl-v">patientID</span> <span class="pl-k">=</span> c(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>), 
+  <span class="pl-v">age</span> <span class="pl-k">=</span> c(<span class="pl-c1">25</span>, <span class="pl-c1">34</span>, <span class="pl-c1">28</span>, <span class="pl-c1">52</span>), 
+  <span class="pl-v">diabetes</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type2<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>), 
+  <span class="pl-v">status</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Poor<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Improved<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Excellent<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Poor<span class="pl-pds">"</span></span>)
+  )
+
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span>
+class(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] "data.frame"</span></pre></div>
+<p>上一章中从外部读取的数据，默认就是数据框结构：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">library(<span class="pl-smi">readxl</span>)
+<span class="pl-smi">brca_expr</span> <span class="pl-k">&lt;-</span> read_xlsx(<span class="pl-s"><span class="pl-pds">"</span>datasets/brca_expr.xlsx<span class="pl-pds">"</span></span>, <span class="pl-v">col_names</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>)
+
+class(<span class="pl-smi">brca_expr</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] "tbl_df"     "tbl"        "data.frame"</span></pre></div>
+<blockquote>
+<p><strong>Note</strong></p>
+</blockquote>
+<p><code class="notranslate">readxl</code>是<code class="notranslate">tidyverse</code>系列R包的一员，如果你使用了这个系列的R包，那么默认的数据框就不再单单是<code class="notranslate">data.frame</code>类型，还会增加<code class="notranslate">tbl_df</code>和<code class="notranslate">tbl</code>类型，这会在某些操作中报错，千万要注意。</p>
+<p>如何变成单纯的<code class="notranslate">data.frame</code>类型？只需要使用<code class="notranslate">as.data.frame()</code>函数即可：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 转换类型</span>
+<span class="pl-smi">brca_expr</span> <span class="pl-k">&lt;-</span> as.data.frame(<span class="pl-smi">brca_expr</span>)
+class(<span class="pl-smi">brca_expr</span>) <span class="pl-c"><span class="pl-c">#</span> 查看类型</span>
+<span class="pl-c"><span class="pl-c">#</span># [1] "data.frame"</span></pre></div>
+<h3>探索数据框</h3>
+<p>查看数据框的基本信息，比如，有几行几列？每一列是什么类型？列名是什么？</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 像Excel一样查看数据框，注意，数据太大会直接卡死</span>
+View(<span class="pl-smi">patientdata</span>) <span class="pl-c"><span class="pl-c">#</span> 或者在环境面板中直接点击数据框名字</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看类型</span>
+class(<span class="pl-smi">patientdata</span>) <span class="pl-c"><span class="pl-c">#</span> 数据框</span>
+<span class="pl-c"><span class="pl-c">#</span># [1] "data.frame"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看数据框的维度，dim是dimension的缩写</span>
+dim(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] 4 4</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看几行几列</span>
+ncol(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] 4</span>
+nrow(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] 4</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看数据框的结构：str是structure的缩写</span>
+str(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span># 'data.frame':    4 obs. of  4 variables:</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ patientID: num  1 2 3 4</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ age      : num  25 34 28 52</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ diabetes : chr  "Type1" "Type2" "Type1" "Type1"</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ status   : chr  "Poor" "Improved" "Excellent" "Poor"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看前6行和最后6行</span>
+head(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span>
+tail(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 默认是6行，可以更改，比如改成2行</span>
+head(<span class="pl-smi">patientdata</span>, <span class="pl-c1">2</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes   status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1     Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2 Improved</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看数据框的列名</span>
+names(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] "patientID" "age"       "diabetes"  "status"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 或者使用以下方法查看列名</span>
+colnames(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] "patientID" "age"       "diabetes"  "status"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看行名</span>
+rownames(<span class="pl-smi">patientdata</span>)  
+<span class="pl-c"><span class="pl-c">#</span># [1] "1" "2" "3" "4"</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 总结数据信息，摘要</span>
+summary(<span class="pl-smi">patientdata</span>)
+<span class="pl-c"><span class="pl-c">#</span>#    patientID         age          diabetes            status         </span>
+<span class="pl-c"><span class="pl-c">#</span>#  Min.   :1.00   Min.   :25.00   Length:4           Length:4          </span>
+<span class="pl-c"><span class="pl-c">#</span>#  1st Qu.:1.75   1st Qu.:27.25   Class :character   Class :character  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  Median :2.50   Median :31.00   Mode  :character   Mode  :character  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  Mean   :2.50   Mean   :34.75                                        </span>
+<span class="pl-c"><span class="pl-c">#</span>#  3rd Qu.:3.25   3rd Qu.:38.50                                        </span>
+<span class="pl-c"><span class="pl-c">#</span>#  Max.   :4.00   Max.   :52.00</span></pre></div>
+<h3>行列选择</h3>
+<p>如果我们要选择其中的某些行或者某些列，或者某个元素（比如，第2行第3列的值），有多种不同的方法实现。</p>
+<p>可以通过方括号实现，就像访问向量的元素一样。</p>
+<p>数据框和向量不一样，向量是一维的，数据框既有行也有列，<strong>数据框是二维的</strong>，所以在使用方括号时，我们也要<strong>指定行和列</strong>，行和列之间用<code class="notranslate">,</code>隔开，<code class="notranslate">,</code>前面表示行，后面表示列。</p>
+<p>以下是常见方法，<strong>必须要记住</strong>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>[<span class="pl-c1">1</span>, <span class="pl-c1">2</span>] <span class="pl-c"><span class="pl-c">#</span> 取第1行第2列的值 </span>
+<span class="pl-c"><span class="pl-c">#</span># [1] 25</span>
+
+<span class="pl-smi">patientdata</span>[<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">2</span>,] <span class="pl-c"><span class="pl-c">#</span> 取第1行到第2行，以及所有列，省略数字就是取所有</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes   status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1     Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2 Improved</span>
+
+<span class="pl-smi">patientdata</span>[, <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">3</span>] <span class="pl-c"><span class="pl-c">#</span> 取所有行，以及第1列到第3列</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1</span>
+
+<span class="pl-smi">patientdata</span>[c(<span class="pl-c1">1</span>,<span class="pl-c1">4</span>), c(<span class="pl-c1">1</span>,<span class="pl-c1">3</span>)] <span class="pl-c"><span class="pl-c">#</span> 取第1行和第4行，以及第1列和第3列</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID diabetes</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1    Type1</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4    Type1</span></pre></div>
+<p>如果你在方括号中不写<code class="notranslate">,</code>，那么默认是选取其中的列和所有行：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>[c(<span class="pl-c1">1</span>,<span class="pl-c1">3</span>)] <span class="pl-c"><span class="pl-c">#</span> 取第1列和第3列，所有的行</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID diabetes</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1    Type1</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2    Type2</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3    Type1</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4    Type1</span></pre></div>
+<p>除了使用数字序号这种，也可以直接使用列名进行选取（是不是和向量操作非常像？）：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>[, <span class="pl-s"><span class="pl-pds">"</span>patientID<span class="pl-pds">"</span></span>] <span class="pl-c"><span class="pl-c">#</span> 取patientID这一列和所有的行 ,可省略，下面的也是</span>
+<span class="pl-c"><span class="pl-c">#</span># [1] 1 2 3 4</span>
+<span class="pl-smi">patientdata</span>[, c(<span class="pl-s"><span class="pl-pds">"</span>patientID<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>diabetes<span class="pl-pds">"</span></span>)] <span class="pl-c"><span class="pl-c">#</span> 取patientID和diabetes两列及所有行</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID diabetes</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1    Type1</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2    Type2</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3    Type1</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4    Type1</span></pre></div>
+<p>除了使用方括号，还可以使用美元符号<code class="notranslate">$</code>选取列：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 选取patientID这一列</span>
+<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">patientID</span>
+<span class="pl-c"><span class="pl-c">#</span># [1] 1 2 3 4</span></pre></div>
+<p>如果要同时选择部分行和列，还有一个专门的函数<code class="notranslate">subset()</code>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">subset(<span class="pl-smi">patientdata</span>, <span class="pl-c"><span class="pl-c">#</span> 数据</span>
+       <span class="pl-smi">age</span> <span class="pl-k">&gt;</span> <span class="pl-c1">30</span>, <span class="pl-c"><span class="pl-c">#</span> 选择行，age&gt;30的行</span>
+       <span class="pl-v">select</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>patientID<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>diabetes<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">#</span> 选择列</span>
+       )
+<span class="pl-c"><span class="pl-c">#</span>#   patientID diabetes age</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2    Type2  34</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4    Type1  52</span></pre></div>
+<blockquote>
+<p>tidyverse中的<code class="notranslate">filter</code>和<code class="notranslate">select</code>也能完成此操作</p>
+</blockquote>
+<p><code class="notranslate">patientdata</code>这个数据集有4列，每一列都有一个列名，我们可以通过列名很轻松的选取其中的列，但是这个数据集没有行名，我们可以给它添加行名，这个数据共有4行，所以我们要准备4个名字，然后使用<code class="notranslate">rownames()</code>添加行名：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 准备4个名字</span>
+<span class="pl-smi">rws</span> <span class="pl-k">&lt;-</span> c(<span class="pl-s"><span class="pl-pds">"</span>第一行<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>第二行<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>第三行<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>第四行<span class="pl-pds">"</span></span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 添加行名：</span>
+rownames(<span class="pl-smi">patientdata</span>) <span class="pl-k">&lt;-</span> <span class="pl-smi">rws</span>
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#        patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 第一行         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 第二行         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 第三行         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 第四行         4  52    Type1      Poor</span></pre></div>
+<p>这样就可以通过行名选择你想要的行了，比如选择第1行和第3行，所有的列：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>[c(<span class="pl-s"><span class="pl-pds">"</span>第一行<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>第三行<span class="pl-pds">"</span></span>), ]
+<span class="pl-c"><span class="pl-c">#</span>#        patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 第一行         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 第三行         3  28    Type1 Excellent</span></pre></div>
+<p>选择年龄大于30岁的行以及第2列和第3列：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>[<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span> <span class="pl-k">&gt;</span> <span class="pl-c1">30</span>, c(<span class="pl-c1">2</span>,<span class="pl-c1">3</span>)]
+<span class="pl-c"><span class="pl-c">#</span>#        age diabetes</span>
+<span class="pl-c"><span class="pl-c">#</span># 第二行  34    Type2</span>
+<span class="pl-c"><span class="pl-c">#</span># 第四行  52    Type1</span></pre></div>
+<p>此时其实是通过<code class="notranslate">TRUE/FALSE</code>进行选择，首先看<code class="notranslate">patientdata$age &gt; 30</code>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 第2个和第4个是TRUE，所以就是选择第2行和第4行</span>
+<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span> <span class="pl-k">&gt;</span> <span class="pl-c1">30</span>
+<span class="pl-c"><span class="pl-c">#</span># [1] FALSE  TRUE FALSE  TRUE</span></pre></div>
+<p>这种方法非常有用，大家一定要记住。</p>
+<h3>增加/删除行列</h3>
+<p>增加行列，删除行列：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 增加1列weight</span>
+<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">weight</span> <span class="pl-k">&lt;-</span> c(<span class="pl-c1">20</span>,<span class="pl-c1">30</span>,<span class="pl-c1">40</span>,<span class="pl-c1">50</span>)
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#        patientID age diabetes    status weight</span>
+<span class="pl-c"><span class="pl-c">#</span># 第一行         1  25    Type1      Poor     20</span>
+<span class="pl-c"><span class="pl-c">#</span># 第二行         2  34    Type2  Improved     30</span>
+<span class="pl-c"><span class="pl-c">#</span># 第三行         3  28    Type1 Excellent     40</span>
+<span class="pl-c"><span class="pl-c">#</span># 第四行         4  52    Type1      Poor     50</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 删除第2列，</span>
+<span class="pl-c"><span class="pl-c">#</span> 注意此时不重新赋值的话其实patientdata是没有变化的，和向量一样</span>
+<span class="pl-smi">patientdata</span>[,<span class="pl-k">-</span><span class="pl-c1">2</span>]
+<span class="pl-c"><span class="pl-c">#</span>#        patientID diabetes    status weight</span>
+<span class="pl-c"><span class="pl-c">#</span># 第一行         1    Type1      Poor     20</span>
+<span class="pl-c"><span class="pl-c">#</span># 第二行         2    Type2  Improved     30</span>
+<span class="pl-c"><span class="pl-c">#</span># 第三行         3    Type1 Excellent     40</span>
+<span class="pl-c"><span class="pl-c">#</span># 第四行         4    Type1      Poor     50</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 或者使用以下方法删除列，这种方法不用重新赋值</span>
+<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">weight</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">NULL</span>
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#        patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 第一行         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 第二行         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 第三行         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 第四行         4  52    Type1      Poor</span>
+
+<span class="pl-c"><span class="pl-c">#</span>patientdata[,- "age"] # 这种写法是错误的</span></pre></div>
+<h3>修改和重编码</h3>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(
+  <span class="pl-v">patientID</span> <span class="pl-k">=</span> c(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>), 
+  <span class="pl-v">age</span> <span class="pl-k">=</span> c(<span class="pl-c1">25</span>, <span class="pl-c1">34</span>, <span class="pl-c1">28</span>, <span class="pl-c1">52</span>), 
+  <span class="pl-v">diabetes</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type2<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>), 
+  <span class="pl-v">status</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Poor<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Improved<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Excellent<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Poor<span class="pl-pds">"</span></span>)
+  )
+
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span></pre></div>
+<p>比如，把<code class="notranslate">diabetes</code>这一列中的<code class="notranslate">Type1</code>变成<code class="notranslate">类型1</code>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 选择要修改的列，选择要修改的值，重新赋值即可</span>
+<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">diabetes</span>[<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">diabetes</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>类型1<span class="pl-pds">"</span></span>
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    类型1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    类型1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    类型1      Poor</span></pre></div>
+<p>把<code class="notranslate">age</code>这一列中大于30岁的变成<code class="notranslate">中年人</code>，小于等于30岁的变成<code class="notranslate">青年人</code>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span>[<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span> <span class="pl-k">&gt;</span> <span class="pl-c1">30</span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>中年人<span class="pl-pds">"</span></span>
+<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span>[<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span> <span class="pl-k">&lt;</span><span class="pl-k">=</span> <span class="pl-c1">30</span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>青年人<span class="pl-pds">"</span></span>
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID    age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1 青年人    类型1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2 中年人    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3 青年人    类型1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4 中年人    类型1      Poor</span></pre></div>
+<h3>行列转置</h3>
+<p>行变成列，列变成行，也就是旋转90°：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID    age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1 青年人    类型1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2 中年人    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3 青年人    类型1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4 中年人    类型1      Poor</span>
+
+<span class="pl-smi">pdt</span> <span class="pl-k">&lt;-</span> t(<span class="pl-smi">patientdata</span>) <span class="pl-c"><span class="pl-c">#</span> transpose缩写</span>
+<span class="pl-smi">pdt</span>
+<span class="pl-c"><span class="pl-c">#</span>#           [,1]     [,2]       [,3]        [,4]    </span>
+<span class="pl-c"><span class="pl-c">#</span># patientID "1"      "2"        "3"         "4"     </span>
+<span class="pl-c"><span class="pl-c">#</span># age       "青年人" "中年人"   "青年人"    "中年人"</span>
+<span class="pl-c"><span class="pl-c">#</span># diabetes  "类型1"  "Type2"    "类型1"     "类型1" </span>
+<span class="pl-c"><span class="pl-c">#</span># status    "Poor"   "Improved" "Excellent" "Poor"</span>
+class(<span class="pl-smi">pdt</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] "matrix" "array"</span></pre></div>
+<p>数据框转置后会变成矩阵，如果要变成数据框，使用<code class="notranslate">as.data.frame()</code>即可：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">pdt</span> <span class="pl-k">&lt;-</span> as.data.frame(t(<span class="pl-smi">patientdata</span>))
+<span class="pl-smi">pdt</span>
+<span class="pl-c"><span class="pl-c">#</span>#               V1       V2        V3     V4</span>
+<span class="pl-c"><span class="pl-c">#</span># patientID      1        2         3      4</span>
+<span class="pl-c"><span class="pl-c">#</span># age       青年人   中年人    青年人 中年人</span>
+<span class="pl-c"><span class="pl-c">#</span># diabetes   类型1    Type2     类型1  类型1</span>
+<span class="pl-c"><span class="pl-c">#</span># status      Poor Improved Excellent   Poor</span>
+class(<span class="pl-smi">pdt</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] "data.frame"</span></pre></div>
+<h3>行列拼接</h3>
+<p>可以分为:</p>
+<ul>
+<li>
+<p>拼接列：把列拼起来，也就是对多个数据框水平堆叠，也就是在一个数据框的右侧添加另一个数据框，要求行数相同</p>
+</li>
+<li>
+<p>拼接行：把行拼起来，也就是对多个数据框垂直堆叠，也就是在一个数据框的下方添加另一个数据框，要求列数相同</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/58275fa21dc07830f8fc955a46a4569c60aa3590a5cfd61613d782af8f79d04f/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c52383452696334623963446b563843486f41705953684a7354423157654a3141635a6b7041456e5850547970783166414b344d32473034384d32684e51664731655230764b4871353272327075355539412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/58275fa21dc07830f8fc955a46a4569c60aa3590a5cfd61613d782af8f79d04f/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c52383452696334623963446b563843486f41705953684a7354423157654a3141635a6b7041456e5850547970783166414b344d32473034384d32684e51664731655230764b4871353272327075355539412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84Ric4b9cDkV8CHoApYShJsTB1WeJ1AcZkpAEnXPTypx1fAK4M2G048M2hNQfG1eR0vKHq52r2pu5U9A/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84Ric4b9cDkV8CHoApYShJsTB1WeJ1AcZkpAEnXPTypx1fAK4M2G048M2hNQfG1eR0vKHq52r2pu5U9A/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>比如现在如下两个数据框<code class="notranslate">df1</code>和<code class="notranslate">df2</code>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">df1</span> <span class="pl-c"><span class="pl-c">#</span> 3行4列</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 3 × 4</span>
+<span class="pl-c"><span class="pl-c">#</span>#   barcode                      patient      sample           sample_type        </span>
+<span class="pl-c"><span class="pl-c">#</span>#   &lt;chr&gt;                        &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;              </span>
+<span class="pl-c"><span class="pl-c">#</span># 1 TCGA-BH-A1FC-11A-32R-A13Q-07 TCGA-BH-A1FC TCGA-BH-A1FC-11A Solid Tissue Normal</span>
+<span class="pl-c"><span class="pl-c">#</span># 2 TCGA-AC-A2FM-11B-32R-A19W-07 TCGA-AC-A2FM TCGA-AC-A2FM-11B Solid Tissue Normal</span>
+<span class="pl-c"><span class="pl-c">#</span># 3 TCGA-BH-A0DO-11A-22R-A12D-07 TCGA-BH-A0DO TCGA-BH-A0DO-11A Solid Tissue Normal</span>
+<span class="pl-smi">df2</span> <span class="pl-c"><span class="pl-c">#</span> 3行5列</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 3 × 5</span>
+<span class="pl-c"><span class="pl-c">#</span>#   initial_weight ajcc_pathologic_stage days_to_last_follow_up gender</span>
+<span class="pl-c"><span class="pl-c">#</span>#            &lt;dbl&gt; &lt;chr&gt;                 &lt;chr&gt;                  &lt;chr&gt; </span>
+<span class="pl-c"><span class="pl-c">#</span># 1            260 Stage IIA             NA                     female</span>
+<span class="pl-c"><span class="pl-c">#</span># 2            220 Stage IIB             NA                     female</span>
+<span class="pl-c"><span class="pl-c">#</span># 3            130 Stage I               1644                   female</span>
+<span class="pl-c"><span class="pl-c">#</span># # ℹ 1 more variable: age_at_index &lt;dbl&gt;</span></pre></div>
+<p>现在我们把两个数据框按列拼接：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">cbind(<span class="pl-smi">df1</span>, <span class="pl-smi">df2</span>) <span class="pl-c"><span class="pl-c">#</span> column bind，变成3行9列</span>
+<span class="pl-c"><span class="pl-c">#</span>#                        barcode      patient           sample</span>
+<span class="pl-c"><span class="pl-c">#</span># 1 TCGA-BH-A1FC-11A-32R-A13Q-07 TCGA-BH-A1FC TCGA-BH-A1FC-11A</span>
+<span class="pl-c"><span class="pl-c">#</span># 2 TCGA-AC-A2FM-11B-32R-A19W-07 TCGA-AC-A2FM TCGA-AC-A2FM-11B</span>
+<span class="pl-c"><span class="pl-c">#</span># 3 TCGA-BH-A0DO-11A-22R-A12D-07 TCGA-BH-A0DO TCGA-BH-A0DO-11A</span>
+<span class="pl-c"><span class="pl-c">#</span>#           sample_type initial_weight ajcc_pathologic_stage</span>
+<span class="pl-c"><span class="pl-c">#</span># 1 Solid Tissue Normal            260             Stage IIA</span>
+<span class="pl-c"><span class="pl-c">#</span># 2 Solid Tissue Normal            220             Stage IIB</span>
+<span class="pl-c"><span class="pl-c">#</span># 3 Solid Tissue Normal            130               Stage I</span>
+<span class="pl-c"><span class="pl-c">#</span>#   days_to_last_follow_up gender age_at_index</span>
+<span class="pl-c"><span class="pl-c">#</span># 1                     NA female           78</span>
+<span class="pl-c"><span class="pl-c">#</span># 2                     NA female           87</span>
+<span class="pl-c"><span class="pl-c">#</span># 3                   1644 female           78</span></pre></div>
+<p>假如还有两个数据框<code class="notranslate">df3</code>和<code class="notranslate">df4</code>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">df3</span> <span class="pl-c"><span class="pl-c">#</span> 3行2列</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 3 × 2</span>
+<span class="pl-c"><span class="pl-c">#</span>#   barcode                      patient     </span>
+<span class="pl-c"><span class="pl-c">#</span>#   &lt;chr&gt;                        &lt;chr&gt;       </span>
+<span class="pl-c"><span class="pl-c">#</span># 1 TCGA-BH-A1FC-11A-32R-A13Q-07 TCGA-BH-A1FC</span>
+<span class="pl-c"><span class="pl-c">#</span># 2 TCGA-AC-A2FM-11B-32R-A19W-07 TCGA-AC-A2FM</span>
+<span class="pl-c"><span class="pl-c">#</span># 3 TCGA-BH-A0DO-11A-22R-A12D-07 TCGA-BH-A0DO</span>
+<span class="pl-smi">df4</span> <span class="pl-c"><span class="pl-c">#</span> 2行2列</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 2 × 2</span>
+<span class="pl-c"><span class="pl-c">#</span>#   barcode                      patient     </span>
+<span class="pl-c"><span class="pl-c">#</span>#   &lt;chr&gt;                        &lt;chr&gt;       </span>
+<span class="pl-c"><span class="pl-c">#</span># 1 TCGA-E2-A1BC-11A-32R-A12P-07 TCGA-E2-A1BC</span>
+<span class="pl-c"><span class="pl-c">#</span># 2 TCGA-BH-A0BJ-11A-23R-A089-07 TCGA-BH-A0BJ</span></pre></div>
+<p>进行按行拼接：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">rbind(<span class="pl-smi">df3</span>,<span class="pl-smi">df4</span>) <span class="pl-c"><span class="pl-c">#</span> row bind，变成5行2列</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 5 × 2</span>
+<span class="pl-c"><span class="pl-c">#</span>#   barcode                      patient     </span>
+<span class="pl-c"><span class="pl-c">#</span>#   &lt;chr&gt;                        &lt;chr&gt;       </span>
+<span class="pl-c"><span class="pl-c">#</span># 1 TCGA-BH-A1FC-11A-32R-A13Q-07 TCGA-BH-A1FC</span>
+<span class="pl-c"><span class="pl-c">#</span># 2 TCGA-AC-A2FM-11B-32R-A19W-07 TCGA-AC-A2FM</span>
+<span class="pl-c"><span class="pl-c">#</span># 3 TCGA-BH-A0DO-11A-22R-A12D-07 TCGA-BH-A0DO</span>
+<span class="pl-c"><span class="pl-c">#</span># 4 TCGA-E2-A1BC-11A-32R-A12P-07 TCGA-E2-A1BC</span>
+<span class="pl-c"><span class="pl-c">#</span># 5 TCGA-BH-A0BJ-11A-23R-A089-07 TCGA-BH-A0BJ</span></pre></div>
+<h3>数据框合并</h3>
+<p>具有共同信息的两个数据框可以合并到一个数据框中。比如表格1中包含甲乙丙丁4个病人的年龄和性别信息，表格2中包含甲乙丙丁4个病人的生化指标，那么这样的两个表格就可以合并到一个表格中。</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">df1</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(
+  <span class="pl-v">patientID</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>甲<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>乙<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>丙<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>丁<span class="pl-pds">"</span></span>),
+  <span class="pl-v">age</span> <span class="pl-k">=</span> c(<span class="pl-c1">23</span>,<span class="pl-c1">43</span>,<span class="pl-c1">45</span>,<span class="pl-c1">34</span>),
+  <span class="pl-v">gender</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>男<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>女<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>女<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>男<span class="pl-pds">"</span></span>)
+)
+<span class="pl-smi">df2</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(
+  <span class="pl-v">patientID</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>甲<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>乙<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>丙<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>丁<span class="pl-pds">"</span></span>),
+  <span class="pl-v">hb</span> <span class="pl-k">=</span> c(<span class="pl-c1">110</span>,<span class="pl-c1">124</span>,<span class="pl-c1">138</span>,<span class="pl-c1">142</span>),
+  <span class="pl-v">wbc</span> <span class="pl-k">=</span> c(<span class="pl-c1">3.7</span>,<span class="pl-c1">4.6</span>,<span class="pl-c1">6.4</span>,<span class="pl-c1">4.2</span>)
+)
+
+<span class="pl-smi">df1</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        甲  23     男</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        乙  43     女</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        丙  45     女</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        丁  34     男</span>
+<span class="pl-smi">df2</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        甲 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        乙 124 4.6</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        丙 138 6.4</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        丁 142 4.2</span></pre></div>
+<p>这两个数据框储存着同一批病人（都是甲乙丙丁4个人）的不同信息，直接拼接起来不是我们想要的结果，因为<code class="notranslate">patientID</code>会出现两次：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">cbind(<span class="pl-smi">df1</span>,<span class="pl-smi">df2</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender patientID  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        甲  23     男        甲 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        乙  43     女        乙 124 4.6</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        丙  45     女        丙 138 6.4</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        丁  34     男        丁 142 4.2</span></pre></div>
+<p>正确的方法是根据两个数据框共有的信息把它们合并起来。这两个数据框共有的信息是<code class="notranslate">patientID</code>这一列，表示的都是甲乙丙丁4个病人，这种情况的正确做法是使用<code class="notranslate">merge</code>函数。</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 根据共有信息合并2个数据框</span>
+<span class="pl-smi">df3</span> <span class="pl-k">&lt;-</span> merge(<span class="pl-smi">df1</span>, <span class="pl-smi">df2</span>, <span class="pl-v">by</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>patientID<span class="pl-pds">"</span></span>)
+<span class="pl-smi">df3</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        丙  45     女 138 6.4</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        丁  34     男 142 4.2</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        甲  23     男 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        乙  43     女 124 4.6</span></pre></div>
+<p>顺序不一样也没有影响，会自动对应好。比如下面这个数据框，它的顺序不是甲乙丙丁，而是甲丁乙丙：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">df4</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">df2</span>[order(<span class="pl-smi">df2</span><span class="pl-k">$</span><span class="pl-smi">wbc</span>),]
+<span class="pl-smi">df4</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        甲 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        丁 142 4.2</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        乙 124 4.6</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        丙 138 6.4</span></pre></div>
+<p>这个数据框和<code class="notranslate">df1</code>也可以直接合并，不会出错：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">merge(<span class="pl-smi">df1</span>, <span class="pl-smi">df4</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        丙  45     女 138 6.4</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        丁  34     男 142 4.2</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        甲  23     男 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        乙  43     女 124 4.6</span></pre></div>
+<p>两个数据框共有信息的名字不一样也可以！</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 这个数据框表示病人ID的列名是id，不是patientID</span>
+names(<span class="pl-smi">df4</span>)[<span class="pl-c1">1</span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>
+<span class="pl-smi">df4</span>
+<span class="pl-c"><span class="pl-c">#</span>#   id  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1 甲 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 4 丁 142 4.2</span>
+<span class="pl-c"><span class="pl-c">#</span># 2 乙 124 4.6</span>
+<span class="pl-c"><span class="pl-c">#</span># 3 丙 138 6.4</span>
+<span class="pl-smi">df1</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        甲  23     男</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        乙  43     女</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        丙  45     女</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        丁  34     男</span></pre></div>
+<p>也可以直接合并，只要指定各自的列名即可：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">merge(<span class="pl-smi">df1</span>,<span class="pl-smi">df4</span>, <span class="pl-v">by.x</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>patientID<span class="pl-pds">"</span></span>, <span class="pl-v">by.y</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        丙  45     女 138 6.4</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        丁  34     男 142 4.2</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        甲  23     男 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        乙  43     女 124 4.6</span></pre></div>
+<p>这就是表格的合并，也就是把存储相同信息的多个表格合并到一个表格中，注意共同的列(上面的例子是<code class="notranslate">patientID</code>，可以列名不同，但是必须是相同的一类信息或者标识符)不能有重复的观测（比如不能有多个“甲”，只能有一个）。</p>
+<p>根据具体情况不同，可以分为以下几类：</p>
+<ul>
+<li>
+<p>内连接：保留两个表格中共有的观测。</p>
+</li>
+<li>
+<p>左连接：保留表1中的所有观测。</p>
+</li>
+<li>
+<p>右连接：保留表2中的所有观测。</p>
+</li>
+<li>
+<p>全连接：保留表1和表2中的所有观测。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/1dda51937445878a46724b7b4bf34f99271249c2b5c9adb1428cc1c9dd9e971a/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c52383452696334623963446b563843486f41705953684a735442316b75333443593544545a4c3573595a6854754e6a6f4b654377357a6a396f433252665465476341746a584d6b5579696352507a795657412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/1dda51937445878a46724b7b4bf34f99271249c2b5c9adb1428cc1c9dd9e971a/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c52383452696334623963446b563843486f41705953684a735442316b75333443593544545a4c3573595a6854754e6a6f4b654377357a6a396f433252665465476341746a584d6b5579696352507a795657412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84Ric4b9cDkV8CHoApYShJsTB1ku34CY5DTZL5sYZhTuNjoKeCw5zj9oC2RfTeGcAtjXMkUyicRPzyVWA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84Ric4b9cDkV8CHoApYShJsTB1ku34CY5DTZL5sYZhTuNjoKeCw5zj9oC2RfTeGcAtjXMkUyicRPzyVWA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>假设两个数据框存储了病人的不同信息，如下所示：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">df1</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(
+  <span class="pl-v">patientID</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>甲<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>乙<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>丙<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>丁<span class="pl-pds">"</span></span>),
+  <span class="pl-v">age</span> <span class="pl-k">=</span> c(<span class="pl-c1">23</span>,<span class="pl-c1">43</span>,<span class="pl-c1">45</span>,<span class="pl-c1">34</span>),
+  <span class="pl-v">gender</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>男<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>女<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>女<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>男<span class="pl-pds">"</span></span>)
+)
+<span class="pl-smi">df2</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(
+  <span class="pl-v">patientID</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>甲<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>乙<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>戊<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>几<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>庚<span class="pl-pds">"</span></span>),
+  <span class="pl-v">hb</span> <span class="pl-k">=</span> c(<span class="pl-c1">110</span>,<span class="pl-c1">124</span>,<span class="pl-c1">138</span>,<span class="pl-c1">142</span>,<span class="pl-c1">108</span>),
+  <span class="pl-v">wbc</span> <span class="pl-k">=</span> c(<span class="pl-c1">3.7</span>,<span class="pl-c1">4.6</span>,<span class="pl-c1">6.4</span>,<span class="pl-c1">4.2</span>,<span class="pl-c1">5.6</span>)
+)
+
+<span class="pl-smi">df1</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        甲  23     男</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        乙  43     女</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        丙  45     女</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        丁  34     男</span>
+<span class="pl-smi">df2</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        甲 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        乙 124 4.6</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        戊 138 6.4</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        几 142 4.2</span>
+<span class="pl-c"><span class="pl-c">#</span># 5        庚 108 5.6</span></pre></div>
+<p>内连接，即保留两个表格中共有的观测：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">merge(<span class="pl-smi">df1</span>, <span class="pl-smi">df2</span>, <span class="pl-v">by</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>patientID<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        甲  23     男 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        乙  43     女 124 4.6</span></pre></div>
+<p>左连接，即保留表1中的所有观测，表2中没有的信息自动填充<code class="notranslate">NA</code>：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">merge(<span class="pl-smi">df1</span>, <span class="pl-smi">df2</span>, <span class="pl-v">all.x</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        丙  45     女  NA  NA</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        丁  34     男  NA  NA</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        甲  23     男 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        乙  43     女 124 4.6</span></pre></div>
+<p>右连接，和左连接刚好相反，保留表2中的所有观测：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">merge(<span class="pl-smi">df1</span>, <span class="pl-smi">df2</span>, <span class="pl-v">all.y</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        庚  NA   &lt;NA&gt; 108 5.6</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        几  NA   &lt;NA&gt; 142 4.2</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        甲  23     男 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        戊  NA   &lt;NA&gt; 138 6.4</span>
+<span class="pl-c"><span class="pl-c">#</span># 5        乙  43     女 124 4.6</span>
+
+<span class="pl-c"><span class="pl-c">#</span>等价于</span>
+merge(<span class="pl-smi">df2</span>, <span class="pl-smi">df1</span>, <span class="pl-v">all.x</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID  hb wbc age gender</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        庚 108 5.6  NA   &lt;NA&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        几 142 4.2  NA   &lt;NA&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        甲 110 3.7  23     男</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        戊 138 6.4  NA   &lt;NA&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span># 5        乙 124 4.6  43     女</span></pre></div>
+<p>全连接，即保留表1和表2中的所有观测：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">merge(<span class="pl-smi">df1</span>, <span class="pl-smi">df2</span>, <span class="pl-v">all</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>)
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age gender  hb wbc</span>
+<span class="pl-c"><span class="pl-c">#</span># 1        丙  45     女  NA  NA</span>
+<span class="pl-c"><span class="pl-c">#</span># 2        丁  34     男  NA  NA</span>
+<span class="pl-c"><span class="pl-c">#</span># 3        庚  NA   &lt;NA&gt; 108 5.6</span>
+<span class="pl-c"><span class="pl-c">#</span># 4        几  NA   &lt;NA&gt; 142 4.2</span>
+<span class="pl-c"><span class="pl-c">#</span># 5        甲  23     男 110 3.7</span>
+<span class="pl-c"><span class="pl-c">#</span># 6        戊  NA   &lt;NA&gt; 138 6.4</span>
+<span class="pl-c"><span class="pl-c">#</span># 7        乙  43     女 124 4.6</span></pre></div>
+<p>上面4种连接是最常见的，其实还有半连接和反连接，暂不介绍，感兴趣的可以自己学习一下。</p>
+<h3>排序</h3>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span> <span class="pl-k">&lt;-</span> <span class="pl-k">data.frame</span>(
+  <span class="pl-v">patientID</span> <span class="pl-k">=</span> c(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>), 
+  <span class="pl-v">age</span> <span class="pl-k">=</span> c(<span class="pl-c1">25</span>, <span class="pl-c1">34</span>, <span class="pl-c1">28</span>, <span class="pl-c1">52</span>), 
+  <span class="pl-v">diabetes</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type2<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Type1<span class="pl-pds">"</span></span>), 
+  <span class="pl-v">status</span> <span class="pl-k">=</span> c(<span class="pl-s"><span class="pl-pds">"</span>Poor<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Improved<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Excellent<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Poor<span class="pl-pds">"</span></span>)
+  )
+
+<span class="pl-smi">patientdata</span>
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span></pre></div>
+<p>根据某一列进行排序，比如根据<code class="notranslate">age</code>从小到大对数据框重新排序：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>[order(<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span>),]
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span></pre></div>
+<p>根据<code class="notranslate">age</code>从大到小对数据框重新排序：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>[order(<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span>, <span class="pl-v">decreasing</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>),]
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 或者</span>
+<span class="pl-smi">patientdata</span>[order(<span class="pl-k">-</span> <span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span>),]
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span></pre></div>
+<p>还可以根据多个变量进行排序，比如，按照年龄从小到大，并且diabetes从1型到2型的顺序排序：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">patientdata</span>[order(<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">age</span>, <span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">diabetes</span>),]
+<span class="pl-c"><span class="pl-c">#</span>#   patientID age diabetes    status</span>
+<span class="pl-c"><span class="pl-c">#</span># 1         1  25    Type1      Poor</span>
+<span class="pl-c"><span class="pl-c">#</span># 3         3  28    Type1 Excellent</span>
+<span class="pl-c"><span class="pl-c">#</span># 2         2  34    Type2  Improved</span>
+<span class="pl-c"><span class="pl-c">#</span># 4         4  52    Type1      Poor</span></pre></div>
+<h3>计数</h3>
+<p>如果要查看某一列有几个类别及数量：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">table(<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">status</span>)
+<span class="pl-c"><span class="pl-c">#</span># </span>
+<span class="pl-c"><span class="pl-c">#</span># Excellent  Improved      Poor </span>
+<span class="pl-c"><span class="pl-c">#</span>#         1         1         2</span></pre></div>
+<p>如果你想生成<code class="notranslate">diabetes</code>和<code class="notranslate">status</code>的列联表，可以使用<code class="notranslate">table()</code>函数：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">table(<span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">diabetes</span>, <span class="pl-smi">patientdata</span><span class="pl-k">$</span><span class="pl-smi">status</span>)
+<span class="pl-c"><span class="pl-c">#</span>#        </span>
+<span class="pl-c"><span class="pl-c">#</span>#         Excellent Improved Poor</span>
+<span class="pl-c"><span class="pl-c">#</span>#   Type1         1        0    2</span>
+<span class="pl-c"><span class="pl-c">#</span>#   Type2         0        1    0</span></pre></div>
+<p>医学生应该都能看懂这个结果什么意思吧？</p>
+<p>在每个变量名前都键入一次<code class="notranslate">patientdata$</code>的写法是不符合编程思想的，是很繁琐的，所以给大家介绍一个<code class="notranslate">with()</code>函数，在<code class="notranslate">with()</code>函数内部，你可以不用写数据集的名字：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">with(<span class="pl-smi">patientdata</span>,
+     table(<span class="pl-smi">diabetes</span>, <span class="pl-smi">status</span>)
+     )
+<span class="pl-c"><span class="pl-c">#</span>#         status</span>
+<span class="pl-c"><span class="pl-c">#</span># diabetes Excellent Improved Poor</span>
+<span class="pl-c"><span class="pl-c">#</span>#    Type1         1        0    2</span>
+<span class="pl-c"><span class="pl-c">#</span>#    Type2         0        1    0</span></pre></div>
+<h3>数据框实战</h3>
+<p>这个数据是我从TCGA官网（官网，不是XENA）下载的乳腺癌患者的临床信息，包含：患者ID、样本ID、样本类型（normal还是tumor？）、年龄、性别等。</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 读取文件</span>
+library(<span class="pl-smi">readxl</span>)
+<span class="pl-smi">brca_clin</span> <span class="pl-k">&lt;-</span> read_xlsx(<span class="pl-s"><span class="pl-pds">"</span>F:/R_books/R_beginners/brca_clin.xlsx<span class="pl-pds">"</span></span>, <span class="pl-v">col_names</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>)
+
+<span class="pl-c"><span class="pl-c">#</span> 查看数据基本情况</span>
+dim(<span class="pl-smi">brca_clin</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] 20  9</span>
+head(<span class="pl-smi">brca_clin</span>)
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 6 × 9</span>
+<span class="pl-c"><span class="pl-c">#</span>#   barcode        patient sample sample_type initial_weight ajcc_pathologic_stage</span>
+<span class="pl-c"><span class="pl-c">#</span>#   &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;                </span>
+<span class="pl-c"><span class="pl-c">#</span># 1 TCGA-BH-A1FC-… TCGA-B… TCGA-… Solid Tiss…            260 Stage IIA            </span>
+<span class="pl-c"><span class="pl-c">#</span># 2 TCGA-AC-A2FM-… TCGA-A… TCGA-… Solid Tiss…            220 Stage IIB            </span>
+<span class="pl-c"><span class="pl-c">#</span># 3 TCGA-BH-A0DO-… TCGA-B… TCGA-… Solid Tiss…            130 Stage I              </span>
+<span class="pl-c"><span class="pl-c">#</span># 4 TCGA-E2-A1BC-… TCGA-E… TCGA-… Solid Tiss…            260 Stage IA             </span>
+<span class="pl-c"><span class="pl-c">#</span># 5 TCGA-BH-A0BJ-… TCGA-B… TCGA-… Solid Tiss…            200 Stage IIB            </span>
+<span class="pl-c"><span class="pl-c">#</span># 6 TCGA-E2-A1LH-… TCGA-E… TCGA-… Solid Tiss…             60 Stage I              </span>
+<span class="pl-c"><span class="pl-c">#</span># # ℹ 3 more variables: days_to_last_follow_up &lt;chr&gt;, gender &lt;chr&gt;,</span>
+<span class="pl-c"><span class="pl-c">#</span># #   age_at_index &lt;dbl&gt;</span>
+colnames(<span class="pl-smi">brca_clin</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] "barcode"                "patient"                "sample"                </span>
+<span class="pl-c"><span class="pl-c">#</span># [4] "sample_type"            "initial_weight"         "ajcc_pathologic_stage" </span>
+<span class="pl-c"><span class="pl-c">#</span># [7] "days_to_last_follow_up" "gender"                 "age_at_index"</span></pre></div>
+<p>变量名修改：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">colnames(<span class="pl-smi">brca_clin</span>)[c(<span class="pl-c1">5</span>,<span class="pl-c1">6</span>,<span class="pl-c1">7</span>,<span class="pl-c1">9</span>)] <span class="pl-k">&lt;-</span> c(<span class="pl-s"><span class="pl-pds">"</span>weight<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>stage<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>days<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span>)
+colnames(<span class="pl-smi">brca_clin</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] "barcode"     "patient"     "sample"      "sample_type" "weight"     </span>
+<span class="pl-c"><span class="pl-c">#</span># [6] "stage"       "days"        "gender"      "age"</span></pre></div>
+<p>选择第5~9列：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">brca_clin</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">brca_clin</span>[,c(<span class="pl-c1">5</span><span class="pl-k">:</span><span class="pl-c1">9</span>)]
+<span class="pl-smi">brca_clin</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 20 × 5</span>
+<span class="pl-c"><span class="pl-c">#</span>#    weight stage      days  gender   age</span>
+<span class="pl-c"><span class="pl-c">#</span>#     &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span>#  1    260 Stage IIA  NA    female    78</span>
+<span class="pl-c"><span class="pl-c">#</span>#  2    220 Stage IIB  NA    female    87</span>
+<span class="pl-c"><span class="pl-c">#</span>#  3    130 Stage I    1644  female    78</span>
+<span class="pl-c"><span class="pl-c">#</span>#  4    260 Stage IA   501   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span>#  5    200 Stage IIB  660   female    41</span>
+<span class="pl-c"><span class="pl-c">#</span>#  6     60 Stage I    3247  female    59</span>
+<span class="pl-c"><span class="pl-c">#</span>#  7    320 Stage IIB  NA    female    60</span>
+<span class="pl-c"><span class="pl-c">#</span>#  8    310 Stage IIIA NA    female    39</span>
+<span class="pl-c"><span class="pl-c">#</span>#  9    100 Stage IIB  1876  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 10    250 Stage IIB  707   female    51</span>
+<span class="pl-c"><span class="pl-c">#</span># 11    130 Stage IIA  5749  female    51</span>
+<span class="pl-c"><span class="pl-c">#</span># 12    110 Stage IA   NA    female    44</span>
+<span class="pl-c"><span class="pl-c">#</span># 13    470 Stage IIA  1972  female    64</span>
+<span class="pl-c"><span class="pl-c">#</span># 14     90 Stage I    1321  female    56</span>
+<span class="pl-c"><span class="pl-c">#</span># 15    200 Stage IIA  385   female    71</span>
+<span class="pl-c"><span class="pl-c">#</span># 16     70 Stage IIA  1800  female    71</span>
+<span class="pl-c"><span class="pl-c">#</span># 17    130 Stage IIB  214   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span># 18    770 Stage IIIA 1206  female    47</span>
+<span class="pl-c"><span class="pl-c">#</span># 19    200 Stage IA   2442  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 20    250 Stage IIIC NA    female    36</span></pre></div>
+<p>按照<code class="notranslate">age</code>从小到大排序数据框：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">brca_clin</span>[order(<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">age</span>),]
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 20 × 5</span>
+<span class="pl-c"><span class="pl-c">#</span>#    weight stage      days  gender   age</span>
+<span class="pl-c"><span class="pl-c">#</span>#     &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span>#  1    250 Stage IIIC NA    female    36</span>
+<span class="pl-c"><span class="pl-c">#</span>#  2    310 Stage IIIA NA    female    39</span>
+<span class="pl-c"><span class="pl-c">#</span>#  3    200 Stage IIB  660   female    41</span>
+<span class="pl-c"><span class="pl-c">#</span>#  4    110 Stage IA   NA    female    44</span>
+<span class="pl-c"><span class="pl-c">#</span>#  5    770 Stage IIIA 1206  female    47</span>
+<span class="pl-c"><span class="pl-c">#</span>#  6    250 Stage IIB  707   female    51</span>
+<span class="pl-c"><span class="pl-c">#</span>#  7    130 Stage IIA  5749  female    51</span>
+<span class="pl-c"><span class="pl-c">#</span>#  8    100 Stage IIB  1876  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span>#  9    200 Stage IA   2442  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 10     90 Stage I    1321  female    56</span>
+<span class="pl-c"><span class="pl-c">#</span># 11     60 Stage I    3247  female    59</span>
+<span class="pl-c"><span class="pl-c">#</span># 12    320 Stage IIB  NA    female    60</span>
+<span class="pl-c"><span class="pl-c">#</span># 13    260 Stage IA   501   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span># 14    130 Stage IIB  214   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span># 15    470 Stage IIA  1972  female    64</span>
+<span class="pl-c"><span class="pl-c">#</span># 16    200 Stage IIA  385   female    71</span>
+<span class="pl-c"><span class="pl-c">#</span># 17     70 Stage IIA  1800  female    71</span>
+<span class="pl-c"><span class="pl-c">#</span># 18    260 Stage IIA  NA    female    78</span>
+<span class="pl-c"><span class="pl-c">#</span># 19    130 Stage I    1644  female    78</span>
+<span class="pl-c"><span class="pl-c">#</span># 20    220 Stage IIB  NA    female    87</span></pre></div>
+<p>按照从大到小的顺序排列：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">brca_clin</span>[order(<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">age</span>, <span class="pl-v">decreasing</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>),]
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 20 × 5</span>
+<span class="pl-c"><span class="pl-c">#</span>#    weight stage      days  gender   age</span>
+<span class="pl-c"><span class="pl-c">#</span>#     &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span>#  1    220 Stage IIB  NA    female    87</span>
+<span class="pl-c"><span class="pl-c">#</span>#  2    260 Stage IIA  NA    female    78</span>
+<span class="pl-c"><span class="pl-c">#</span>#  3    130 Stage I    1644  female    78</span>
+<span class="pl-c"><span class="pl-c">#</span>#  4    200 Stage IIA  385   female    71</span>
+<span class="pl-c"><span class="pl-c">#</span>#  5     70 Stage IIA  1800  female    71</span>
+<span class="pl-c"><span class="pl-c">#</span>#  6    470 Stage IIA  1972  female    64</span>
+<span class="pl-c"><span class="pl-c">#</span>#  7    260 Stage IA   501   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span>#  8    130 Stage IIB  214   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span>#  9    320 Stage IIB  NA    female    60</span>
+<span class="pl-c"><span class="pl-c">#</span># 10     60 Stage I    3247  female    59</span>
+<span class="pl-c"><span class="pl-c">#</span># 11     90 Stage I    1321  female    56</span>
+<span class="pl-c"><span class="pl-c">#</span># 12    100 Stage IIB  1876  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 13    200 Stage IA   2442  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 14    250 Stage IIB  707   female    51</span>
+<span class="pl-c"><span class="pl-c">#</span># 15    130 Stage IIA  5749  female    51</span>
+<span class="pl-c"><span class="pl-c">#</span># 16    770 Stage IIIA 1206  female    47</span>
+<span class="pl-c"><span class="pl-c">#</span># 17    110 Stage IA   NA    female    44</span>
+<span class="pl-c"><span class="pl-c">#</span># 18    200 Stage IIB  660   female    41</span>
+<span class="pl-c"><span class="pl-c">#</span># 19    310 Stage IIIA NA    female    39</span>
+<span class="pl-c"><span class="pl-c">#</span># 20    250 Stage IIIC NA    female    36</span></pre></div>
+<p>查看有几个类别，以及每个类别的数量：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">table(<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span>)
+<span class="pl-c"><span class="pl-c">#</span># </span>
+<span class="pl-c"><span class="pl-c">#</span>#    Stage I   Stage IA  Stage IIA  Stage IIB Stage IIIA Stage IIIC </span>
+<span class="pl-c"><span class="pl-c">#</span>#          3          3          5          6          2          1</span></pre></div>
+<p>变量重编码和修改：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span>[<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>Stage IIB<span class="pl-pds">"</span></span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Stage_2<span class="pl-pds">"</span></span>
+<span class="pl-smi">brca_clin</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 20 × 5</span>
+<span class="pl-c"><span class="pl-c">#</span>#    weight stage      days  gender   age</span>
+<span class="pl-c"><span class="pl-c">#</span>#     &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span>#  1    260 Stage IIA  NA    female    78</span>
+<span class="pl-c"><span class="pl-c">#</span>#  2    220 Stage_2    NA    female    87</span>
+<span class="pl-c"><span class="pl-c">#</span>#  3    130 Stage I    1644  female    78</span>
+<span class="pl-c"><span class="pl-c">#</span>#  4    260 Stage IA   501   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span>#  5    200 Stage_2    660   female    41</span>
+<span class="pl-c"><span class="pl-c">#</span>#  6     60 Stage I    3247  female    59</span>
+<span class="pl-c"><span class="pl-c">#</span>#  7    320 Stage_2    NA    female    60</span>
+<span class="pl-c"><span class="pl-c">#</span>#  8    310 Stage IIIA NA    female    39</span>
+<span class="pl-c"><span class="pl-c">#</span>#  9    100 Stage_2    1876  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 10    250 Stage_2    707   female    51</span>
+<span class="pl-c"><span class="pl-c">#</span># 11    130 Stage IIA  5749  female    51</span>
+<span class="pl-c"><span class="pl-c">#</span># 12    110 Stage IA   NA    female    44</span>
+<span class="pl-c"><span class="pl-c">#</span># 13    470 Stage IIA  1972  female    64</span>
+<span class="pl-c"><span class="pl-c">#</span># 14     90 Stage I    1321  female    56</span>
+<span class="pl-c"><span class="pl-c">#</span># 15    200 Stage IIA  385   female    71</span>
+<span class="pl-c"><span class="pl-c">#</span># 16     70 Stage IIA  1800  female    71</span>
+<span class="pl-c"><span class="pl-c">#</span># 17    130 Stage_2    214   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span># 18    770 Stage IIIA 1206  female    47</span>
+<span class="pl-c"><span class="pl-c">#</span># 19    200 Stage IA   2442  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 20    250 Stage IIIC NA    female    36</span></pre></div>
+<p>全部修改：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span>[<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>Stage IIA<span class="pl-pds">"</span></span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Stage_2<span class="pl-pds">"</span></span>
+<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span>[<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>Stage IA<span class="pl-pds">"</span></span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Stage_1<span class="pl-pds">"</span></span>
+<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span>[<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>Stage I<span class="pl-pds">"</span></span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Stage_1<span class="pl-pds">"</span></span>
+<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span>[<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>Stage IIIA<span class="pl-pds">"</span></span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Stage_3<span class="pl-pds">"</span></span>
+<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span>[<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>Stage IIIC<span class="pl-pds">"</span></span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>Stage_3<span class="pl-pds">"</span></span>
+
+<span class="pl-smi">brca_clin</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 20 × 5</span>
+<span class="pl-c"><span class="pl-c">#</span>#    weight stage   days  gender   age</span>
+<span class="pl-c"><span class="pl-c">#</span>#     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span>#  1    260 Stage_2 NA    female    78</span>
+<span class="pl-c"><span class="pl-c">#</span>#  2    220 Stage_2 NA    female    87</span>
+<span class="pl-c"><span class="pl-c">#</span>#  3    130 Stage_1 1644  female    78</span>
+<span class="pl-c"><span class="pl-c">#</span>#  4    260 Stage_1 501   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span>#  5    200 Stage_2 660   female    41</span>
+<span class="pl-c"><span class="pl-c">#</span>#  6     60 Stage_1 3247  female    59</span>
+<span class="pl-c"><span class="pl-c">#</span>#  7    320 Stage_2 NA    female    60</span>
+<span class="pl-c"><span class="pl-c">#</span>#  8    310 Stage_3 NA    female    39</span>
+<span class="pl-c"><span class="pl-c">#</span>#  9    100 Stage_2 1876  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 10    250 Stage_2 707   female    51</span>
+<span class="pl-c"><span class="pl-c">#</span># 11    130 Stage_2 5749  female    51</span>
+<span class="pl-c"><span class="pl-c">#</span># 12    110 Stage_1 NA    female    44</span>
+<span class="pl-c"><span class="pl-c">#</span># 13    470 Stage_2 1972  female    64</span>
+<span class="pl-c"><span class="pl-c">#</span># 14     90 Stage_1 1321  female    56</span>
+<span class="pl-c"><span class="pl-c">#</span># 15    200 Stage_2 385   female    71</span>
+<span class="pl-c"><span class="pl-c">#</span># 16     70 Stage_2 1800  female    71</span>
+<span class="pl-c"><span class="pl-c">#</span># 17    130 Stage_2 214   female    63</span>
+<span class="pl-c"><span class="pl-c">#</span># 18    770 Stage_3 1206  female    47</span>
+<span class="pl-c"><span class="pl-c">#</span># 19    200 Stage_1 2442  female    54</span>
+<span class="pl-c"><span class="pl-c">#</span># 20    250 Stage_3 NA    female    36</span></pre></div>
+<p>查看修改后的<code class="notranslate">stage</code>:</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">table(<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">stage</span>)
+<span class="pl-c"><span class="pl-c">#</span># </span>
+<span class="pl-c"><span class="pl-c">#</span># Stage_1 Stage_2 Stage_3 </span>
+<span class="pl-c"><span class="pl-c">#</span>#       6      11       3</span></pre></div>
+<p>根据年龄进行分组，大于60岁是<code class="notranslate">old</code>，小于等于60岁是<code class="notranslate">young</code>:</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 先看下年龄是不是数值型</span>
+str(<span class="pl-smi">brca_clin</span>)
+<span class="pl-c"><span class="pl-c">#</span># tibble [20 × 5] (S3: tbl_df/tbl/data.frame)</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ weight: num [1:20] 260 220 130 260 200 60 320 310 100 250 ...</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ stage : chr [1:20] "Stage_2" "Stage_2" "Stage_1" "Stage_1" ...</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ days  : chr [1:20] "NA" "NA" "1644" "501" ...</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ gender: chr [1:20] "female" "female" "female" "female" ...</span>
+<span class="pl-c"><span class="pl-c">#</span>#  $ age   : num [1:20] 78 87 78 63 41 59 60 39 54 51 ...</span>
+is.numeric(<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">age</span>)
+<span class="pl-c"><span class="pl-c">#</span># [1] TRUE</span></pre></div>
+<p>开始修改：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">age</span>[<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">age</span> <span class="pl-k">&gt;</span> <span class="pl-c1">60</span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>old<span class="pl-pds">"</span></span>
+<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">age</span>[<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">age</span> <span class="pl-k">&lt;</span><span class="pl-k">=</span> <span class="pl-c1">60</span>] <span class="pl-k">&lt;-</span> <span class="pl-s"><span class="pl-pds">"</span>young<span class="pl-pds">"</span></span>
+<span class="pl-smi">brca_clin</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 20 × 5</span>
+<span class="pl-c"><span class="pl-c">#</span>#    weight stage   days  gender age  </span>
+<span class="pl-c"><span class="pl-c">#</span>#     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span>#  1    260 Stage_2 NA    female old  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  2    220 Stage_2 NA    female old  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  3    130 Stage_1 1644  female old  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  4    260 Stage_1 501   female old  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  5    200 Stage_2 660   female young</span>
+<span class="pl-c"><span class="pl-c">#</span>#  6     60 Stage_1 3247  female young</span>
+<span class="pl-c"><span class="pl-c">#</span>#  7    320 Stage_2 NA    female young</span>
+<span class="pl-c"><span class="pl-c">#</span>#  8    310 Stage_3 NA    female young</span>
+<span class="pl-c"><span class="pl-c">#</span>#  9    100 Stage_2 1876  female young</span>
+<span class="pl-c"><span class="pl-c">#</span># 10    250 Stage_2 707   female young</span>
+<span class="pl-c"><span class="pl-c">#</span># 11    130 Stage_2 5749  female young</span>
+<span class="pl-c"><span class="pl-c">#</span># 12    110 Stage_1 NA    female young</span>
+<span class="pl-c"><span class="pl-c">#</span># 13    470 Stage_2 1972  female old  </span>
+<span class="pl-c"><span class="pl-c">#</span># 14     90 Stage_1 1321  female young</span>
+<span class="pl-c"><span class="pl-c">#</span># 15    200 Stage_2 385   female old  </span>
+<span class="pl-c"><span class="pl-c">#</span># 16     70 Stage_2 1800  female old  </span>
+<span class="pl-c"><span class="pl-c">#</span># 17    130 Stage_2 214   female old  </span>
+<span class="pl-c"><span class="pl-c">#</span># 18    770 Stage_3 1206  female young</span>
+<span class="pl-c"><span class="pl-c">#</span># 19    200 Stage_1 2442  female young</span>
+<span class="pl-c"><span class="pl-c">#</span># 20    250 Stage_3 NA    female young</span></pre></div>
+<p>NA修改(这个数据框里的NA是字符型，并不是真正的<code class="notranslate">NA</code>)：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">days_1</span> <span class="pl-k">&lt;-</span> ifelse(<span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">days</span> <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>NA<span class="pl-pds">"</span></span>, <span class="pl-c1">NA</span>, <span class="pl-smi">brca_clin</span><span class="pl-k">$</span><span class="pl-smi">days</span>)
+<span class="pl-smi">brca_clin</span>
+<span class="pl-c"><span class="pl-c">#</span># # A tibble: 20 × 6</span>
+<span class="pl-c"><span class="pl-c">#</span>#    weight stage   days  gender age   days_1</span>
+<span class="pl-c"><span class="pl-c">#</span>#     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; </span>
+<span class="pl-c"><span class="pl-c">#</span>#  1    260 Stage_2 NA    female old   &lt;NA&gt;  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  2    220 Stage_2 NA    female old   &lt;NA&gt;  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  3    130 Stage_1 1644  female old   1644  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  4    260 Stage_1 501   female old   501   </span>
+<span class="pl-c"><span class="pl-c">#</span>#  5    200 Stage_2 660   female young 660   </span>
+<span class="pl-c"><span class="pl-c">#</span>#  6     60 Stage_1 3247  female young 3247  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  7    320 Stage_2 NA    female young &lt;NA&gt;  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  8    310 Stage_3 NA    female young &lt;NA&gt;  </span>
+<span class="pl-c"><span class="pl-c">#</span>#  9    100 Stage_2 1876  female young 1876  </span>
+<span class="pl-c"><span class="pl-c">#</span># 10    250 Stage_2 707   female young 707   </span>
+<span class="pl-c"><span class="pl-c">#</span># 11    130 Stage_2 5749  female young 5749  </span>
+<span class="pl-c"><span class="pl-c">#</span># 12    110 Stage_1 NA    female young &lt;NA&gt;  </span>
+<span class="pl-c"><span class="pl-c">#</span># 13    470 Stage_2 1972  female old   1972  </span>
+<span class="pl-c"><span class="pl-c">#</span># 14     90 Stage_1 1321  female young 1321  </span>
+<span class="pl-c"><span class="pl-c">#</span># 15    200 Stage_2 385   female old   385   </span>
+<span class="pl-c"><span class="pl-c">#</span># 16     70 Stage_2 1800  female old   1800  </span>
+<span class="pl-c"><span class="pl-c">#</span># 17    130 Stage_2 214   female old   214   </span>
+<span class="pl-c"><span class="pl-c">#</span># 18    770 Stage_3 1206  female young 1206  </span>
+<span class="pl-c"><span class="pl-c">#</span># 19    200 Stage_1 2442  female young 2442  </span>
+<span class="pl-c"><span class="pl-c">#</span># 20    250 Stage_3 NA    female young &lt;NA&gt;</span></pre></div></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
