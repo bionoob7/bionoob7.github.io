@@ -21,7 +21,7 @@
 <meta property="og:url" content="https://bionoob7.github.io/post/wan-zhuan-R-yu-yan-04--han-shu-he-can-shu-%EF%BC%8C-bang-zhu-wen-dang-cha-kan.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
 <title>玩转R语言04-函数和参数，帮助文档查看</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -45,7 +45,17 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     body {padding: 8px;}
     .postTitle{font-size:24px;}
 }
-
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
 </style>
 
 
@@ -80,55 +90,49 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <div class="markdown-body" id="postBody"><h2>函数</h2>
 <p><strong>函数</strong>的英文是<code class="notranslate">function</code>，所以函数是用来实现特定功能的、由别人整理好的一段代码，通常一个R包会包含多个函数。这就好比一个手机APP可以做多个事情，比如微信可以用来文字聊天、视频聊天、查看订阅号消息等，甚至还可以看直播。</p>
 <p>一个R包里面有多个函数，这些函数也可以实现不同的功能。比如<code class="notranslate">graphics</code>包里面的两个函数：</p>
-<pre lang="R" class="notranslate"><code class="notranslate">plot(1:10,1:10) # 画图
-lines(1:10) # 添加一条线
-</code></pre>
+<div class="highlight highlight-source-r"><pre class="notranslate">plot(<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">10</span>,<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">#</span> 画图</span>
+lines(<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">#</span> 添加一条线</span></pre></div>
 <p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/dbe8a65a73e5c4619daa792cb8a00d2fc05aeb0dac7d19c8341ceb6e80ccc241/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6f6f78324e44573169626f4f46505474493944783978554d6461514169636e4957535a6f41487656313647314b7939514e37696375575750412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/dbe8a65a73e5c4619daa792cb8a00d2fc05aeb0dac7d19c8341ceb6e80ccc241/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6f6f78324e44573169626f4f46505474493944783978554d6461514169636e4957535a6f41487656313647314b7939514e37696375575750412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNoox2NDW1iboOFPTtI9Dx9xUMdaQAicnIWSZoAHvV16G1Ky9QN7icuWWPA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNoox2NDW1iboOFPTtI9Dx9xUMdaQAicnIWSZoAHvV16G1Ky9QN7icuWWPA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
 <p>这里的<code class="notranslate">plot()</code>就是一个函数，可以实现画图功能。当你运行<code class="notranslate">plot(1:10,1:10)</code>之后，它会为你开辟一片空间用于画图，然后把这个图的框架（4条框以及坐标等）给你画出来，然后把点也给你画上去，这就是这个函数的功能（当然它还有其他功能）。</p>
 <p>当你接着运行<code class="notranslate">lines(1:10)</code>之后，它会给你画一条线，这就是<code class="notranslate">lines()</code>这个函数的功能。</p>
 <p>当我们在使用某个手机APP时，肯定是要先打开这个APP，然后才能使用它，R包也是如此，<strong>一定要先加载R包，才能使用R包里的函数</strong>。</p>
 <p>这个<code class="notranslate">plot()</code>函数是<code class="notranslate">graphics</code>包里面的，这个R包是R语言自带的（有些自带的不需要加载也能使用），不需要额外安装，使用时也不需要加载（即不需要先<code class="notranslate">library(graphics)</code>），<strong>自己安装的R包是需要先加载才能使用里面的函数的</strong>。</p>
 <p>比如<code class="notranslate">ggplot()</code>函数是属于<code class="notranslate">ggplot2</code>这个R包的，这个R包是需要自己安装的，所以在使用前需要先加载才能使用：</p>
-<pre lang="R" class="notranslate"><code class="notranslate"># 先加载对应的R包
-library(ggplot2)
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 先加载对应的R包</span>
+library(<span class="pl-smi">ggplot2</span>)
 
-# 才能使用里面的函数
-ggplot()
-</code></pre>
+<span class="pl-c"><span class="pl-c">#</span> 才能使用里面的函数</span>
+ggplot()</pre></div>
 <p>我经常看到有人把函数当做R包，然后使用<code class="notranslate">install.packages("")</code>进行安装，非常错误的做法，比如有一个R包叫<code class="notranslate">rms</code>，其中有一个函数叫<code class="notranslate">lrm</code>，有的人不明所以，直接使用<code class="notranslate">install.packages("lrm")</code>，结果报错:</p>
-<pre lang="R" class="notranslate"><code class="notranslate">install.packages("lrm")
-将程序包安装入‘C:/Users/liyue/AppData/Local/R/win-library/4.3’
-(因为‘lib’没有被指定)
-Warning in install.packages :
-  package ‘lrm’ is not available for this version of R
+<div class="highlight highlight-source-r"><pre class="notranslate">install.packages(<span class="pl-s"><span class="pl-pds">"</span>lrm<span class="pl-pds">"</span></span>)
+将程序包安装入‘<span class="pl-smi">C</span><span class="pl-k">:</span><span class="pl-k">/</span><span class="pl-smi">Users</span><span class="pl-k">/</span><span class="pl-smi">liyue</span><span class="pl-k">/</span><span class="pl-smi">AppData</span><span class="pl-k">/</span><span class="pl-smi">Local</span><span class="pl-k">/</span><span class="pl-smi">R</span><span class="pl-k">/</span><span class="pl-smi">win</span><span class="pl-k">-</span><span class="pl-smi">library</span><span class="pl-k">/</span><span class="pl-c1">4.3</span>’
+(因为‘<span class="pl-smi">lib</span>’没有被指定)
+<span class="pl-smi">Warning</span> <span class="pl-k">in</span> <span class="pl-smi">install.packages</span> <span class="pl-k">:</span>
+  <span class="pl-smi">package</span> ‘<span class="pl-smi">lrm</span>’ <span class="pl-smi">is</span> <span class="pl-smi">not</span> <span class="pl-smi">available</span> <span class="pl-k">for</span> <span class="pl-smi">this</span> <span class="pl-smi">version</span> <span class="pl-smi">of</span> <span class="pl-smi">R</span>
 
-A version of this package for your version of R might be available elsewhere,
-see the ideas at
-https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
-</code></pre>
+<span class="pl-smi">A</span> <span class="pl-smi">version</span> <span class="pl-smi">of</span> <span class="pl-smi">this</span> <span class="pl-smi">package</span> <span class="pl-k">for</span> <span class="pl-smi">your</span> <span class="pl-smi">version</span> <span class="pl-smi">of</span> <span class="pl-smi">R</span> <span class="pl-smi">might</span> <span class="pl-smi">be</span> <span class="pl-smi">available</span> <span class="pl-smi">elsewhere</span>,
+<span class="pl-smi">see</span> <span class="pl-smi">the</span> <span class="pl-smi">ideas</span> <span class="pl-smi">at</span>
+<span class="pl-smi">https</span><span class="pl-k">:</span><span class="pl-k">//</span><span class="pl-smi">cran.r</span><span class="pl-k">-</span><span class="pl-smi">project.org</span><span class="pl-k">/</span><span class="pl-smi">doc</span><span class="pl-k">/</span><span class="pl-smi">manuals</span><span class="pl-k">/</span><span class="pl-smi">r</span><span class="pl-k">-</span><span class="pl-smi">patched</span><span class="pl-k">/</span><span class="pl-smi">R</span><span class="pl-k">-</span><span class="pl-smi">admin.html</span><span class="pl-c"><span class="pl-c">#</span>Installing-packages</span></pre></div>
 <p>你要安装的是R包，不是函数，千万要注意，别犯这种低级错误。</p>
 <h2>参数</h2>
 <p>每个函数都有特定的<strong>参数</strong>（argument），比如上面的<code class="notranslate">plot(1:10,1:10)</code>，其中的<code class="notranslate">1:10</code>就是<code class="notranslate">plot</code>这个函数的参数，你也可以写成<code class="notranslate">plot(x = 1:10, y = 1:10)</code>：</p>
-<pre lang="R" class="notranslate"><code class="notranslate">plot(x = 1:10, y = 1:10)
-</code></pre>
+<div class="highlight highlight-source-r"><pre class="notranslate">plot(<span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">10</span>, <span class="pl-v">y</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">10</span>)</pre></div>
 <p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/53d8ead555468cc61a8fc0767cd9ef7182f55acc2cebfc040de93769994fe13f/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e30367839666e55344d76423250573643756641514866636849656e474933564477475178336b38726a4951394e7979667666453276772f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/53d8ead555468cc61a8fc0767cd9ef7182f55acc2cebfc040de93769994fe13f/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e30367839666e55344d76423250573643756641514866636849656e474933564477475178336b38726a4951394e7979667666453276772f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflN06x9fnU4MvB2PW6CufAQHfchIenGI3VDwGQx3k8rjIQ9NyyfvfE2vw/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflN06x9fnU4MvB2PW6CufAQHfchIenGI3VDwGQx3k8rjIQ9NyyfvfE2vw/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
 <p>这也是完整的写法，其中的<code class="notranslate">x</code>、<code class="notranslate">y</code>被称为形式参数（简称<strong>形参</strong>），<code class="notranslate">1:10</code>被称为实际参数（简称<strong>实参</strong>）。</p>
 <p>形参是函数的作者规定的，这个名字如果你写了，就要写对，不能乱写，必须按照人家的规定来，实参是需要你自己提供的。</p>
 <p>如果你写了形参的话，可以不用管参数的顺序：</p>
-<pre lang="R" class="notranslate"><code class="notranslate">opar &lt;- par(mfrow=c(1,2))
-# 先写x或y都不影响
-plot(x = c(2,4,6,8,10), y = 1:5)
-plot(y = 1:5, x = c(2,4,6,8,10))
-par(opar)
-</code></pre>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">opar</span> <span class="pl-k">&lt;-</span> par(<span class="pl-v">mfrow</span><span class="pl-k">=</span>c(<span class="pl-c1">1</span>,<span class="pl-c1">2</span>))
+<span class="pl-c"><span class="pl-c">#</span> 先写x或y都不影响</span>
+plot(<span class="pl-v">x</span> <span class="pl-k">=</span> c(<span class="pl-c1">2</span>,<span class="pl-c1">4</span>,<span class="pl-c1">6</span>,<span class="pl-c1">8</span>,<span class="pl-c1">10</span>), <span class="pl-v">y</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">5</span>)
+plot(<span class="pl-v">y</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">5</span>, <span class="pl-v">x</span> <span class="pl-k">=</span> c(<span class="pl-c1">2</span>,<span class="pl-c1">4</span>,<span class="pl-c1">6</span>,<span class="pl-c1">8</span>,<span class="pl-c1">10</span>))
+par(<span class="pl-smi">opar</span>)</pre></div>
 <p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/91dfd7cb016af0964013b51d963ddebab93a1be5b12124c24a243bb3bbdc3156/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e735952304c6c6963636251796774705a6b4955546b7164475235564f7269616962637155477556436848425054754a574a30357666354b4b412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/91dfd7cb016af0964013b51d963ddebab93a1be5b12124c24a243bb3bbdc3156/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e735952304c6c6963636251796774705a6b4955546b7164475235564f7269616962637155477556436848425054754a574a30357666354b4b412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNsYR0LliccbQygtpZkIUTkqdGR5VOriaibcqUGuVChHBPTuJWJ05vf5KKA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNsYR0LliccbQygtpZkIUTkqdGR5VOriaibcqUGuVChHBPTuJWJ05vf5KKA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
 <p>形参是可以省略的，但是省略后要按照作者规定的顺序提供实参，不然就会出问题（初学者建议写上形参），比如：</p>
-<pre lang="R" class="notranslate"><code class="notranslate">opar &lt;- par(mfrow=c(1,2))
-# 不写形参先后顺序有影响，会默认第一个是x,第二个是y
-plot(c(2,4,6,8,10), 1:5)
-plot(1:5, c(2,4,6,8,10))
-par(opar)
-</code></pre>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-smi">opar</span> <span class="pl-k">&lt;-</span> par(<span class="pl-v">mfrow</span><span class="pl-k">=</span>c(<span class="pl-c1">1</span>,<span class="pl-c1">2</span>))
+<span class="pl-c"><span class="pl-c">#</span> 不写形参先后顺序有影响，会默认第一个是x,第二个是y</span>
+plot(c(<span class="pl-c1">2</span>,<span class="pl-c1">4</span>,<span class="pl-c1">6</span>,<span class="pl-c1">8</span>,<span class="pl-c1">10</span>), <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">5</span>)
+plot(<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">5</span>, c(<span class="pl-c1">2</span>,<span class="pl-c1">4</span>,<span class="pl-c1">6</span>,<span class="pl-c1">8</span>,<span class="pl-c1">10</span>))
+par(<span class="pl-smi">opar</span>)</pre></div>
 <p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9d296ce640b7a2bd606bdbe0da1c25bff364c2c56efc4737ada2e2e0190f7f38/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e7779696133784e6e4c513841566d5a66466d53496f6a306c5a5064427a44356765434c58643936576d785267424c706f53736c69615971772f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/9d296ce640b7a2bd606bdbe0da1c25bff364c2c56efc4737ada2e2e0190f7f38/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e7779696133784e6e4c513841566d5a66466d53496f6a306c5a5064427a44356765434c58643936576d785267424c706f53736c69615971772f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNwyia3xNnLQ8AVmZfFmSIoj0lZPdBzD5geCLXd96WmxRgBLpoSsliaYqw/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNwyia3xNnLQ8AVmZfFmSIoj0lZPdBzD5geCLXd96WmxRgBLpoSsliaYqw/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
 <p>这些参数是有要求的，不按照规定写就会报错。比如：</p>
 <ul>
@@ -141,19 +145,17 @@ par(opar)
 </ul>
 <p>这个东西是很机械的，不可更改，函数的作者规定的，不按照要求写必然报错！</p>
 <p>还有一些参数是有默认值的，如果你没有指定，它就会使用默认值。比如：</p>
-<pre lang="R" class="notranslate"><code class="notranslate">?t.test
+<div class="highlight highlight-source-r"><pre class="notranslate">?<span class="pl-smi">t.test</span>
 
-# 其中的mu = 0, paired = FALSE, var.equal = FALSE, 
-# conf.level = 0.95 都是默认值
-</code></pre>
+<span class="pl-c"><span class="pl-c">#</span> 其中的mu = 0, paired = FALSE, var.equal = FALSE, </span>
+<span class="pl-c"><span class="pl-c">#</span> conf.level = 0.95 都是默认值</span></pre></div>
 <p>如何知道每个参数的具体要求及函数的使用方法呢？我们可以直接查看帮助文档。帮助文档是函数的开发者按照一定的要求写的、能够让使用者快速理解函数用法的文档。</p>
 <p>绝大多数R语言中的函数都可以通过<code class="notranslate">?xxx</code>或者<code class="notranslate">help(xxx)</code>查看函数的帮助文档（自己安装的R包需要先加载），比如：</p>
-<pre lang="R" class="notranslate"><code class="notranslate"># 以下两种方法都可以
-?lines
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 以下两种方法都可以</span>
+?<span class="pl-smi">lines</span>
 
-# 或者
-help("lines")
-</code></pre>
+<span class="pl-c"><span class="pl-c">#</span> 或者</span>
+help(<span class="pl-s"><span class="pl-pds">"</span>lines<span class="pl-pds">"</span></span>)</pre></div>
 <p>当你运行上面的代码后，在Rstudio右侧<code class="notranslate">help</code>面板中会出现该函数的帮助文档，如下图所示：</p>
 <p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ab3f0618419971912e4b39c82a1138fb89bf1bebd5545d718a9838fef83dac92/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e4e54567a616c50704756434d36454375645872506556656738306d304535586a64557a34684a31593856464463676f6669634c4f584d772f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/ab3f0618419971912e4b39c82a1138fb89bf1bebd5545d718a9838fef83dac92/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e4e54567a616c50704756434d36454375645872506556656738306d304535586a64557a34684a31593856464463676f6669634c4f584d772f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNNTVzalPpGVCM6ECudXrPeVeg80m0E5XjdUz4hJ1Y8VFDcgoficLOXMw/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNNTVzalPpGVCM6ECudXrPeVeg80m0E5XjdUz4hJ1Y8VFDcgoficLOXMw/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
 <p>帮助文档是学习函数用法的最好方法，这也是你以后最常用的学习方法（当然有些帮助文档写的很烂）。</p>
@@ -204,7 +206,7 @@ if(""!=""){
 </script></div>
 </body>
 <script>
-var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
 var utterancesLoad=0;
 
 let themeSettings={
@@ -277,7 +279,70 @@ function iFrameLoading(){
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
 
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
 
 </script>
 <script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
