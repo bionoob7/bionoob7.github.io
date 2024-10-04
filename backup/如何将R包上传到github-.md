@@ -1,6 +1,6 @@
 ### 什么是 GitHub？
 
-[[GitHub](https://github.com/)是一个用于存放 [git](https://git-scm.com/)存储库的网站。它有点像程序员（和数据科学家）的 Facebook：每个人都在上面；你可以查看他们正在做什么，轻松浏览他们的代码并提出建议或更改。
+[GitHub](https://github.com/)是一个用于存放 [git](https://git-scm.com/)存储库的网站。它有点像程序员（和数据科学家）的 Facebook：每个人都在上面；你可以查看他们正在做什么，轻松浏览他们的代码并提出建议或更改。
 
 GitHub 降低了协作的门槛。通过 GitHub，您可以轻松为他人的代码提供修改建议，而他人也可以轻松采纳您的修改建议。
 
@@ -14,7 +14,7 @@ GitHub 降低了协作的门槛。通过 GitHub，您可以轻松为他人的代
 
 - 除了指出问题之外，人们还可以修复问题并向您发送补丁，您可以轻松测试该补丁并将其合并到您的软件包中。其中一些可以完全在线完成，无需了解 git。他们不会说“您的文档中有错别字”，而是说“这里，我已修复了您的文档中的错别字。”
 
-- 借助[[Hadley Wickham](https://hadley.nz/)]的 [[devtools](https://github.com/hadley/devtools)的`install_github()`软件包中的功能 ，人们可以轻松地直接从 GitHub 安装您的软件包。它不必在[[CRAN](https://cran.r-project.org/)上。（正如 [[您所看到的](https://kbroman.org/pkg_primer/pages/cran.html)，在 CRAN 上获取您的软件包可能有点困难。）
+- 借助[Hadley Wickham](https://hadley.nz/)]的 [devtools](https://github.com/hadley/devtools)的`install_github()`软件包中的功能 ，人们可以轻松地直接从 GitHub 安装您的软件包。它不必在[CRAN](https://cran.r-project.org/)上。（正如 [您所看到的](https://kbroman.org/pkg_primer/pages/cran.html)，在 CRAN 上获取您的软件包可能有点困难。）
 
 要将自己写的R包上传到GitHub，可以按照以下步骤进行操作：
 
@@ -120,4 +120,4 @@ git push origin main
 
 ### 为你的R包配置一个网站（补充）
 
-您可能还想为您的软件包创建一个网站。使用[[GitHub Pages](https://pages.github.com/) 很容易做到这一点。请看[为 R/qtlcharts 软件包创建的网站](https://kbroman.org/qtlcharts)。为你的软件包 git 仓库创建一个空的`gh-pages`分支，然后填充一个网站。GitHub 可以让网站轻松使用[Jekyll Bootstrap](http://jekyllbootstrap.com/)，因此你可以用`Markdown`而不是`HTML`来编写内容。请看这里的[简单网站](https://kbroman.org/simple_site)教程，尤其是[制作项目网站的](https://kbroman.org/simple_site/pages/project_site.html)那一页。
+您可能还想为您的软件包创建一个网站。使用[GitHub Pages](https://pages.github.com/) 很容易做到这一点。请看[为 R/qtlcharts 软件包创建的网站](https://kbroman.org/qtlcharts)。为你的软件包 git 仓库创建一个空的`gh-pages`分支，然后填充一个网站。GitHub 可以让网站轻松使用[Jekyll Bootstrap](http://jekyllbootstrap.com/)，因此你可以用`Markdown`而不是`HTML`来编写内容。请看这里的[简单网站](https://kbroman.org/simple_site)教程，尤其是[制作项目网站的](https://kbroman.org/simple_site/pages/project_site.html)那一页。
