@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="目前有三种常用的转录组/单细胞数据保存方法，分别为Rdata，rds和qs。">
+<meta property="og:title" content="保存单细胞数据的三种方法(rdata,rds,qs)">
+<meta property="og:description" content="目前有三种常用的转录组/单细胞数据保存方法，分别为Rdata，rds和qs。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/bao-cun-dan-xi-bao-shu-ju-de-san-zhong-fang-fa-%28rdata%2Crds%2Cqs%29.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>保存单细胞数据的三种方法(rdata,rds,qs)</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">保存单细胞数据的三种方法(rdata,rds,qs)</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/20" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>目前有三种常用的转录组/单细胞数据保存方法，分别为Rdata，rds和qs。</p>
+<p>在分析数据的时候最常规的保存方法是Rdata，这种方法可以把我们想保存的信息全部糅杂在一起变成同一个文件，在下次加载的时候一并加载出来就可以了，是初学者必学的保存数据类型。</p>
+<p>但Rdata文件不能很个性化的修改名称，这时候如果不小心出现重名文件就会把上一次的文件给覆盖掉。因此选择rds格式的保存方式可以个性化的进行保存和读取文件，不用担心覆盖的情况，并且保存和读取速度也可能会(<strong>实际不一定!</strong>)比Rdata会快一些。</p>
+<p>但进入单细胞分析时代之后，数据大小动不动就超过了20GB，上述两种方式读取和保存文件的时间变得非常的长，而且一套分析下来有可能占用存储空间会超过200GB。此时使用rdata或者rds格式的保存方式就会出现十分“心累”的情况。</p>
+<p>那么在这个大数据分析的时代下，有没有更加适合的数据保存方式呢？曾老师告诉我可以尝试使用qs的保存方式，这种方式可以在不损坏数据的前提下尽可能的压缩文件，并且同样的文件在保存和读取速度都比上述两种方式更快。</p>
+<h4>简单总结这三种方式的优缺点。</h4>
+<h4>1. .Rdata</h4>
+<p><strong>优点：</strong></p>
+<p>● 多对象保存：可以在一个 .Rdata 文件中保存多个 R 对象（如数据框、列表、模型等）。</p>
+<p>● 兼容性好：这是 R 中最常用的文件格式之一，兼容性高，易于在不同 R 环境中使用。</p>
+<p>● 加载灵活：加载 .Rdata 文件时，可以选择性地加载其中的某些对象，而不必加载所有对象。</p>
+<p><strong>缺点：</strong></p>
+<p>● 文件体积较大：相比其他格式，.Rdata 文件的体积可能较大，特别是当包含多个大型对象时。</p>
+<p>● 加载速度慢：加载速度相对较慢，尤其是在保存了大量数据时。</p>
+<h4>2. .rds</h4>
+<p><strong>优点：</strong></p>
+<p>● 单对象保存：专门用于保存单个 R 对象，更适合需要保存单一数据框或模型的场景。</p>
+<p>● 文件体积较小：通常比 .Rdata 文件更小，因为 .rds 文件只保存一个对象，并且通过压缩减少文件大小。</p>
+<p>● 加载速度较快：由于文件体积小，加载速度通常比 .Rdata快。</p>
+<p>● 灵活性：可以用 readRDS() 加载对象，并赋值给任何变量名称，而不受保存时的对象名称限制。</p>
+<p><strong>缺点：</strong></p>
+<p>● 仅保存单个对象：只能保存单个对象，不适合需要同时保存多个对象的场景。</p>
+<p>● 不包含变量名称：加载 .rds 文件时，必须显式地指定变量名，否则无法直接使用。</p>
+<h4>3. .qs</h4>
+<p><strong>优点：</strong></p>
+<p>● 超高压缩率：qs 格式使用高效的压缩算法，生成的文件体积非常小，非常适合保存大数据集。</p>
+<p>● 读写速度极快：相比于 .Rdata 和 .rds，qs 格式的读写速度显著更快，特别是在处理大数据时表现尤为出色。</p>
+<p>● 支持多种压缩等级：可以根据需要调整压缩等级，以平衡文件大小和读写速度。</p>
+<p><strong>缺点：</strong></p>
+<p>● 兼容性问题：qs 格式相对较新，在一些环境中可能需要额外安装 qs 包，兼容性不如 .Rdata 和 .rds 普遍。</p>
+<p>● 社区支持较少：由于qs格式较新，相关的资源和支持可能不如其他格式丰富。</p>
+<p>接下来进行代码运行时长和存储文件大小比较，系统中存在这三个文件。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b62c4e76be626c85fdd1f107c2d7660a0dafd49ac696535d9deae1062b9e65b5/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f30534f47344d70444179476d346962645459784e53796459675759574d4d39674e7a35366646424678724b566d66696175556961795a746c6963494c6f374f744c316b494c56536869617a4138617732357a76444e4956514276512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/b62c4e76be626c85fdd1f107c2d7660a0dafd49ac696535d9deae1062b9e65b5/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f30534f47344d70444179476d346962645459784e53796459675759574d4d39674e7a35366646424678724b566d66696175556961795a746c6963494c6f374f744c316b494c56536869617a4138617732357a76444e4956514276512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/0SOG4MpDAyGm4ibdTYxNSydYgWYWMM9gNz56fFBFxrKVmfiauUiayZtlicILo7OtL1kILVShiazA8aw25zvDNIVQBvQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/0SOG4MpDAyGm4ibdTYxNSydYgWYWMM9gNz56fFBFxrKVmfiauUiayZtlicILo7OtL1kILVShiazA8aw25zvDNIVQBvQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>使用system.time()函数去计算代码运行时间，最后会返回三个数值，分别是user，system和elapsed。</p>
+<p>● user：用户CPU时间，即R代码本身在用户模式下执行的时间。也就是R解释并运行R代码所花费的时间。</p>
+<p>● system：系统CPU时间，即操作系统为代码执行分配的时间。通常是R在操作系统级别处理文件读写或其他系统调用所消耗的时间。</p>
+<p>● elspsed：这是墙钟时间（wall clock time），也就是从开始到结束的实际时间，包括了user时间、system时间以及R进程在等待其他资源（如I/O操作）时所花费的时间。换句话说，elspsed时间是在运行代码时实际等待的时间。</p>
+<h4>1、Rdata格式：</h4>
+<div class="highlight highlight-source-r"><pre class="notranslate">system.time({
+save(<span class="pl-smi">sce.all</span>,<span class="pl-smi">sce</span>,<span class="pl-smi">sceList</span>,<span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>sce_RAW.Rdata<span class="pl-pds">"</span></span>)
+})
+
+<span class="pl-c"><span class="pl-c">#</span>   user  system elapsed </span>
+<span class="pl-c"><span class="pl-c">#</span> 22.915  38.786  67.229 </span>
+
+system.time({
+load(<span class="pl-s"><span class="pl-pds">"</span>sce_RAW.Rdata<span class="pl-pds">"</span></span>)
+})
+<span class="pl-c"><span class="pl-c">#</span>   user  system elapsed </span>
+<span class="pl-c"><span class="pl-c">#</span> 21.609  12.622  34.228 </span>
+
+<span class="pl-smi">file_info</span> <span class="pl-k">&lt;-</span> file.info(<span class="pl-s"><span class="pl-pds">"</span>sce_RAW.Rdata<span class="pl-pds">"</span></span>)
+<span class="pl-smi">file_size</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">file_info</span><span class="pl-k">$</span><span class="pl-smi">size</span>
+<span class="pl-en">format_file_size</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">size</span>) {
+  <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span>) {
+    <span class="pl-k">return</span>(paste(<span class="pl-smi">size</span>, <span class="pl-s"><span class="pl-pds">"</span>Bytes<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">2</span>) {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>KB<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">3</span>) {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">2</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>MB<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">3</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>GB<span class="pl-pds">"</span></span>))
+  }
+}
+
+<span class="pl-c"><span class="pl-c">#</span> 使用该函数格式化文件大小</span>
+<span class="pl-smi">readable_size</span> <span class="pl-k">&lt;-</span> format_file_size(<span class="pl-smi">file_size</span>)
+print(<span class="pl-smi">readable_size</span>)
+<span class="pl-c"><span class="pl-c">#</span>[1] "18.86 GB"</span></pre></div>
+<p>保存需要花费1分多钟时间，加载需要花费半分钟左右，最后生成的文件大小为18.86GB。</p>
+<h4>2、rds格式：</h4>
+<p>由于只能对单对象保存，这里仅保存最大的文件(sce)</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">system.time({
+saveRDS(<span class="pl-smi">sce</span>,<span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>sce_RDS.rds<span class="pl-pds">"</span></span>)
+})
+<span class="pl-c"><span class="pl-c">#</span>   user  system elapsed </span>
+<span class="pl-c"><span class="pl-c">#</span>740.750  27.599 770.705 </span>
+
+system.time({
+<span class="pl-smi">sce</span> <span class="pl-k">&lt;-</span> readRDS(<span class="pl-s"><span class="pl-pds">"</span>sce_RDS.rds<span class="pl-pds">"</span></span>)
+})
+<span class="pl-c"><span class="pl-c">#</span>   user  system elapsed </span>
+<span class="pl-c"><span class="pl-c">#</span> 92.853  10.411 103.214 </span>
+
+<span class="pl-smi">file_info</span> <span class="pl-k">&lt;-</span> file.info(<span class="pl-s"><span class="pl-pds">"</span>sce_RDS.rds<span class="pl-pds">"</span></span>)
+<span class="pl-smi">file_size</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">file_info</span><span class="pl-k">$</span><span class="pl-smi">size</span>
+<span class="pl-en">format_file_size</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">size</span>) {
+  <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span>) {
+    <span class="pl-k">return</span>(paste(<span class="pl-smi">size</span>, <span class="pl-s"><span class="pl-pds">"</span>Bytes<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">2</span>) {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>KB<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">3</span>) {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">2</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>MB<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">3</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>GB<span class="pl-pds">"</span></span>))
+  }
+}
+
+<span class="pl-c"><span class="pl-c">#</span> 使用该函数格式化文件大小</span>
+<span class="pl-smi">readable_size</span> <span class="pl-k">&lt;-</span> format_file_size(<span class="pl-smi">file_size</span>)
+print(<span class="pl-smi">readable_size</span>)
+<span class="pl-c"><span class="pl-c">#</span> [1] "12.71 GB"</span></pre></div>
+<p>实际情况还是挺慢的，保存时间竟然超过了10分钟..，存储大小变小了一些只有12.71GB(不过只保存了最大的sce)。</p>
+<h4>3、qs格式：</h4>
+<p>同样只能对单对象保存，这里仅保存最大的文件(sce)</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 需要先加载一下qs包</span>
+library(<span class="pl-smi">qs</span>)
+system.time({
+qsave(<span class="pl-smi">sce</span>,<span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>sce_qs.qs<span class="pl-pds">"</span></span>)
+})
+<span class="pl-c"><span class="pl-c">#</span>   user  system elapsed </span>
+<span class="pl-c"><span class="pl-c">#</span> 67.516  20.576  88.543  </span>
+
+system.time({
+<span class="pl-smi">sce</span> <span class="pl-k">&lt;-</span> qread(<span class="pl-s"><span class="pl-pds">"</span>sce_qs.qs<span class="pl-pds">"</span></span>)
+})
+<span class="pl-c"><span class="pl-c">#</span>   user  system elapsed </span>
+<span class="pl-c"><span class="pl-c">#</span> 20.622  16.275  36.943 </span>
+
+<span class="pl-smi">file_info</span> <span class="pl-k">&lt;-</span> file.info(<span class="pl-s"><span class="pl-pds">"</span>sce_qs.qs<span class="pl-pds">"</span></span>)
+<span class="pl-smi">file_size</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">file_info</span><span class="pl-k">$</span><span class="pl-smi">size</span>
+<span class="pl-en">format_file_size</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">size</span>) {
+  <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span>) {
+    <span class="pl-k">return</span>(paste(<span class="pl-smi">size</span>, <span class="pl-s"><span class="pl-pds">"</span>Bytes<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">2</span>) {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>KB<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-smi">size</span> <span class="pl-k">&lt;</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">3</span>) {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">2</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>MB<span class="pl-pds">"</span></span>))
+  } <span class="pl-k">else</span> {
+    <span class="pl-k">return</span>(paste(round(<span class="pl-smi">size</span> <span class="pl-k">/</span> <span class="pl-c1">1024</span><span class="pl-k">^</span><span class="pl-c1">3</span>, <span class="pl-c1">2</span>), <span class="pl-s"><span class="pl-pds">"</span>GB<span class="pl-pds">"</span></span>))
+  }
+}
+
+<span class="pl-c"><span class="pl-c">#</span> 使用该函数格式化文件大小</span>
+<span class="pl-smi">readable_size</span> <span class="pl-k">&lt;-</span> format_file_size(<span class="pl-smi">file_size</span>)
+print(<span class="pl-smi">readable_size</span>)
+<span class="pl-c"><span class="pl-c">#</span> [1] "3.58 GB"</span></pre></div>
+<p>保存和加载的时间跟Rdata差不多，存储大小只需要3.58GB，缩小了4.8倍，简直太棒了！</p>
+<h4>总结:</h4>
+<p>如果需要<strong>保存多个 R 对象</strong>，并且<strong>不在意文件大小和加载速度</strong>，.<strong>Rdata</strong> 是一种<strong>方便的选择</strong>。</p>
+<p>如果只需要保存一个对象，并且希望文件较小，.rds <strong>可能是</strong>一个不错的选择。</p>
+<p>如果处理的是大数据集，并且对文件体积和加载速度有较高要求，.<strong>qs 格式是一个极佳的选择</strong>。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
