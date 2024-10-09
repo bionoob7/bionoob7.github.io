@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 环境创建及软件安装（必须）
+
+```Shell
+conda create -n snakemake -y &&
+conda activate snakemake &&
+conda install mamba -y  &&
+mamba install python=3.10 -y &&
+mamba install snakemake -y &&
+mamba install -y sra-tools fastqc trim-galore hisat2 subread multiqc samtools salmon fastp
+```
+
+
+# 文件夹（这个无所谓，Snakemake会自动创建）
+
+```Shell
+mkdir -p project/rnaseq
+cd project/rnaseq
+
+mkdir -p  data/rawdata/sra  data/rawdata/fastq data/rawdata/qc data/cleandata/trim_galore  data/cleandata/fastqc data/cleandata/multiqc
+mkdir -p Mapping/Hisat2  
+mkdir -p Expression/featureCounts  
+tree
+```
+
+
+# 参考基因组（必须）
+
+https://www.jianshu.com/p/6298877b6253
+
+https://www.ensembl.org/info/data/ftp/index.html?redirect=no
+
+## 参考基因组文件
+
+```Shell
+nohup wget  https://ftp.ensembl.org/pub/release-100/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz &
+```
+
+
+## 基因组注释文件
+
+```Shell
+ wget https://ftp.ensembl.org/pub/release-100/gtf/homo_sapiens/Homo_sapiens.GRCh38.100.gtf.gz
+```
+
+
+# 数据下载及解压 （非必须内容，这只是前期写的一个下载转换代码）
+
+```Shell
+#!/bin/bash
+
+# 将此脚本的所有输出重定向到日志文件
+exec > download_and_convert.log 2>&1
+
+# SRR ID数组
+srr_ids=('SRR17214819' 'SRR17214820') # 根据需要添加更多SRR ID
+
+# 原始数据目录
+sra_data_dir='./data/rawdata/sra'
+# FASTQ文件的输出目录
+fastq_data_dir='./data/rawdata/fastq'
+
+# 检查给定SRR ID的FASTQ文件是否已存在的函数
+check_fastq_files_exist() {
+    local srr_id=$1
+    # 查找格式为 '${srr_id}_*.fastq.gz' 的FASTQ文件
+    local files=('${fastq_data_dir}/${srr_id}'_*.fastq.gz)
+    
+    # 检查是否找到任何文件
+    if [ -e '${files[0]}' ]; then
+        return 0 # 文件存在
+    else
+        return 1 # 文件不存在
+    fi
+}
+
+# 遍历每个SRR ID
+for srr_id in '${srr_ids[@]}'; do
+    # 检查FASTQ文件是否已存在
+    if check_fastq_files_exist '$srr_id'; then
+        echo 'FASTQ文件 $srr_id 已存在，跳过...'
+        continue
+    fi
+
+    # SRA文件的路径
+    sra_file='${sra_data_dir}/${srr_id}/${srr_id}.sra'
+
+    # 检查SRA文件是否已存在
+    if [[ -f '$sra_file' ]]; then
+        echo 'SRA文件 $srr_id 已存在，但FASTQ文件不存在，进行转换...'
+    else
+        # Prefetch
+        echo '开始预取 $srr_id'
+        prefetch '$srr_id' -O '$sra_data_dir' &
+        
+        # 等待prefetch完成
+        wait
+    fi
+
+    # Fastq-dump
+    echo '开始转换 $srr_id'
+    fastq-dump --split-files --gzip '$sra_file' --outdir '$fastq_data_dir' &
+    
+    # 等待fastq-dump完成
+    wait
+done
+
+echo '所有过程已完成。">
+<meta property="og:title" content="利用snakemake完成RNA-seq上游分析">
+<meta property="og:description" content="# 环境创建及软件安装（必须）
+
+```Shell
+conda create -n snakemake -y &&
+conda activate snakemake &&
+conda install mamba -y  &&
+mamba install python=3.10 -y &&
+mamba install snakemake -y &&
+mamba install -y sra-tools fastqc trim-galore hisat2 subread multiqc samtools salmon fastp
+```
+
+
+# 文件夹（这个无所谓，Snakemake会自动创建）
+
+```Shell
+mkdir -p project/rnaseq
+cd project/rnaseq
+
+mkdir -p  data/rawdata/sra  data/rawdata/fastq data/rawdata/qc data/cleandata/trim_galore  data/cleandata/fastqc data/cleandata/multiqc
+mkdir -p Mapping/Hisat2  
+mkdir -p Expression/featureCounts  
+tree
+```
+
+
+# 参考基因组（必须）
+
+https://www.jianshu.com/p/6298877b6253
+
+https://www.ensembl.org/info/data/ftp/index.html?redirect=no
+
+## 参考基因组文件
+
+```Shell
+nohup wget  https://ftp.ensembl.org/pub/release-100/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz &
+```
+
+
+## 基因组注释文件
+
+```Shell
+ wget https://ftp.ensembl.org/pub/release-100/gtf/homo_sapiens/Homo_sapiens.GRCh38.100.gtf.gz
+```
+
+
+# 数据下载及解压 （非必须内容，这只是前期写的一个下载转换代码）
+
+```Shell
+#!/bin/bash
+
+# 将此脚本的所有输出重定向到日志文件
+exec > download_and_convert.log 2>&1
+
+# SRR ID数组
+srr_ids=('SRR17214819' 'SRR17214820') # 根据需要添加更多SRR ID
+
+# 原始数据目录
+sra_data_dir='./data/rawdata/sra'
+# FASTQ文件的输出目录
+fastq_data_dir='./data/rawdata/fastq'
+
+# 检查给定SRR ID的FASTQ文件是否已存在的函数
+check_fastq_files_exist() {
+    local srr_id=$1
+    # 查找格式为 '${srr_id}_*.fastq.gz' 的FASTQ文件
+    local files=('${fastq_data_dir}/${srr_id}'_*.fastq.gz)
+    
+    # 检查是否找到任何文件
+    if [ -e '${files[0]}' ]; then
+        return 0 # 文件存在
+    else
+        return 1 # 文件不存在
+    fi
+}
+
+# 遍历每个SRR ID
+for srr_id in '${srr_ids[@]}'; do
+    # 检查FASTQ文件是否已存在
+    if check_fastq_files_exist '$srr_id'; then
+        echo 'FASTQ文件 $srr_id 已存在，跳过...'
+        continue
+    fi
+
+    # SRA文件的路径
+    sra_file='${sra_data_dir}/${srr_id}/${srr_id}.sra'
+
+    # 检查SRA文件是否已存在
+    if [[ -f '$sra_file' ]]; then
+        echo 'SRA文件 $srr_id 已存在，但FASTQ文件不存在，进行转换...'
+    else
+        # Prefetch
+        echo '开始预取 $srr_id'
+        prefetch '$srr_id' -O '$sra_data_dir' &
+        
+        # 等待prefetch完成
+        wait
+    fi
+
+    # Fastq-dump
+    echo '开始转换 $srr_id'
+    fastq-dump --split-files --gzip '$sra_file' --outdir '$fastq_data_dir' &
+    
+    # 等待fastq-dump完成
+    wait
+done
+
+echo '所有过程已完成。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/li-yong-snakemake-wan-cheng-RNA-seq-shang-you-fen-xi.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>利用snakemake完成RNA-seq上游分析</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">利用snakemake完成RNA-seq上游分析</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/22" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>环境创建及软件安装（必须）</h1>
+<div class="highlight highlight-source-shell"><pre class="notranslate">conda create -n snakemake -y <span class="pl-k">&amp;&amp;</span>
+conda activate snakemake <span class="pl-k">&amp;&amp;</span>
+conda install mamba -y  <span class="pl-k">&amp;&amp;</span>
+mamba install python=3.10 -y <span class="pl-k">&amp;&amp;</span>
+mamba install snakemake -y <span class="pl-k">&amp;&amp;</span>
+mamba install -y sra-tools fastqc trim-galore hisat2 subread multiqc samtools salmon fastp</pre></div>
+<h1>文件夹（这个无所谓，Snakemake会自动创建）</h1>
+<div class="highlight highlight-source-shell"><pre class="notranslate">mkdir -p project/rnaseq
+<span class="pl-c1">cd</span> project/rnaseq
+
+mkdir -p  data/rawdata/sra  data/rawdata/fastq data/rawdata/qc data/cleandata/trim_galore  data/cleandata/fastqc data/cleandata/multiqc
+mkdir -p Mapping/Hisat2  
+mkdir -p Expression/featureCounts  
+tree</pre></div>
+<h1>参考基因组（必须）</h1>
+<p><a href="https://www.jianshu.com/p/6298877b6253" rel="nofollow">https://www.jianshu.com/p/6298877b6253</a></p>
+<p><a href="https://www.ensembl.org/info/data/ftp/index.html?redirect=no" rel="nofollow">https://www.ensembl.org/info/data/ftp/index.html?redirect=no</a></p>
+<h2>参考基因组文件</h2>
+<div class="highlight highlight-source-shell"><pre class="notranslate">nohup wget  https://ftp.ensembl.org/pub/release-100/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz <span class="pl-k">&amp;</span></pre></div>
+<h2>基因组注释文件</h2>
+<div class="highlight highlight-source-shell"><pre class="notranslate"> wget https://ftp.ensembl.org/pub/release-100/gtf/homo_sapiens/Homo_sapiens.GRCh38.100.gtf.gz</pre></div>
+<h1>数据下载及解压 （非必须内容，这只是前期写的一个下载转换代码）</h1>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#!</span>/bin/bash</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 将此脚本的所有输出重定向到日志文件</span>
+<span class="pl-c1">exec</span> <span class="pl-k">&gt;</span> download_and_convert.log <span class="pl-k">2&gt;&amp;1</span>
+
+<span class="pl-c"><span class="pl-c">#</span> SRR ID数组</span>
+srr_ids=(<span class="pl-s"><span class="pl-pds">"</span>SRR17214819<span class="pl-pds">"</span></span> <span class="pl-s"><span class="pl-pds">"</span>SRR17214820<span class="pl-pds">"</span></span>) <span class="pl-c"><span class="pl-c">#</span> 根据需要添加更多SRR ID</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 原始数据目录</span>
+sra_data_dir=<span class="pl-s"><span class="pl-pds">"</span>./data/rawdata/sra<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> FASTQ文件的输出目录</span>
+fastq_data_dir=<span class="pl-s"><span class="pl-pds">"</span>./data/rawdata/fastq<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 检查给定SRR ID的FASTQ文件是否已存在的函数</span>
+<span class="pl-en">check_fastq_files_exist</span>() {
+    <span class="pl-k">local</span> srr_id=<span class="pl-smi">$1</span>
+    <span class="pl-c"><span class="pl-c">#</span> 查找格式为 "${srr_id}_*.fastq.gz" 的FASTQ文件</span>
+    <span class="pl-k">local</span> files=(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${fastq_data_dir}</span>/<span class="pl-smi">${srr_id}</span><span class="pl-pds">"</span></span>_<span class="pl-k">*</span>.fastq.gz)
+    
+    <span class="pl-c"><span class="pl-c">#</span> 检查是否找到任何文件</span>
+    <span class="pl-k">if</span> [ <span class="pl-k">-e</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${files[0]}</span><span class="pl-pds">"</span></span> ]<span class="pl-k">;</span> <span class="pl-k">then</span>
+        <span class="pl-k">return</span> 0 <span class="pl-c"><span class="pl-c">#</span> 文件存在</span>
+    <span class="pl-k">else</span>
+        <span class="pl-k">return</span> 1 <span class="pl-c"><span class="pl-c">#</span> 文件不存在</span>
+    <span class="pl-k">fi</span>
+}
+
+<span class="pl-c"><span class="pl-c">#</span> 遍历每个SRR ID</span>
+<span class="pl-k">for</span> <span class="pl-smi">srr_id</span> <span class="pl-k">in</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${srr_ids[@]}</span><span class="pl-pds">"</span></span><span class="pl-k">;</span> <span class="pl-k">do</span>
+    <span class="pl-c"><span class="pl-c">#</span> 检查FASTQ文件是否已存在</span>
+    <span class="pl-k">if</span> check_fastq_files_exist <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$srr_id</span><span class="pl-pds">"</span></span><span class="pl-k">;</span> <span class="pl-k">then</span>
+        <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>FASTQ文件 <span class="pl-smi">$srr_id</span> 已存在，跳过...<span class="pl-pds">"</span></span>
+        <span class="pl-k">continue</span>
+    <span class="pl-k">fi</span>
+
+    <span class="pl-c"><span class="pl-c">#</span> SRA文件的路径</span>
+    sra_file=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">${sra_data_dir}</span>/<span class="pl-smi">${srr_id}</span>/<span class="pl-smi">${srr_id}</span>.sra<span class="pl-pds">"</span></span>
+
+    <span class="pl-c"><span class="pl-c">#</span> 检查SRA文件是否已存在</span>
+    <span class="pl-k">if</span> [[ <span class="pl-k">-f</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$sra_file</span><span class="pl-pds">"</span></span> ]]<span class="pl-k">;</span> <span class="pl-k">then</span>
+        <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>SRA文件 <span class="pl-smi">$srr_id</span> 已存在，但FASTQ文件不存在，进行转换...<span class="pl-pds">"</span></span>
+    <span class="pl-k">else</span>
+        <span class="pl-c"><span class="pl-c">#</span> Prefetch</span>
+        <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>开始预取 <span class="pl-smi">$srr_id</span><span class="pl-pds">"</span></span>
+        prefetch <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$srr_id</span><span class="pl-pds">"</span></span> -O <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$sra_data_dir</span><span class="pl-pds">"</span></span> <span class="pl-k">&amp;</span>
+        
+        <span class="pl-c"><span class="pl-c">#</span> 等待prefetch完成</span>
+        <span class="pl-c1">wait</span>
+    <span class="pl-k">fi</span>
+
+    <span class="pl-c"><span class="pl-c">#</span> Fastq-dump</span>
+    <span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>开始转换 <span class="pl-smi">$srr_id</span><span class="pl-pds">"</span></span>
+    fastq-dump --split-files --gzip <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$sra_file</span><span class="pl-pds">"</span></span> --outdir <span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$fastq_data_dir</span><span class="pl-pds">"</span></span> <span class="pl-k">&amp;</span>
+    
+    <span class="pl-c"><span class="pl-c">#</span> 等待fastq-dump完成</span>
+    <span class="pl-c1">wait</span>
+<span class="pl-k">done</span>
+
+<span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>所有过程已完成。<span class="pl-pds">"</span></span></pre></div>
+<h1>Snakemake正式流程（重要！！）</h1>
+<p>运行一个样本做例子</p>
+<ul>
+<li>
+<p><strong>input</strong>：输入文件</p>
+</li>
+<li>
+<p><strong>output</strong>：输出文件</p>
+</li>
+<li>
+<p><strong>log</strong>：输出log日志</p>
+</li>
+<li>
+<p><strong>shell</strong>：命令</p>
+</li>
+</ul>
+<blockquote>
+<p>此流程中，你需要指定SAMPLE的SRR号，index路径，GTF路径即可！</p>
+</blockquote>
+<div class="highlight highlight-source-shell"><pre class="notranslate">SAMPLE = [<span class="pl-s"><span class="pl-pds">"</span>SRR17214819<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>SRR17214820<span class="pl-pds">"</span></span>]
+<span class="pl-c"><span class="pl-c">#</span> 参考基因组需另外下载</span>
+index = <span class="pl-s"><span class="pl-pds">"</span>/home/shpc_101389/database/GRCh38.100/Hisat2Index/genome<span class="pl-pds">"</span></span>
+GTF = <span class="pl-s"><span class="pl-pds">"</span>/home/shpc_101389/database/GRCh38.100/Homo_sapiens.GRCh38.100.gtf<span class="pl-pds">"</span></span>
+
+rule all:
+    input:
+        expand(<span class="pl-s"><span class="pl-pds">"</span>rawdata/sra/{sample}/{sample}.sra<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>rawdata/fastq/{sample}_1.fastq.gz<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>rawdata/fastq/{sample}_2.fastq.gz<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>rawdata/qc/{sample}_1_fastqc.zip<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>rawdata/qc/{sample}_2_fastqc.zip<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>cleandata/trim_galore/{sample}_1_val_1.fq.gz<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>cleandata/trim_galore/{sample}_2_val_2.fq.gz<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/{sample}.Hisat_aln.sorted.bam<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/{sample}.Hisat_aln.sorted.bam.bai<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/{sample}.flagstat<span class="pl-pds">"</span></span>,sample = SAMPLE),
+        expand(<span class="pl-s"><span class="pl-pds">"</span>Expression/featureCounts/all_feature.txt<span class="pl-pds">"</span></span>)
+<span class="pl-c"><span class="pl-c">#</span> 下载</span>
+rule prefetch:
+    output:
+        <span class="pl-s"><span class="pl-pds">"</span>rawdata/sra/{sample}/{sample}.sra<span class="pl-pds">"</span></span>
+    shell:
+        <span class="pl-s"><span class="pl-pds">"</span>prefetch {wildcards.sample} -O rawdata/sra/<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 转换</span>
+rule fasterqdump:
+    input:
+        <span class="pl-s"><span class="pl-pds">"</span>rawdata/sra/{sample}/{sample}.sra<span class="pl-pds">"</span></span>
+    output:
+        fastq1=<span class="pl-s"><span class="pl-pds">"</span>rawdata/fastq/{sample}_1.fastq.gz<span class="pl-pds">"</span></span>,
+        fastq2=<span class="pl-s"><span class="pl-pds">"</span>rawdata/fastq/{sample}_2.fastq.gz<span class="pl-pds">"</span></span>
+    shell:
+        <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+<span class="pl-s">        fasterq-dump -p -e 10 --split-3 -O rawdata/fastq {input[0]} &amp;&amp;</span>
+<span class="pl-s">        gzip -c rawdata/fastq/{wildcards.sample}_1.fastq &gt; {output.fastq1} &amp;&amp;</span>
+<span class="pl-s">        gzip -c rawdata/fastq/{wildcards.sample}_2.fastq &gt; {output.fastq2} &amp;&amp;</span>
+<span class="pl-s">        rm -rf rawdata/fastq/{wildcards.sample}_1.fastq &amp;&amp;</span>
+<span class="pl-s">        rm -rf rawdata/fastq/{wildcards.sample}_2.fastq</span>
+<span class="pl-s">        <span class="pl-pds">"</span><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+
+
+<span class="pl-c"><span class="pl-c">#</span> 质控</span>
+rule fastqc:
+    input:
+        <span class="pl-s"><span class="pl-pds">"</span>rawdata/fastq/{sample}_1.fastq.gz<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>rawdata/fastq/{sample}_2.fastq.gz<span class="pl-pds">"</span></span>
+    output:
+        <span class="pl-s"><span class="pl-pds">"</span>rawdata/qc/{sample}_1_fastqc.zip<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>rawdata/qc/{sample}_2_fastqc.zip<span class="pl-pds">"</span></span>
+    shell:
+        <span class="pl-s"><span class="pl-pds">"</span>fastqc -t 5 -o rawdata/qc {input[0]}&gt;{output[0]}<span class="pl-pds">"</span></span>
+        <span class="pl-s"><span class="pl-pds">"</span>fastqc -t 5 -o rawdata/qc {input[1]}&gt;{output[1]}<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 过滤       </span>
+rule trim_galore:
+    input:
+        <span class="pl-s"><span class="pl-pds">"</span>rawdata/fastq/{sample}_1.fastq.gz<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>rawdata/fastq/{sample}_2.fastq.gz<span class="pl-pds">"</span></span>
+    output:
+        <span class="pl-s"><span class="pl-pds">"</span>cleandata/trim_galore/{sample}_1_val_1.fq.gz<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>cleandata/trim_galore/{sample}_2_val_2.fq.gz<span class="pl-pds">"</span></span>
+    log:
+        <span class="pl-s"><span class="pl-pds">"</span>cleandata/trim_galore/trim_galore_{sample}.log<span class="pl-pds">"</span></span>
+    shell:
+        <span class="pl-s"><span class="pl-pds">"</span>trim_galore --phred33 -q 20 --length 36 --stringency 3 --fastqc --paired --max_n 3 -o cleandata/trim_galore {input[0]} {input[1]}&gt;{log}<span class="pl-pds">"</span></span>
+        
+<span class="pl-c"><span class="pl-c">#</span> 比对 建索引        </span>
+rule hisat2:
+    input:
+        <span class="pl-s"><span class="pl-pds">"</span>cleandata/trim_galore/{sample}_1_val_1.fq.gz<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>cleandata/trim_galore/{sample}_2_val_2.fq.gz<span class="pl-pds">"</span></span>
+    output:
+        <span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/{sample}.Hisat_aln.sorted.bam<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/{sample}.Hisat_aln.sorted.bam.bai<span class="pl-pds">"</span></span>
+    log:
+        <span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/hisat2_{sample}.log<span class="pl-pds">"</span></span>
+    shell:
+        <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+<span class="pl-s">        hisat2 --threads 5 -x {index} -1 {input[0]} -2 {input[1]} | </span>
+<span class="pl-s">        samtools sort --threads 1 -o {output[0]} &amp;&amp;</span>
+<span class="pl-s">        samtools index --threads 5 {output[0]} {output[1]} &gt; {log}</span>
+<span class="pl-s">        <span class="pl-pds">"</span><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+        
+<span class="pl-c"><span class="pl-c">#</span> 统计比对结果</span>
+rule samtools:
+    input:
+        <span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/{sample}.Hisat_aln.sorted.bam<span class="pl-pds">"</span></span>
+    output:
+        <span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/{sample}.flagstat<span class="pl-pds">"</span></span>
+    shell:
+        <span class="pl-s"><span class="pl-pds">"</span>samtools flagstat -@ 5 {input} &gt; {output}<span class="pl-pds">"</span></span>
+ 
+<span class="pl-c"><span class="pl-c">#</span> 定量       </span>
+rule featureCounts:
+    input:
+        expand(<span class="pl-s"><span class="pl-pds">"</span>Mapping/Hisat2/{sample}.Hisat_aln.sorted.bam<span class="pl-pds">"</span></span>,sample = SAMPLE)
+    output:
+        <span class="pl-s"><span class="pl-pds">"</span>Expression/featureCounts/all_feature.txt<span class="pl-pds">"</span></span>
+    log:
+        <span class="pl-s"><span class="pl-pds">"</span>Expression/featureCounts/featureCounts.log<span class="pl-pds">"</span></span>
+    shell:
+        <span class="pl-s"><span class="pl-pds">"</span>featureCounts -T 8 -p -t exon -g gene_id -a {GTF} -o {output} {input} 2&gt;{log}<span class="pl-pds">"</span></span>  </pre></div>
+<h1>执行命令</h1>
+<div class="highlight highlight-source-shell"><pre class="notranslate">nohup snakemake --cores 16 --keep-going -s snakefile <span class="pl-k">&gt;</span>snakemake.log <span class="pl-k">&amp;</span></pre></div></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
