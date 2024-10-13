@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="**写一个R包，大概要经过以下几个步骤：**
+
+1）准备一个R包，含有一些必需文件和文件夹。">
+<meta property="og:title" content="怎么写R包">
+<meta property="og:description" content="**写一个R包，大概要经过以下几个步骤：**
+
+1）准备一个R包，含有一些必需文件和文件夹。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/zen-me-xie-R-bao.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>怎么写R包</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">怎么写R包</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/24" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p><strong>写一个R包，大概要经过以下几个步骤：</strong></p>
+<p>1）准备一个R包，含有一些必需文件和文件夹。<br>
+2）准备R包需要用到的函数和测试数据，并写函数和测试数据的注释。<br>
+3）将函数封装成一个包。<br>
+4）写说明书。（非必须）<br>
+5）将R包上传到github，方便修改和维护。（非必须）<br>
+6）补充：遇到问题</p>
+<p>以下介绍各个步骤的要点：</p>
+<h3><strong>1、准备一个R包</strong></h3>
+<p>在介绍这个之前，需要先了解一下<strong>R包的结构。</strong> 我们可以通过Rstudio来获得一个基本的R包模板，模板里就是R包的结构和必需内容。通过Rstudio→File→New Project→New Directory→R package，填写R包名称和创建路径，获得一个名为“myPackage”的R包，里面有以下的文件或文件夹，是一个R包必须有的：</p>
+<p>myPackage（见图1）<br>
+| ------  man文件夹：用于存放.Rd文件的文件夹，里面有一个示例文件hello.Rd。<br>
+| ------  R文件夹：用于存放R函数的文件夹，里面有一个示例文件hello.R。<br>
+| ------  DESCRIPTION: R包的描述文件。<br>
+| ------  NAMESPACE：用来指定R包输入和输出的包，还有一些特殊的名称。</p>
+<p>此外，以后如果想要加载这个包的编辑环境，可以用Rstudio→File→Open Project加载myPackage.Rproj文件，很方便就可以加载环境。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/7a14631b3456f04b6f8aace3ebd7a93b12cc0cf9ba4dc942d86005f709c9b9b8/68747470733a2f2f626c6f676765722e676f6f676c6575736572636f6e74656e742e636f6d2f696d672f622f523239765a32786c2f4156765873456a316a584c4c4f557238486d5447563654774349746d2d4f57655832754c4778706b7572612d4935656f7955704f78664d445677624a4f704752623072374e716a5f435875435a3838796139447647786177593154626f4334564f4a2d457862684b73336f6e3337434b31557250447067555857763369583767525a6c6874394949444a664b314559696f567a542f733634302f2532354536253235394325323541412532354536253235413025323538372532354539253235413225323539382d312e706e67"><img src="https://camo.githubusercontent.com/7a14631b3456f04b6f8aace3ebd7a93b12cc0cf9ba4dc942d86005f709c9b9b8/68747470733a2f2f626c6f676765722e676f6f676c6575736572636f6e74656e742e636f6d2f696d672f622f523239765a32786c2f4156765873456a316a584c4c4f557238486d5447563654774349746d2d4f57655832754c4778706b7572612d4935656f7955704f78664d445677624a4f704752623072374e716a5f435875435a3838796139447647786177593154626f4334564f4a2d457862684b73336f6e3337434b31557250447067555857763369583767525a6c6874394949444a664b314559696f567a542f733634302f2532354536253235394325323541412532354536253235413025323538372532354539253235413225323539382d312e706e67" alt="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1jXLLOUr8HmTGV6TwCItm-OWeX2uLGxpkura-I5eoyUpOxfMDVwbJOpGRb0r7Nqj_CXuCZ88ya9DvGxawY1TboC4VOJ-ExbhKs3on37CK1UrPDpgUXWv3iX7gRZlht9IIDJfK1EYioVzT/s640/%25E6%259C%25AA%25E6%25A0%2587%25E9%25A2%2598-1.png" data-canonical-src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1jXLLOUr8HmTGV6TwCItm-OWeX2uLGxpkura-I5eoyUpOxfMDVwbJOpGRb0r7Nqj_CXuCZ88ya9DvGxawY1TboC4VOJ-ExbhKs3on37CK1UrPDpgUXWv3iX7gRZlht9IIDJfK1EYioVzT/s640/%25E6%259C%25AA%25E6%25A0%2587%25E9%25A2%2598-1.png" style="max-width: 100%;"></a></p>
+<p>图1：R包的创建和结果</p>
+<p>其中，由两个部分不需要做任何人工改动：<br>
+1）NAMESPACE 命名空间文件，最好不要经过人工编辑，roxygen2包可以帮助你新建这个文件，建议你先把这个文件删掉，否则没办法新建。<br>
+2）man文件夹，存放.Rd文件，全部可以由roxygen2包自动生成，不经过人工编辑。</p>
+<p>以下是需要人工进行修改的部分：</p>
+<h4><strong>1.1 R文件夹</strong></h4>
+<p>这个文件夹用来存放你的所有R函数。如果你的包使用了其他的语言，需要新建一个src文件夹来分开存放。详见<a href="https://bookdown.org/yihui/r-ninja/r-package.html" rel="nofollow">参考</a>。</p>
+<h4><strong>1.2 DESCRIPTION文件</strong></h4>
+<p>这个文件描述R包的重要信息，详细可以参照Hadley Wickham<a href="http://r-pkgs.had.co.nz/description.html" rel="nofollow">R包描述部分说明</a>，里面包含内容用名称+冒号+空格为开头。我们就根据Rstudio生成的模板进行修改即可，里面的项目和内容，基本上都能见名知义。可能会影响后面检查包（check）出现warning或note的地方如下：</p>
+<p><strong>1） Depends</strong></p>
+<p>格式为R+空格+左括弧+大于号+等于号+空格＋版本号</p>
+<p>如果你想声明R (&gt;= 3.4.3)，需要写成R (&gt;= 3.4.0), 否则会出现警告：Dependence on R version '3.4.3' not with patchlevel 0。</p>
+<p>另外，depends可以写R版本，以及你需要声明特殊版本号的R包，如果不需要就仅写R版本即可。否则check时会出现提示。</p>
+<p>import和suggest主要取决于这个包是否参与你包的主要功能，如果是一些辅助功能，有了这个包你的软件功能会更加强大，可以放在suggest里。</p>
+<p><strong>2）每个内容末尾句号的问题</strong><br>
+除了Description末尾必须有实心句号外，其他所有，包括Title 末尾均不能有句号，否则就会出现警告。（这点网上也有人吐槽，这不合理，标题也应该是完整的句子。）</p>
+<p><strong>3）Encoding</strong><br>
+该文件里必须声明 Encoding: UTF-8，没有这一行就会报错。</p>
+<p><strong>4）License</strong><br>
+该文件里必须声明License，不知道选哪个可以参考<a href="https://www.r-project.org/Licenses/" rel="nofollow">R CRAN上关于License的说明</a>。</p>
+<p>还需要注意的是这个文件，包括后面的R脚本注释，最好不要超过每行80个字符，否则在自动生成注释文件和manual的时候会超出边框，check的时候也会警告。</p>
+<h3><strong>2、准备R包需要用到的函数和测试数据，并写函数和测试数据的注释。</strong></h3>
+<p>这一部分是R包的核心。关于R包函数怎么写笔者就不详述了，这里介绍一下如何写函数的注释。原本在写R包的时候，需要些一些后缀为rd的文件作为函数的说明文件，工作量很大，又需要学习latex，很不方便。自从有了roxygen2（roxygen现在已经不更新了，请安装roxygen2）这个R包，写rd文档就非常方便了。只需在R函数前面写一段话格式化的文字就可以。</p>
+<p>建议使用Rstudio来写，因为它会把注释重要的地方标亮，还会提示错用的特殊符号。</p>
+<h4>2.1 编写注释</h4>
+<p>比如一个R函数和注释如下，虽然不是每一个注释都需要写成这样，但是这里为了讲解，写的具体一点：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span>' @title Poisson vector.</span>
+<span class="pl-c"><span class="pl-c">#</span>' @description  Creating poisson vector.</span>
+<span class="pl-c"><span class="pl-c">#</span>' @details Input an integer and return the log density of a poisson distribution with lambda equals the input integer.</span>
+<span class="pl-c"><span class="pl-c">#</span>' @param x A non-negative integer. or vector.</span>
+<span class="pl-c"><span class="pl-c">#</span>' @return A numeric vector of log density.</span>
+<span class="pl-c"><span class="pl-c">#</span>' @export</span>
+<span class="pl-c"><span class="pl-c">#</span>' @import stats</span>
+<span class="pl-c"><span class="pl-c">#</span>' @importFrom stats dpois</span>
+<span class="pl-c"><span class="pl-c">#</span>' @examples</span>
+<span class="pl-c"><span class="pl-c">#</span>' poiVec(5)</span>
+<span class="pl-c"><span class="pl-c">#</span>' poiVec(6)</span>
+<span class="pl-en">poiVec</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">x</span>) {
+  dpois(<span class="pl-smi">x</span> , <span class="pl-smi">x</span>)
+}
+</pre></div>
+<p>1）注释的每一行开头用#'或者##'开始。注释基本上都是完整的句子，请用实心句号结束。</p>
+<p>2）注释的内容和格式，每一个项目和其内容之间用空格隔开：</p>
+<p><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/title/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/title">@title</a> 定义函数的标题，这个标题里的词可以搜索到</p>
+<p><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/description/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/description">@description</a> 是函数的描述，如果描述内容很长，则可以写在<a class="user-mention notranslate" data-hovercard-type="organization" data-hovercard-url="/orgs/details/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/details">@details</a>里。</p>
+<p><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/param/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/param">@param</a> 声明函数的参数，每个参数都需要声明，如果用一行同时声明2个输入类型一致的<br>
+参数，则用<a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/param/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/param">@param</a> x,y 来表示，参数之间只用逗号隔开，不能有空格。<br>
+<a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/return/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/return">@return</a> 非必须，声明返回的内容和类型，如果没有返回就不需要加这个项，否则会报错。</p>
+<p><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/export/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/export">@export</a> 非必须，如果需要输出该函数到NAMESPACE里，则必须加上这个项</p>
+<p><a class="user-mention notranslate" data-hovercard-type="organization" data-hovercard-url="/orgs/import/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/import">@import</a> 和@importFrom 虽然不是必须的，但是非常需要注意，如果你的函数里用到了其他包的函数，最好声明一下，当然基本的函数可以不用声明。这些内容会写到NAMESPACE文件里。如果不声明的话，在check包的时候，就会因为运行不了函数的例子而报错。</p>
+<p>而且不建议在函数里加library()或者require()这种命令，也不建议在函数里使用包名::函数名这种命令，最好通通写在import和importFrom里，这样在生成rd文件的时候就被roxygen2自动输出到NAMESPACE文件中，方便维护和修改。</p>
+<p><a class="user-mention notranslate" data-hovercard-type="organization" data-hovercard-url="/orgs/examples/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/examples">@examples</a> 也不是必须的，但是一旦你写了，就要保证里面的脚本能够运行。所以一定要声明好import的包。还有如果example里用到了其他的包，需要写require(包名)，否则check的时候会找不到这个包。</p>
+<p>3）需要注意格式化，这里只简单地列举一些，详细见Hadley Wickham写的<a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/formatting.html" rel="nofollow">Format说明</a>：</p>
+<p>斜体   \emph{italics}</p>
+<p>加粗：   \strong{bold}</p>
+<p>标注R函数和代码：   \code{r_function_call(with = "arguments")}</p>
+<p>标注NULL、TRUE或FALSE：    \code{NULL}</p>
+<p>标注R包 ：    \pkg{package_name}</p>
+<p>引用本R包中的函数说明 ：   \code{\link{function}}</p>
+<p>引用其他R包里的函数说明，如MASS包中的abbey：    \code{\link[MASS]{abbey}}</p>
+<p>插入链接：   \url{<a href="http://rstudio.com%7D" rel="nofollow">http://rstudio.com}</a></p>
+<p>给某个字段插入链接 ：  \href{<a href="http://rstudio.com%7D%7BRstudio%7D" rel="nofollow">http://rstudio.com}{Rstudio}</a></p>
+<p>插入email，注意要写两个@：    \email{*@@rstudio.com}</p>
+<p>4）如果想要在一个注释里添加多个函数，可以用<a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/Rdname/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/Rdname">@Rdname</a>, 而且一定要记得这个函数也要export，否则运行例子的时候如果写了这个函数，就会因为找不到函数而报错。</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> ' @rdname 写了注释的那个函数的名称</span>
+
+<span class="pl-c"><span class="pl-c">#</span> ' @export</span>
+</pre></div>
+<p>5）注释的内容最好不要超过80个字符每行，否则在生成manuel.pdf文件的时候就会超出边界。Rstudio有一个<a href="https://github.com/tjmahr/WrapRmd">工具</a>可以帮助我们自动换行：</p>
+<p>devtools::install_github("tjmahr/WrapRmd")</p>
+<p>安装这个包以后，在Rstudio里面，选中注释然后Ctrl/Cmd + Shift + /  就可以自动换行。</p>
+<p>6）注释因为是转成rd文件，有一些需要转义的符号，比如@号，\号，{}和[]都是latex里的重要符号，都需要转义。</p>
+<h4>2.2 生成rd文件</h4>
+<p>用roxygen2包的roxygenize函数即可生成rd文件。生成前最好先把之前Rstudio创建的NAMESPACE文件删掉。如果注释写错了就会报错，这一步需要反复修改。</p>
+<p>roxygen2::roxygenize(package.dir = ".")</p>
+<h3><strong>3、创建R包</strong></h3>
+<h4>3.1 check</h4>
+<p>在build之前，需要先check一下R包有没有问题，我们可以打开命令行工具，用以下命令来check。</p>
+<p>R CMD check RPkgName</p>
+<p>不过这里<strong>推荐使用devtools</strong>来进行R包的检查和创建：</p>
+<p>devtools::check()</p>
+<p>如果想检查manual，可以运行下面的命令，就会在temp文件夹里生成一个pdf文件：</p>
+<p>devtools::check(manual = TRUE)</p>
+<p>这一步可能会遇到很多的error和warning，这都是因为之前的文件没有写对导致的。</p>
+<p>笔者遇到的报错或者warning有：</p>
+<p>1） 警告：no visible binding for global variable.</p>
+<p>这个warning最好还是解决一下，比如ggplot2就经常出这个warning。可以aes改成aes_string， 然后x和y就可以传入字符串了。还有比如你在load Rdata的时候没有给Rdata赋值，之后直接调用也会报这个警告。</p>
+<p>2）警告：no visible global function definition for '函数名'</p>
+<p>这可能是因为你调用了其他包的函数，但是没有在NAMESPACE里声明（也就是没有在rd注释的import里声明）。也可能是你写的函数没有export到NAMESPACE里。</p>
+<p>3）报错：checking examples 时“could not find function  ‘函数名’”</p>
+<p>如果上述问题2）没有解决，那运行example的时候就会遇到这个报错。如果解决了，还遇到报错，那就可能是你的example里调用了其他包，你没有声明require(包)。</p>
+<p>这步需要反复地修改和check，尽量修改到没有报错和警告为止。笔者改到出现如下结果的时候差点没有哭出来。（1 note是因为笔者的手册和测试数据太大了。）</p>
+<p>0 errors √ | 0 warnings √ | 1 note x</p>
+<h4>3.2 Build</h4>
+<p>在确保R包没有错误之后，便可以创建了。你可以打开命令行工具，cd到R包文件夹所在的目录，然后build R包。它默认会创建vignettes和manual，然后打包成*.tar.gz。</p>
+<p>R CMD build RPkgName</p>
+<p>然后安装R包：</p>
+<p>R CMD INSTALL RPkgName.tar.gz</p>
+<p>不过这里推荐使用devtools来进行R包的build和install。</p>
+<p>devtools::build()</p>
+<p>会创建一个*.tar.gz, 然后</p>
+<p>devtools::install()</p>
+<p>则可以安装R包。</p>
+<p>如果你的R包由vignettes，则为了能够使用browseVignettes()命令看到你的vignettes，需要build vignettes：</p>
+<p>devtools::build_vignettes()<br>
+devtools::build_manual(pkg = ".", path = './doc')<br>
+devtools::build(vignettes = TRUE, manual = TRUE)</p>
+<p>并且用以下命令安装</p>
+<p>devtools::install(build_vignettes = TRUE)</p>
+<p>这样就可以看到这个R包的vignette。</p>
+<p>browseVignettes(RPkgName)</p>
+<h3><strong>4、写说明书</strong></h3>
+<p>这部分并不是R包的必要组成部分，但是有一个使用说明书能够让别人方便的使用，也方便自己回顾。很多人都把vignettes写的像文献一样详细和严谨。</p>
+<p>在R包主目录里新建一个名为vignettes的文件夹（注意，不是vignette而是vignettes，否则会识别错误），说明书则存放在这个文件夹下。vignettes文件顾名思义就是手册，需要自己编写，当然可以越详细越好，可以是.Rd或者.Rmd。编写完后将.Rmd文件放到vignettes文件夹里。由于文件题头里声明了文件是pdf或者html，在打包的时候会自动生成。</p>
+<p>推荐使用R markdown来编写，可以使用下述代码创建vignettes文件夹，它会在文件夹里创建vignettes模板，名字就是你传入的字符串，比如下述代码传入"my-vignette"，模板名称就是"my-vignette.Rmd"。 模板里已经预先写好了vignettes需要声明的header等信息，自己再修改内容就可以了。怎么写就不详述了，具体可以看<a href="https://bookdown.org/yihui/rmarkdown/" rel="nofollow">R markdown的使用手册</a>。</p>
+<p>usethis::use_vignette("my-vignette")</p>
+<p>还有如果是想写bioconductor的包，他们的vignettes有一个推荐的模板， 具体可以看<a href="https://bioconductor.org/packages/devel/bioc/vignettes/BiocStyle/inst/doc/AuthoringRmdVignettes.html" rel="nofollow">BiocStyle</a>。</p>
+<p>此外，*-manual.pdf文件里面是把上述所有rd文件整理在一个pdf文件里，可以在build包之后自动生成，不用自己写。笔者原来还以为得自己写呢。</p>
+<p>devtools::build_manual(pkg = ".", path = './doc')</p>
+<h3><strong>5、将R包上传到github</strong></h3>
+<h4><strong>5.1 R包的上传</strong></h4>
+<p>将R包发布到github可以方便版本管理和收集反馈。我们可以新建一个本地仓库，然后再把本地仓库远程到github仓库。可以按照以下步骤来执行，可见<a href="http://kbroman.org/pkg_primer/pages/github.html" rel="nofollow">参考</a>：</p>
+<p>1） 申请一个github账号，并创建一个新的仓库repository，以R包命名.</p>
+<p>2）cd到你创建R包的文件夹，然后执行以下命令git初始化你的R包文件夹为本地仓库。当然这需要你先安装git。</p>
+<p>git init</p>
+<p>然后执行以下命令把R包文件夹里的所有文件添加到仓库中, 并加上注释message。</p>
+<p>git add .<br>
+git commit -m 'submit'</p>
+<p>3）将本地仓库远程到github仓库</p>
+<p>git remote add origin <a href="https://github.com/usrName/repositoryName">https://github.com/usrName/repositoryName</a></p>
+<p>然后将文件传输到远程仓库，作为master：</p>
+<p>git push -u origin master</p>
+<p>以后每次更新，只需在本地仓库更新后再远程传输一次即可。</p>
+<p>另外补充说明，从github上安装R包，也可以使用'devtools'包。</p>
+<p>devtools::install_github("usrName/repositoryName")</p>
+<p>如果你想查看手册需要build这个包，可以执行：</p>
+<p>devtools::install_github('repositoryName/repositoryName',<br>
+build = TRUE, build_opts = c("--no-resave-data"), force = TRUE)</p>
+<h4>5.2 R包维护</h4>
+<p>通常，我们上传github之后，会写一个README.md，我们需要把它第一时间同步到我们的本地库里。</p>
+<p>1）查看远程仓库：</p>
+<p>git remote -v</p>
+<p>2）把远程库更新到本地</p>
+<p>git fetch origin master</p>
+<p>3）比较远程更新和本地版本库的差异</p>
+<p>git log master.. origin/master</p>
+<p>4）合并远程库</p>
+<p>git merge origin/master</p>
+<p>然后我们一般会在本地仓库进行代码修改（如果是自己维护的话），修改完后将本地库更新</p>
+<p>git add .<br>
+git commit -m "message"</p>
+<p>最后将本地库更新推送到远程库：</p>
+<p>git push origin master</p>
+<p>查看本地库的状态：</p>
+<p>git status</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
