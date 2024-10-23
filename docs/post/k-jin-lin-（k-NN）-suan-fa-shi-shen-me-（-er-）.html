@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="**这篇文章重点讲解一下k近邻算法的最经典算法kd树的相关知识点以及最终的总结！希望看完这篇文章，大家对kd树能够有一个直观的感觉~**
+
+## **一、k近邻算法的回顾**
+
+1.我们提出了k近邻算法，算法的核心思想是，即是给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例**最邻近**的K个实例，这K个实例的多数属于某个类，就把该输入实例分类到这个类中。">
+<meta property="og:title" content="k近邻（k-NN）算法是什么（二）">
+<meta property="og:description" content="**这篇文章重点讲解一下k近邻算法的最经典算法kd树的相关知识点以及最终的总结！希望看完这篇文章，大家对kd树能够有一个直观的感觉~**
+
+## **一、k近邻算法的回顾**
+
+1.我们提出了k近邻算法，算法的核心思想是，即是给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例**最邻近**的K个实例，这K个实例的多数属于某个类，就把该输入实例分类到这个类中。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/k-jin-lin-%EF%BC%88k-NN%EF%BC%89-suan-fa-shi-shen-me-%EF%BC%88-er-%EF%BC%89.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>k近邻（k-NN）算法是什么（二）</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">k近邻（k-NN）算法是什么（二）</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/31" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p><strong>这篇文章重点讲解一下k近邻算法的最经典算法kd树的相关知识点以及最终的总结！希望看完这篇文章，大家对kd树能够有一个直观的感觉~</strong></p>
+<h2><strong>一、k近邻算法的回顾</strong></h2>
+<p>1.我们提出了k近邻算法，算法的核心思想是，即是给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例<strong>最邻近</strong>的K个实例，这K个实例的多数属于某个类，就把该输入实例分类到这个类中。<strong>更通俗说一遍算法的过程，来了一个新的输入实例，我们算出该实例与每一个训练点的距离（这里的复杂度为0(n)比较大，所以引出了下文的kd树等结构），然后找到前k个，这k个哪个类别数最多，我们就判断新的输入实例就是哪类！</strong></p>
+<p>2.与该实例最近邻的k个实例，那么最近邻的衡量标准是是什么。<strong>这个最近邻的定义</strong>是通过不同距离函数来定义，我们最常用的是欧式距离。</p>
+<p>3.为了保证每个特征同等重要性，我们这里对每个特征进行<strong>归一化。</strong></p>
+<p>4.k值的选取，既不能太大，也不能太小，何值为最好，<strong>需要实验调整参数确定！</strong></p>
+<h2><strong>二、k近邻算法中的分类决策规则讲解</strong></h2>
+<p>k近邻算法的分类决策规则通俗来说就是<strong>k 近邻法中的分类决策规则往往是多数表决决定，背后的数学思维是什么？</strong></p>
+<p>k 近邻法中的分类决策规则往往是多数表决，即由输入实例的 k 个近邻的训练实例中的多数类决定输入实例的类。</p>
+<p>多数表决规则（majority voting rule）有如下解释：如果分类的损失函数为 0-1 损失函数，分类函数为：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/18992160b71100a78a8754b4ad762613736e122ed8adfe508165b17a3d891b76/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d34323334306535623432366633636162626632646434373433626666646439305f622e706e67"><img src="https://camo.githubusercontent.com/18992160b71100a78a8754b4ad762613736e122ed8adfe508165b17a3d891b76/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d34323334306535623432366633636162626632646434373433626666646439305f622e706e67" alt="https://pic3.zhimg.com/v2-42340e5b426f3cabbf2dd4743bffdd90_b.png" data-canonical-src="https://pic3.zhimg.com/v2-42340e5b426f3cabbf2dd4743bffdd90_b.png" style="max-width: 100%;"></a></p>
+<p>那么误分类的概率是：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/d0d8391b761fd563ab858c2c77b8088e2e75eeb5b7f9095878dfe5293424040c/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d39396462633331316632393734336537333766306466393662383665643961385f622e706e67"><img src="https://camo.githubusercontent.com/d0d8391b761fd563ab858c2c77b8088e2e75eeb5b7f9095878dfe5293424040c/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d39396462633331316632393734336537333766306466393662383665643961385f622e706e67" alt="https://pic1.zhimg.com/v2-99dbc311f29743e737f0df96b86ed9a8_b.png" data-canonical-src="https://pic1.zhimg.com/v2-99dbc311f29743e737f0df96b86ed9a8_b.png" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9ed1b6c2a17930b6fd5b52605d78dc18afab6378308505205b2201197c5313aa/68747470733a2f2f706963342e7a68696d672e636f6d2f76322d35623361626637363965656531626630336161313433356235353162383335335f622e706e67"><img src="https://camo.githubusercontent.com/9ed1b6c2a17930b6fd5b52605d78dc18afab6378308505205b2201197c5313aa/68747470733a2f2f706963342e7a68696d672e636f6d2f76322d35623361626637363965656531626630336161313433356235353162383335335f622e706e67" alt="https://pic4.zhimg.com/v2-5b3abf769eee1bf03aa1435b551b8353_b.png" data-canonical-src="https://pic4.zhimg.com/v2-5b3abf769eee1bf03aa1435b551b8353_b.png" style="max-width: 100%;"></a></p>
+<p>换句话说，目前候选种类为c1,c2….cj，我选择哪一个，使得我们的经验风险最小（<strong>经验风险通俗讲就是训练数据的错误值</strong>）。</p>
+<p>那么由上式经验风险最小，<strong>也就是说，要我们预测出的种类属于cj类的最多（那么预测出来的种类结果和真实结果一致的越多，我们认为正确可能性就越大，也就是经验风险越小），也就是我们所说的多数表决规则。而它也等价于我们的经验风险最小。这也是我们在k近邻算法中采用多数表决规则的正确性说明！</strong></p>
+<h2><strong>三、k近邻法的实现：kd树原理的讲解以及kd树详细例子讲解</strong></h2>
+<ul>
+<li><strong>kd树原理的讲解</strong></li>
+</ul>
+<hr>
+<p>kd 树的结构</p>
+<p>kd树是一个二叉树结构，它的每一个节点记载了【<strong>特征坐标，切分轴，指向左枝的指针，指向右枝的指针</strong>】。</p>
+<p>其中，特征坐标是线性空间 Rn 中的一个点 (x1,x2,…,xn)切分轴由一个整数 r 表示，这里 1≤r≤n，是我们在 n 维空间中沿第 rr维进行一次分割。节点的左枝和右枝分别都是 kd 树，并且满足：如果 y 是左枝的一个特征坐标，那么 yr≤xr（<strong>左分支结点</strong>）；并且如果 z 是右枝的一个特征坐标，那么 zr≥xr（<strong>右分支结点</strong>）。</p>
+<p>给定一个数据样本集 S⊆Rn 和切分轴 r，以下<strong>递归算法</strong>将构建一个基于该数据集的 kd 树，每一次循环制作一个节点：<br>
+−− 如果 |S|=1，记录 S 中唯一的一个点为当前节点的特征数据，并且不设左枝和右枝。（|S| 指集合 S 中元素的数量）<br>
+−− 如果 |S|&gt;1</p>
+<ul>
+<li>
+<p>将 S 内所有点按照第 r 个坐标的大小进行<strong>排序</strong>；</p>
+</li>
+<li>
+<p>选出该排列后的中位元素（<strong>如果一共有偶数个元素，则选择中位左边或右边的元素，左随便哪一个都无所谓</strong>），作为当前节点的特征坐标，并且记录切分轴 r；</p>
+</li>
+<li>
+<p>将 SL设为在 S 中所有排列在中位元素之前的元素； SR 设为在 S 中所有排列在中位元素后的元素；</p>
+</li>
+<li>
+<p>当前节点的左枝设为以 SL 为数据集并且 r 为切分轴制作出的 kd 树；当前节点的右枝设为以 SR 为数据集并且 r为切分轴制作出的 kd 树。再设 r←(r+1)modn。（<strong>这里，我们想轮流沿着每一个维度进行分割；modn 是因为一共有 n 个维度，在沿着最后一个维度进行分割之后再重新回到第一个维度。</strong> ）</p>
+</li>
+</ul>
+<p><strong>哎呀，到这里有没有一点晕了，这么多文字，好罗，下面通过例子一步一步给出kd树的构建，以便容易理解！举出李航博士例子3.2！</strong></p>
+<p><strong>kd树的构建！例题3.2</strong></p>
+<p><strong>给定一个二维空间的数据集：</strong></p>
+<p><strong>T = {（2,3），（5,4），（9,6）,（4,7），（8,1），（7,2）}， 构造一个平衡kd树。</strong></p>
+<p><strong>为了方便，我这里进行编号A(2，3)、B（5,4）、C（9,6）、D（4,7）、E（8,1）、F（7,2）</strong></p>
+<p><strong>初始值r=0，对应x轴。</strong></p>
+<p>可视化数据点如下：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/476cd7c7efdc3670956bf95e4f0c8c916b2096a7aac4bad1001457ac49e29ee9/68747470733a2f2f706963322e7a68696d672e636f6d2f76322d30323936336565346261663034396433323663343262343738353533306438375f622e706e67"><img src="https://camo.githubusercontent.com/476cd7c7efdc3670956bf95e4f0c8c916b2096a7aac4bad1001457ac49e29ee9/68747470733a2f2f706963322e7a68696d672e636f6d2f76322d30323936336565346261663034396433323663343262343738353533306438375f622e706e67" alt="https://pic2.zhimg.com/v2-02963ee4baf049d326c42b4785530d87_b.png" data-canonical-src="https://pic2.zhimg.com/v2-02963ee4baf049d326c42b4785530d87_b.png" style="max-width: 100%;"></a></p>
+<p>首先先沿 x 坐标进行切分，我们选出 x 坐标的中位点，获取最根部节点的坐标，对数据点x坐标进行排序得：</p>
+<p>A(2，3)、D（4,7）、B（5,4）、F（7,2）、E（8,1）、C（9,6）</p>
+<p><strong>则我们得到中位点为B或者F，我这里选择F作为我们的根结点，并作出切分（并得到左右子树），如图：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9c32da0eaaba7ac27323344415f5a98b2063bde9eb0bedb17329ee66ddb6c7bb/68747470733a2f2f706963322e7a68696d672e636f6d2f76322d33636431643330353935356661356336353466643765643837626439353061375f622e706e67"><img src="https://camo.githubusercontent.com/9c32da0eaaba7ac27323344415f5a98b2063bde9eb0bedb17329ee66ddb6c7bb/68747470733a2f2f706963322e7a68696d672e636f6d2f76322d33636431643330353935356661356336353466643765643837626439353061375f622e706e67" alt="https://pic2.zhimg.com/v2-3cd1d305955fa5c654fd7ed87bd950a7_b.png" data-canonical-src="https://pic2.zhimg.com/v2-3cd1d305955fa5c654fd7ed87bd950a7_b.png" style="max-width: 100%;"></a></p>
+<p><strong>对应的树结构如下：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/75caf5eb5316b602665a1b2a261f3eed1d8266fffce6c34ac453f80d7d71e522/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d32373136646437313161363539376530373635373166376532313531343865365f622e706e67"><img src="https://camo.githubusercontent.com/75caf5eb5316b602665a1b2a261f3eed1d8266fffce6c34ac453f80d7d71e522/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d32373136646437313161363539376530373635373166376532313531343865365f622e706e67" alt="https://pic1.zhimg.com/v2-2716dd711a6597e076571f7e215148e6_b.png" data-canonical-src="https://pic1.zhimg.com/v2-2716dd711a6597e076571f7e215148e6_b.png" style="max-width: 100%;"></a></p>
+<p><strong>根据算法，此时r=r+1=1，对应y轴，此时对应算法|S|&gt;1，则我们分别递归的在F对应的左子树与右子树按y轴进行分类，得到中位节点分别为B，C点，如图所示：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/099930bd18755c85925530804868bf4841bb1c85cbae6a89ef31b80618bdc7ec/68747470733a2f2f706963342e7a68696d672e636f6d2f76322d34666331656334623562363939643233373639316233643434313430326366645f622e706e67"><img src="https://camo.githubusercontent.com/099930bd18755c85925530804868bf4841bb1c85cbae6a89ef31b80618bdc7ec/68747470733a2f2f706963342e7a68696d672e636f6d2f76322d34666331656334623562363939643233373639316233643434313430326366645f622e706e67" alt="https://pic4.zhimg.com/v2-4fc1ec4b5b699d237691b3d441402cfd_b.png" data-canonical-src="https://pic4.zhimg.com/v2-4fc1ec4b5b699d237691b3d441402cfd_b.png" style="max-width: 100%;"></a></p>
+<p><strong>对应树结构为：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/22631941908f0b25459fab017dd5e1673af653df59dd0598d0ff418be2cb7d91/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d37353235626635626333363166323635633332366133643864353539336566655f622e706e67"><img src="https://camo.githubusercontent.com/22631941908f0b25459fab017dd5e1673af653df59dd0598d0ff418be2cb7d91/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d37353235626635626333363166323635633332366133643864353539336566655f622e706e67" alt="https://pica.zhimg.com/v2-7525bf5bc361f265c326a3d8d5593efe_b.png" data-canonical-src="https://pica.zhimg.com/v2-7525bf5bc361f265c326a3d8d5593efe_b.png" style="max-width: 100%;"></a></p>
+<p><strong>而到此时，B的左孩子为A，右孩子为D，C的左孩子为E,均满足|S|==1，此时r = (r+1)mod2 = 0,又满足x轴排序，对x轴划分！则如图所示：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/78af60ca5f2891711966ac25ce7965bd9f7d46b76c9a671d9816bc9599751417/68747470733a2f2f706963322e7a68696d672e636f6d2f76322d62313363343434386635393139633538316236323731626563653265336165355f622e706e67"><img src="https://camo.githubusercontent.com/78af60ca5f2891711966ac25ce7965bd9f7d46b76c9a671d9816bc9599751417/68747470733a2f2f706963322e7a68696d672e636f6d2f76322d62313363343434386635393139633538316236323731626563653265336165355f622e706e67" alt="https://pic2.zhimg.com/v2-b13c4448f5919c581b6271bece2e3ae5_b.png" data-canonical-src="https://pic2.zhimg.com/v2-b13c4448f5919c581b6271bece2e3ae5_b.png" style="max-width: 100%;"></a></p>
+<p>对应树结构如下：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/7936e4ac0755207496457d0f98f3b5b7b12dc8aba7e3ea53e711374a4f0923b7/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d30393133346236613462663563643535626330343837346637376666353661655f622e706e67"><img src="https://camo.githubusercontent.com/7936e4ac0755207496457d0f98f3b5b7b12dc8aba7e3ea53e711374a4f0923b7/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d30393133346236613462663563643535626330343837346637376666353661655f622e706e67" alt="https://pic3.zhimg.com/v2-09134b6a4bf5cd55bc04874f77ff56ae_b.png" data-canonical-src="https://pic3.zhimg.com/v2-09134b6a4bf5cd55bc04874f77ff56ae_b.png" style="max-width: 100%;"></a></p>
+<p>恩恩，到这里为止，给定的kd树构造完成啦，**所有的数据点都能在树上的每个结点找到！**而我们根据上面构造树的过程，也能很容易的知道，来了一个新的数据点的时候，对应该层的指定维数，通过比较大小，我就能知道往左（<strong>预测点对应维度数据小于该结点对对应维度数据</strong>）走还是往右（<strong>预测点对应维度数据大于该结点对应维度数据</strong>）走，<strong>那么好的情况下</strong>，我们就能省掉一半的数据点啦~（<strong>不好的情况，哈哈，没有节省，后面会说到，这也是kd树的致命缺点~</strong>）</p>
+<p>恩，好啦，到这里为止，我们一步一步给出了kd树的构造过程。这也是李航博士书籍上例子中kd树构造的详细过程！他的图片如下：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/aeeddb2d8658362e1a2b15185365a6ee723c3ce24d4f68a727c0ea53cf152349/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d65323064353565613563643738663466343838363263343464393932313237345f622e706e67"><img src="https://camo.githubusercontent.com/aeeddb2d8658362e1a2b15185365a6ee723c3ce24d4f68a727c0ea53cf152349/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d65323064353565613563643738663466343838363263343464393932313237345f622e706e67" alt="https://pica.zhimg.com/v2-e20d55ea5cd78f4f48862c44d9921274_b.png" data-canonical-src="https://pica.zhimg.com/v2-e20d55ea5cd78f4f48862c44d9921274_b.png" style="max-width: 100%;"></a></p>
+<p>对应kd树为:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/41346a8ecb40c4be0f3e3c3c2c36b3aaf67ab1c93af5b52cd10d29c91bed393a/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d35393139636439393336666162363763306131393463623262653562336262345f622e706e67"><img src="https://camo.githubusercontent.com/41346a8ecb40c4be0f3e3c3c2c36b3aaf67ab1c93af5b52cd10d29c91bed393a/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d35393139636439393336666162363763306131393463623262653562336262345f622e706e67" alt="https://pica.zhimg.com/v2-5919cd9936fab67c0a194cb2be5b3bb4_b.png" data-canonical-src="https://pica.zhimg.com/v2-5919cd9936fab67c0a194cb2be5b3bb4_b.png" style="max-width: 100%;"></a></p>
+<ul>
+<li><strong>kd树搜索</strong></li>
+</ul>
+<hr>
+<p>我这里和统计学习方法例子一样，以最近邻为例加以叙述，同样的方法可以应用到k近邻。</p>
+<p><strong>为了让大家更好的理解，我这里直接用上面例子给大家一步一步给出过程！</strong></p>
+<p><strong>首先我们来看用kd树的最近邻搜索算法流程：</strong></p>
+<p><strong>输入：已构造的kd树；目标点x；</strong></p>
+<p><strong>输出：x的最近邻.</strong></p>
+<p>（1）在kd树中找出包含目标点x的叶结点：从根结点出发，递归地向下访问kd树，<strong>若目标点x当前维的坐标小于切分点的坐标,则移动到左子节点，否则移动到右子结点.直到子结点为叶结点位置.</strong></p>
+<p>（2）以此叶结点为“当前最近点”</p>
+<p>（3）递归地向上回退，在每个结点进行以下操作：</p>
+<p>（a）如果该结点保存的实例点比当前最近点距离目标点更近，则以该实例点为“当前最近点”.</p>
+<p>（b）当前最近点一定存在于该结点一个子结点对应的区域.检查该子结点的父结点的另一个子结点对应的区域是否有更近的点.具体地，<strong>检查另一子结点对应的区域是否以目标点为球心、以目标点与“当前最近点”间为半径的超球体相交。</strong></p>
+<p><strong>如果不相交，向上回退.</strong></p>
+<p>（4）<strong>当回退到根结点时，搜索结束。最后的“当前最近点”即为最近邻点.</strong></p>
+<p>看到这里是不是有点晕了，哈哈，不要怕，下面通过例子，一步一步走一遍上面所描述的算法过程，化抽象为具体！</p>
+<p><strong>kd树最近邻搜索例题：</strong></p>
+<p><strong>给定一个二维空间的数据集：</strong></p>
+<p><strong>T = {（2,3），（5,4），（9,6）,（4,7），（8,1），（7,2）}，输入目标实例为K(8.5,1),求K的最近邻。</strong></p>
+<p><strong>首先我们由上面可以给出，T的kd树对应如下：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/41346a8ecb40c4be0f3e3c3c2c36b3aaf67ab1c93af5b52cd10d29c91bed393a/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d35393139636439393336666162363763306131393463623262653562336262345f622e706e67"><img src="https://camo.githubusercontent.com/41346a8ecb40c4be0f3e3c3c2c36b3aaf67ab1c93af5b52cd10d29c91bed393a/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d35393139636439393336666162363763306131393463623262653562336262345f622e706e67" alt="https://pica.zhimg.com/v2-5919cd9936fab67c0a194cb2be5b3bb4_b.png" data-canonical-src="https://pica.zhimg.com/v2-5919cd9936fab67c0a194cb2be5b3bb4_b.png" style="max-width: 100%;"></a></p>
+<p>我们此时的K（8.5,1），根据算法第一步得：第一层的x轴K点为8大于F点的7，所以进入F（7,2）的右子树，进入下面红色线条区域：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/d55da5a7de963be235aeb8c83f544952df0765cca5107e2c77e3d497fc5fbc5a/68747470733a2f2f706963782e7a68696d672e636f6d2f76322d62666232646439333032373735323165316434393739623434643364623332335f622e706e67"><img src="https://camo.githubusercontent.com/d55da5a7de963be235aeb8c83f544952df0765cca5107e2c77e3d497fc5fbc5a/68747470733a2f2f706963782e7a68696d672e636f6d2f76322d62666232646439333032373735323165316434393739623434643364623332335f622e706e67" alt="https://picx.zhimg.com/v2-bfb2dd930277521e1d4979b44d3db323_b.png" data-canonical-src="https://picx.zhimg.com/v2-bfb2dd930277521e1d4979b44d3db323_b.png" style="max-width: 100%;"></a></p>
+<p>到了第二层，分割平面坐标为y轴，K点y轴坐标为1，小于C点y轴坐标6，则继续向右走，在下图红色线条区域内：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b5822ddc89b3882449d5772dbbe724875bb156186d03076022a9f0d95587a40a/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d35366565383430666533656133656462346263643634316366633535373831365f622e706e67"><img src="https://camo.githubusercontent.com/b5822ddc89b3882449d5772dbbe724875bb156186d03076022a9f0d95587a40a/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d35366565383430666533656133656462346263643634316366633535373831365f622e706e67" alt="https://pic1.zhimg.com/v2-56ee840fe3ea3edb4bcd641cfc557816_b.png" data-canonical-src="https://pic1.zhimg.com/v2-56ee840fe3ea3edb4bcd641cfc557816_b.png" style="max-width: 100%;"></a></p>
+<p>则此时算法对应第（1）部分完成，我们找到了叶子节点E（8,1）。</p>
+<p>我们进行算法第（2）步，把E（8,1）作为最近邻点。此时我们算一下KE之间的距离为0.5（便于后面步骤用到）.</p>
+<p>然后进行算法第（3）步，递归的往上回退，每个结点进行相同步骤，好，我现在从E点回退到C点，对应图片如下；</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b5fbb6cf2122d4f0ae92684e1c5f4c3e0eb744321121ff4f7d99164aa872f93c/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d63386437633838343562366435373935333533323862613666396539313338635f622e706e67"><img src="https://camo.githubusercontent.com/b5fbb6cf2122d4f0ae92684e1c5f4c3e0eb744321121ff4f7d99164aa872f93c/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d63386437633838343562366435373935333533323862613666396539313338635f622e706e67" alt="https://pic1.zhimg.com/v2-c8d7c8845b6d579535328ba6f9e9138c_b.png" data-canonical-src="https://pic1.zhimg.com/v2-c8d7c8845b6d579535328ba6f9e9138c_b.png" style="max-width: 100%;"></a></p>
+<p>此时对C点进行第（3）步的（a）操作，判断一下KC距离与保存的最近邻距离（这时是KE）比较，KC距离为点K（8.5,1）与点C（9,6）之间的距离\sqrt{25.25} &gt;最近邻0.5，于是不更新最近邻点。</p>
+<p>然后对C点进行第（3）步的（b）操作，判断一下当前最近邻的距离画一个圆是否与C点切割面相交，如图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/987f048212cb261e68e0ae6f6a4d60382eee979fd89e86ba18790d20bcf627be/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d34316338363938356336306662396539336334356438383733396365386335345f622e706e67"><img src="https://camo.githubusercontent.com/987f048212cb261e68e0ae6f6a4d60382eee979fd89e86ba18790d20bcf627be/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d34316338363938356336306662396539336334356438383733396365386335345f622e706e67" alt="https://pica.zhimg.com/v2-41c86985c60fb9e93c45d88739ce8c54_b.png" data-canonical-src="https://pica.zhimg.com/v2-41c86985c60fb9e93c45d88739ce8c54_b.png" style="max-width: 100%;"></a></p>
+<p>我们很容易看到与C点切割面并没有相交，于是执行由C点回退到它的父结点F点。如图：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/32bda6bf74b233cb2a939bce458d848e648a26746ca2df31d9a04f28b0329fe3/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d38653761666333623763616137653263633563646134373964316162303862615f622e706e67"><img src="https://camo.githubusercontent.com/32bda6bf74b233cb2a939bce458d848e648a26746ca2df31d9a04f28b0329fe3/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d38653761666333623763616137653263633563646134373964316162303862615f622e706e67" alt="https://pica.zhimg.com/v2-8e7afc3b7caa7e2cc5cda479d1ab08ba_b.png" data-canonical-src="https://pica.zhimg.com/v2-8e7afc3b7caa7e2cc5cda479d1ab08ba_b.png" style="max-width: 100%;"></a></p>
+<p>对F点进行（a），（b）操作！</p>
+<p>进行（a）步骤，判断FK的距离是否小于当前保存的最小值，FK=\sqrt{(7-8.5)^{2}+(2-1)^{2} }=\sqrt{1.25} &gt;0.5，所以不改变最小距离</p>
+<p>下面我们进行（b）步骤，为了判断F点的另一半区域是否有更小的点，判断一下当前最近邻的距离画一个圆是否与F点切割面相交，如图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/987f048212cb261e68e0ae6f6a4d60382eee979fd89e86ba18790d20bcf627be/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d34316338363938356336306662396539336334356438383733396365386335345f622e706e67"><img src="https://camo.githubusercontent.com/987f048212cb261e68e0ae6f6a4d60382eee979fd89e86ba18790d20bcf627be/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d34316338363938356336306662396539336334356438383733396365386335345f622e706e67" alt="https://pica.zhimg.com/v2-41c86985c60fb9e93c45d88739ce8c54_b.png" data-canonical-src="https://pica.zhimg.com/v2-41c86985c60fb9e93c45d88739ce8c54_b.png" style="max-width: 100%;"></a></p>
+<p><strong>发现与任何分割线都没有交点，那么执行算法最后一步，此时F点已经是根结点，无法进行回退，那么我们可以得到我们保留的当前最短距离点E点就是我们要找的最近邻点！任务完成，</strong></p>
+<p><strong>并且根据算法流程，我们并没有遍历所有数据点，而是F点的左孩子根本没有遍历，节省了时间，但是并不是所有的kd树都能到达这样的效果。</strong></p>
+<h2><strong>四、kd树的不足以及最差情况举例</strong></h2>
+<p>讲解这个知识点，我还是通过一个例子来直观说明!</p>
+<p><strong>给定一个二维空间的数据集：</strong></p>
+<p><strong>T = {（2,3），（5,4），（9,6）,（4,7），（8,1），（7,2）}，输入目标实例为K(8,3),求K的最近邻。</strong></p>
+<p><strong>首先我们由上面可以给出，T的kd树对应如下：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/41346a8ecb40c4be0f3e3c3c2c36b3aaf67ab1c93af5b52cd10d29c91bed393a/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d35393139636439393336666162363763306131393463623262653562336262345f622e706e67"><img src="https://camo.githubusercontent.com/41346a8ecb40c4be0f3e3c3c2c36b3aaf67ab1c93af5b52cd10d29c91bed393a/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d35393139636439393336666162363763306131393463623262653562336262345f622e706e67" alt="https://pica.zhimg.com/v2-5919cd9936fab67c0a194cb2be5b3bb4_b.png" data-canonical-src="https://pica.zhimg.com/v2-5919cd9936fab67c0a194cb2be5b3bb4_b.png" style="max-width: 100%;"></a></p>
+<p><strong>我们此时的K（8,3），根据算法第一步得：第一层的x轴K点为8大于F点的7，所以进入F（7,2）的右子树，进入下面红色线条区域：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/cffb1270855a2d53c646851d1ea1652965b947692dca85b8911aa34614c9329e/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d32653063303761393538336232333737343764383432326365376134313634385f622e706e67"><img src="https://camo.githubusercontent.com/cffb1270855a2d53c646851d1ea1652965b947692dca85b8911aa34614c9329e/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d32653063303761393538336232333737343764383432326365376134313634385f622e706e67" alt="https://pic3.zhimg.com/v2-2e0c07a9583b237747d8422ce7a41648_b.png" data-canonical-src="https://pic3.zhimg.com/v2-2e0c07a9583b237747d8422ce7a41648_b.png" style="max-width: 100%;"></a></p>
+<p><strong>（注意：这里叶子节点画不画分割线都没有关系！）</strong></p>
+<p><strong>到了第二层，分割平面坐标为y轴，K点y轴坐标为3，小于C点y轴坐标6，则继续向右走，在下图红色线条区域内：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/5fa7a679cfab984f6486574d302c0998f5dc57b429c9a006b08bdb094e333241/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d63343732306333393538636466356339616465396261396334663633356364635f622e706e67"><img src="https://camo.githubusercontent.com/5fa7a679cfab984f6486574d302c0998f5dc57b429c9a006b08bdb094e333241/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d63343732306333393538636466356339616465396261396334663633356364635f622e706e67" alt="https://pic1.zhimg.com/v2-c4720c3958cdf5c9ade9ba9c4f635cdc_b.png" data-canonical-src="https://pic1.zhimg.com/v2-c4720c3958cdf5c9ade9ba9c4f635cdc_b.png" style="max-width: 100%;"></a></p>
+<p><strong>则此时算法对应第（1）部分完成，我们找到了叶子节点E（8,1）。</strong></p>
+<p><strong>我们进行算法第（2）步，把E（8,1）作为最近邻点。此时我们算一下KE之间的距离为2（便于后面步骤用到）.</strong></p>
+<p><strong>然后进行算法第（3）步，递归的往上回退，每个结点进行相同步骤，好，我现在从E点回退到C点，对应图片如下；</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b5fbb6cf2122d4f0ae92684e1c5f4c3e0eb744321121ff4f7d99164aa872f93c/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d63386437633838343562366435373935333533323862613666396539313338635f622e706e67"><img src="https://camo.githubusercontent.com/b5fbb6cf2122d4f0ae92684e1c5f4c3e0eb744321121ff4f7d99164aa872f93c/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d63386437633838343562366435373935333533323862613666396539313338635f622e706e67" alt="https://pic1.zhimg.com/v2-c8d7c8845b6d579535328ba6f9e9138c_b.png" data-canonical-src="https://pic1.zhimg.com/v2-c8d7c8845b6d579535328ba6f9e9138c_b.png" style="max-width: 100%;"></a></p>
+<p><strong>此时对C点进行第（3）步的（a）操作</strong>，判断一下KC距离与保存的最近邻距离（这时是KE）比较，KC距离为点K（8,3）与点C（9,6）之间的距离\sqrt{10} &gt;最近邻2，于是不更新最近邻点。</p>
+<p><strong>然后对C点进行第（3）步的（b）操作，判断一下当前最近邻的距离画一个圆是否与C点切割面相交，如图所示：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/45624f56a5db6b278107ff35df54cb64dc2977a643ee5f997e12c63d694d7756/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d65353538343232323938396465303536636434626434616433343237613534655f622e706e67"><img src="https://camo.githubusercontent.com/45624f56a5db6b278107ff35df54cb64dc2977a643ee5f997e12c63d694d7756/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d65353538343232323938396465303536636434626434616433343237613534655f622e706e67" alt="https://pica.zhimg.com/v2-e5584222989de056cd4bd4ad3427a54e_b.png" data-canonical-src="https://pica.zhimg.com/v2-e5584222989de056cd4bd4ad3427a54e_b.png" style="max-width: 100%;"></a></p>
+<p><strong>我们很容易看到与C点切割面并没有相交，于是执行由C点回退到它的父结点F点。如图：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/32bda6bf74b233cb2a939bce458d848e648a26746ca2df31d9a04f28b0329fe3/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d38653761666333623763616137653263633563646134373964316162303862615f622e706e67"><img src="https://camo.githubusercontent.com/32bda6bf74b233cb2a939bce458d848e648a26746ca2df31d9a04f28b0329fe3/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d38653761666333623763616137653263633563646134373964316162303862615f622e706e67" alt="https://pica.zhimg.com/v2-8e7afc3b7caa7e2cc5cda479d1ab08ba_b.png" data-canonical-src="https://pica.zhimg.com/v2-8e7afc3b7caa7e2cc5cda479d1ab08ba_b.png" style="max-width: 100%;"></a></p>
+<p><strong>对F点进行（a），（b）操作！</strong></p>
+<p><strong>进行（a）步骤，判断FK的距离是否小于当前保存的最小值，FK=\sqrt{(7-8)^{2}+(2-3)^{2} }=\sqrt{2}</strong></p>
+<p><strong>&lt;2,所以将最小距离替换为FK的距离！</strong></p>
+<p>**下面我们进行（b）步骤，为了判断F点的另一半区域是否有更小的点，**判断一下当前最近邻的距离画一个圆是否与F点切割面相交，如图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/45624f56a5db6b278107ff35df54cb64dc2977a643ee5f997e12c63d694d7756/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d65353538343232323938396465303536636434626434616433343237613534655f622e706e67"><img src="https://camo.githubusercontent.com/45624f56a5db6b278107ff35df54cb64dc2977a643ee5f997e12c63d694d7756/68747470733a2f2f706963612e7a68696d672e636f6d2f76322d65353538343232323938396465303536636434626434616433343237613534655f622e706e67" alt="https://pica.zhimg.com/v2-e5584222989de056cd4bd4ad3427a54e_b.png" data-canonical-src="https://pica.zhimg.com/v2-e5584222989de056cd4bd4ad3427a54e_b.png" style="max-width: 100%;"></a></p>
+<p>我们可以看出，此时圆与F点有交点，那么说明F点左侧是有可能存在与K点距离更小的点（注:这里我们人为看起来好像没有，但是计算机不知道，必须搜索下去，只要以当前最小值画圆发现与节点切割面有交点，<strong>那么一定要进行搜索，不然数据如果是下图：）</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/2b789df417d10b21f1290a4583584bec6ed0bbdcc3dabc99f826630054889337/68747470733a2f2f706963782e7a68696d672e636f6d2f76322d30653537613134633635363831326564303031303034666337313463386530315f622e706e67"><img src="https://camo.githubusercontent.com/2b789df417d10b21f1290a4583584bec6ed0bbdcc3dabc99f826630054889337/68747470733a2f2f706963782e7a68696d672e636f6d2f76322d30653537613134633635363831326564303031303034666337313463386530315f622e706e67" alt="https://picx.zhimg.com/v2-0e57a14c656812ed001004fc714c8e01_b.png" data-canonical-src="https://picx.zhimg.com/v2-0e57a14c656812ed001004fc714c8e01_b.png" style="max-width: 100%;"></a></p>
+<p>如果不进行搜索，我们就可能会漏掉Z数据点，因为KZ比当前最小值KF小！</p>
+<p>此时相交，我们就需要再F点的左孩子进行搜索，一直搜索到叶子节点A，然后进行（a），（b）步骤，继续回溯到它的父亲结点B，以及最后到达F点，完成最后的最近邻是F点，这里几乎遍历了所有数据点，<strong>几乎退化了为线性时间0（n）了。这也是kd树的最差的情况。</strong></p>
+<p>当给定的数据分布很差的时候，我们每一次计算画圆过程中，**都会与每一个分割面相交的时候，都会递归搜索到该结点的另一个子空间中遍历，那么这样最坏的情况是进行线性时间搜索！**比如构建的kd树和数据分布如下：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/1d17b38a00089d446c512dab72beb3d416ae504feed9f6fc3897580263261e8b/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d62313737326466363965366362313036633938323261386639636234316233615f622e706e67"><img src="https://camo.githubusercontent.com/1d17b38a00089d446c512dab72beb3d416ae504feed9f6fc3897580263261e8b/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d62313737326466363965366362313036633938323261386639636234316233615f622e706e67" alt="https://pic3.zhimg.com/v2-b1772df69e6cb106c9822a8f9cb41b3a_b.png" data-canonical-src="https://pic3.zhimg.com/v2-b1772df69e6cb106c9822a8f9cb41b3a_b.png" style="max-width: 100%;"></a></p>
+<p><strong>如图所示，我们可以看到几乎所有的数据离给定预测的点距离很远，每次进行算法第三步判断是否与分割面有交点的时候，几乎每个面都有交点，只要有交点，就必须将该点的另一半结点遍历到叶子结点，重复的进行算法步骤，导致了搜索的低效！</strong></p>
+<h2><strong>五、k近邻方法的一些优缺点总结</strong></h2>
+<p><strong>优点：</strong></p>
+<p>1.KNN分类方法是一种非参数的分类技术，简单直观，易于实现！<strong>只要让预测点分别和训练数据求距离，挑选前k个即可，非常简单直观。</strong></p>
+<p>2.KNN是一种在线技术，新数据可以直接加入数据集而<strong>不必进行重新训练</strong></p>
+<p>缺点及改进：</p>
+<p>1.当样本不平衡时，<strong>比如一个类的样本容量很大，其他类的样本容量很小</strong>，输入一个样本的时候，K个邻近值大多数都是大样本容量的那个类，这时可能会导致分类错误。</p>
+<p><strong>改进方法：对K邻近点进行加权，也就是距离近的权值大，距离远的点权值小。</strong></p>
+<p>**2.**计算量较大，<strong>每个待分类的样本都要计算它到全部点的距离</strong>，根据距离排序才能求得K个临近点。</p>
+<p><strong>改进方法：先对已知样本带你进行裁剪，事先去除分类作用不大的样本，采取kd树以及其它高级搜索方法BBF等算法减少搜索时间。</strong></p>
+<h2>参考：</h2>
+<p><strong>李航老师《统计学习方法》</strong></p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
