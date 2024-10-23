@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="## **一.k近邻算法的基本概念，原理以及应用**
+
+k近邻算法是一种**基本分类和回归方法**。">
+<meta property="og:title" content="k近邻（k-NN）算法是什么（一）">
+<meta property="og:description" content="## **一.k近邻算法的基本概念，原理以及应用**
+
+k近邻算法是一种**基本分类和回归方法**。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/k-jin-lin-%EF%BC%88k-NN%EF%BC%89-suan-fa-shi-shen-me-%EF%BC%88-yi-%EF%BC%89.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>k近邻（k-NN）算法是什么（一）</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">k近邻（k-NN）算法是什么（一）</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/30" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h2><strong>一.k近邻算法的基本概念，原理以及应用</strong></h2>
+<p>k近邻算法是一种<strong>基本分类和回归方法</strong>。本篇文章只讨论分类问题的k近邻法。</p>
+<p>K近邻算法，即是给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例<strong>最邻近</strong>的K个实例，<strong>这K个实例的多数属于某个类</strong>，就把该输入实例分类到这个类中。（<strong>这就类似于现实生活中少数服从多数的思想</strong>）根据这个说法，咱们来看下引自维基百科上的一幅图：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4c67f4b96efe730965a7565043f2372a22f5ed1e68170bfe9ca5f5ad4d45ae98/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d63336631643235353365373436376437646135663963643533386432623439615f622e706e67"><img src="https://camo.githubusercontent.com/4c67f4b96efe730965a7565043f2372a22f5ed1e68170bfe9ca5f5ad4d45ae98/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d63336631643235353365373436376437646135663963643533386432623439615f622e706e67" alt="https://pic1.zhimg.com/v2-c3f1d2553e7467d7da5f9cd538d2b49a_b.png" data-canonical-src="https://pic1.zhimg.com/v2-c3f1d2553e7467d7da5f9cd538d2b49a_b.png" style="max-width: 100%;"></a></p>
+<p>如上图所示，有<strong>两类</strong>不同的样本数据，分别用蓝色的小正方形和红色的小三角形表示，而图正中间的那个绿色的圆所标示的数据则是<strong>待分类的数据</strong>。这也就是我们的目的，来了一个新的数据点，我要得到它的类别是什么？好的，下面我们根据k近邻的思想来给绿色圆点进行分类。</p>
+<ul>
+<li>
+<p>如果K=3，绿色圆点的最邻近的3个点是2个红色小三角形和1个蓝色小正方形，**少数从属于多数，**基于统计的方法，判定绿色的这个待分类点属于红色的三角形一类。</p>
+</li>
+<li>
+<p>如果K=5，绿色圆点的最邻近的5个邻居是2个红色三角形和3个蓝色的正方形，**还是少数从属于多数，**基于统计的方法，判定绿色的这个待分类点属于蓝色的正方形一类。</p>
+</li>
+</ul>
+<p>从上面例子我们可以看出，k近邻的算法思想非常的简单，也非常的容易理解，那么我们是不是就到此结束了，<strong>该算法的原理我们也已经懂了，也知道怎么给新来的点如何进行归类，只要找到离它最近的k个实例，哪个类别最多即可。</strong></p>
+<p>哈哈，没有这么简单啦，算法的核心思想确实是这样，但是要想一个算法在实际应用中work，需要注意的不少额~**比如k怎么确定的，k为多少效果最好呢？所谓的最近邻又是如何来判断给定呢？**哈哈，不要急，下面会一一讲解！</p>
+<h2><strong>二.k近邻算法中k的选取以及特征归一化的重要性</strong></h2>
+<ol>
+<li><strong>选取k值以及它的影响</strong></li>
+</ol>
+<p>k近邻的k值我们应该怎么选取呢？</p>
+<p><strong>如果我们选取较小的k值，那么就会意味着我们的整体模型会变得复杂，容易发生过拟合！恩~结论说完了，太抽象了吧你，不上图讲解号称通俗讲解的都是流氓~好吧，那我就上图来讲解</strong></p>
+<p><strong>假设我们选取k=1这个极端情况，怎么就使得模型变得复杂，又容易过拟合了呢？</strong></p>
+<p><strong>假设我们有训练数据和待分类点如下图：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9866eeebeb534b492d6cf8b8b291a8c87c780f48e12d1e8ec24af6761f02345e/68747470733a2f2f706963342e7a68696d672e636f6d2f76322d36393131646431636535373763396664363834326362643265653638613330395f622e706e67"><img src="https://camo.githubusercontent.com/9866eeebeb534b492d6cf8b8b291a8c87c780f48e12d1e8ec24af6761f02345e/68747470733a2f2f706963342e7a68696d672e636f6d2f76322d36393131646431636535373763396664363834326362643265653638613330395f622e706e67" alt="https://pic4.zhimg.com/v2-6911dd1ce577c9fd6842cbd2ee68a309_b.png" data-canonical-src="https://pic4.zhimg.com/v2-6911dd1ce577c9fd6842cbd2ee68a309_b.png" style="max-width: 100%;"></a></p>
+<p>上图中有俩类，一个是<strong>黑色的圆点</strong>，一个是<strong>蓝色的长方形</strong>，现在我们的待分类点是<strong>红色的五边形。</strong></p>
+<p>好，根据我们的k近邻算法步骤来决定待分类点应该归为哪一类。我们由图中可以得到，<strong>很容易我们能够看出来五边形离黑色的圆点最近，k又等于1，那太好了</strong>，我们最终判定待分类点是黑色的圆点。</p>
+<p>由这个处理过程我们很容易能够感觉出问题了，如果k太小了，比如等于1，那么模型就太复杂了，<strong>我们很容易学习到噪声</strong>，也就非常容易判定为噪声类别，而在上图，如果，k大一点，k等于8，<strong>把长方形都包括进来</strong>，我们很容易得到我们正确的分类应该是蓝色的长方形！如下图：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/311f86f29c8fc48604dd9bf7888e0dd4ad1ce2fdd1918fc3450c5b06eabbe2b5/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d31386466363361636233376632396264303236653031373730656635633936365f622e706e67"><img src="https://camo.githubusercontent.com/311f86f29c8fc48604dd9bf7888e0dd4ad1ce2fdd1918fc3450c5b06eabbe2b5/68747470733a2f2f706963332e7a68696d672e636f6d2f76322d31386466363361636233376632396264303236653031373730656635633936365f622e706e67" alt="https://pic3.zhimg.com/v2-18df63acb37f29bd026e01770ef5c966_b.png" data-canonical-src="https://pic3.zhimg.com/v2-18df63acb37f29bd026e01770ef5c966_b.png" style="max-width: 100%;"></a></p>
+<p>所谓的过拟合就是在训练集上准确率非常高，而在测试集上准确率低，经过上例，我们可以得到k太小会导致<strong>过拟合</strong>，<strong>很容易将一些噪声（如上图离五边形很近的黑色圆点）学习到模型中，而忽略了数据真实的分布！</strong></p>
+<p><strong>如果我们选取较大的k值，就相当于用较大邻域中的训练数据进行预测，这时与输入实例较远的（不相似）训练实例也会对预测起作用，使预测发生错误，k值的增大意味着整体模型变得简单。</strong></p>
+<p>k值增大怎么就意味着模型变得简单了，不要急，我会解释的！哈哈。</p>
+<p>**我们想，如果k=N（N为训练样本的个数）,那么无论输入实例是什么，都将简单地预测它属于在训练实例中最多的类。这时，模型是不是非常简单，这相当于你压根就没有训练模型呀！**直接拿训练数据统计了一下各个数据的类别，找最大的而已！这好像下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/3e83b59d1860af73bcd469f7d0241837bad2805bedbf3494ab7ed3b043110941/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d65373964343661353663343236303631613934393430393166386661633036385f622e706e67"><img src="https://camo.githubusercontent.com/3e83b59d1860af73bcd469f7d0241837bad2805bedbf3494ab7ed3b043110941/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d65373964343661353663343236303631613934393430393166386661633036385f622e706e67" alt="https://pic1.zhimg.com/v2-e79d46a56c426061a9494091f8fac068_b.png" data-canonical-src="https://pic1.zhimg.com/v2-e79d46a56c426061a9494091f8fac068_b.png" style="max-width: 100%;"></a></p>
+<p>我们统计了黑色圆形是8个，长方形个数是7个，那么哈哈，如果k=N，我就得出结论了，红色五边形是属于黑色圆形的（<strong>明显是错误的好不，捂脸！</strong>）</p>
+<p><strong>这个时候，模型过于简单，完全忽略训练数据实例中的大量有用信息，是不可取的。</strong></p>
+<p><strong>恩，k值既不能过大，也不能过小，在我举的这个例子中，我们k值的选择，在下图红色圆边界之间这个范围是最好的，如下图：</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/93a92bc53d1f4e955554bdd052df045f3984972a41d9ac8a4791379f4d2cab14/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d62376463313865653834653563303939633231666261613137356137623963365f622e706e67"><img src="https://camo.githubusercontent.com/93a92bc53d1f4e955554bdd052df045f3984972a41d9ac8a4791379f4d2cab14/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d62376463313865653834653563303939633231666261613137356137623963365f622e706e67" alt="https://pic1.zhimg.com/v2-b7dc18ee84e5c099c21fbaa175a7b9c6_b.png" data-canonical-src="https://pic1.zhimg.com/v2-b7dc18ee84e5c099c21fbaa175a7b9c6_b.png" style="max-width: 100%;"></a></p>
+<p><strong>（注：这里只是为了更好让大家理解，真实例子中不可能只有俩维特征，但是原理是一样的1，我们就是想找到较好的k值大小）</strong></p>
+<p>那么我们一般怎么选取呢？李航博士书上讲到，我们一般选取一个较小的数值，通常采取 交叉验证法来选取最优的k值。（<strong>也就是说，选取k值很重要的关键是实验调参，类似于神经网络选取多少层这种，通过调整超参数来得到一个较好的结果</strong>）</p>
+<p><strong>2.距离的度量</strong></p>
+<p>在上文中说到，k近邻算法是在训练数据集中找到与该实例<strong>最邻近</strong>的K个实例，这K个实例的多数属于某个类，我们就说预测点属于哪个类。</p>
+<p>定义中所说的最邻近是如何度量呢？我们怎么知道谁跟测试点最邻近。这里就会引出我们几种度量俩个点之间距离的标准。</p>
+<p>我们可以有以下几种度量方式：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/88fe77b9e7518a14f1826681140922af26099d6e292d620889a95919c21e9949/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d36306262333832623064323265633063653239366564306530323466333162635f622e706e67"><img src="https://camo.githubusercontent.com/88fe77b9e7518a14f1826681140922af26099d6e292d620889a95919c21e9949/68747470733a2f2f706963312e7a68696d672e636f6d2f76322d36306262333832623064323265633063653239366564306530323466333162635f622e706e67" alt="https://pic1.zhimg.com/v2-60bb382b0d22ec0ce296ed0e024f31bc_b.png" data-canonical-src="https://pic1.zhimg.com/v2-60bb382b0d22ec0ce296ed0e024f31bc_b.png" style="max-width: 100%;"></a></p>
+<p>其中当p=2的时候，就是我们最常见的欧式距离，我们也一般都用欧式距离来衡量我们高维空间中俩点的距离。在实际应用中，距离函数的选择应该根据数据的特性和分析的需要而定，一般选取p=2欧式距离表示，这不是本文的重点。</p>
+<p><strong>恩，距离度量我们也了解了，下面我要说一下各个维度归一化的必要性！</strong></p>
+<p><strong>3.特征归一化的必要性</strong></p>
+<p>首先举例如下，我用一个人身高(cm)与脚码（尺码）大小来作为特征值，类别为男性或者女性。我们现在如果有5个训练样本，分布如下：</p>
+<p>A [(179,42),男] B [(178,43),男] C [(165,36)女] D [(177,42),男] E [(160,35),女]</p>
+<p>通过上述训练样本，我们看出问题了吗？</p>
+<p>很容易看到第一维身高特征是第二维脚码特征的4倍左右，那么在进行距离度量的时候，<strong>我们就会偏向于第一维特征。</strong> 这样造成俩个特征并不是等价重要的，最终可能会导致距离计算错误，从而导致预测错误。口说无凭，举例如下：</p>
+<p>现在我来了一个测试样本 F(167,43)，让我们来预测他是男性还是女性，我们采取k=3来预测。</p>
+<p>下面我们用欧式距离分别算出F离训练样本的欧式距离，然后选取最近的3个，多数类别就是我们最终的结果，计算如下：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b0be46b5b243e72ed6cb9d6b913811174ef64c28699932cc0e1654820534c40e/68747470733a2f2f706963342e7a68696d672e636f6d2f76322d30376439346334333564633935643636303931373638643536343939663336335f622e706e67"><img src="https://camo.githubusercontent.com/b0be46b5b243e72ed6cb9d6b913811174ef64c28699932cc0e1654820534c40e/68747470733a2f2f706963342e7a68696d672e636f6d2f76322d30376439346334333564633935643636303931373638643536343939663336335f622e706e67" alt="https://pic4.zhimg.com/v2-07d94c435dc95d66091768d56499f363_b.png" data-canonical-src="https://pic4.zhimg.com/v2-07d94c435dc95d66091768d56499f363_b.png" style="max-width: 100%;"></a></p>
+<p>由计算可以得到，最近的前三个分别是C,D,E三个样本，那么由C,E为女性，D为男性，女性多于男性得到我们要预测的结果为<strong>女性</strong>。</p>
+<p><strong>这样问题就来了，一个女性的脚43码的可能性，远远小于男性脚43码的可能性，那么为什么算法还是会预测F为女性呢？那是因为由于各个特征量纲的不同，在这里导致了身高的重要性已经远远大于脚码了，这是不客观的。</strong> 所以我们应该让每个特征都是同等重要的！这也是我们要归一化的原因！归一化公式如下：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/222f917cf4464209ddbe825abec6058986358316626ad7ae1088a4570f151368/68747470733a2f2f706963782e7a68696d672e636f6d2f76322d62653330363931643337616339336232323337323137636164636132653936375f622e706e67"><img src="https://camo.githubusercontent.com/222f917cf4464209ddbe825abec6058986358316626ad7ae1088a4570f151368/68747470733a2f2f706963782e7a68696d672e636f6d2f76322d62653330363931643337616339336232323337323137636164636132653936375f622e706e67" alt="https://picx.zhimg.com/v2-be30691d37ac93b2237217cadca2e967_b.png" data-canonical-src="https://picx.zhimg.com/v2-be30691d37ac93b2237217cadca2e967_b.png" style="max-width: 100%;"></a></p>
+<p>讲到这里，k近邻算法基本内容我们已经讲完了。除去之后为了提高查找效率提出的kd树外，算法的原理，应用等方面已经讲解完毕，由于每篇文章内容不宜太多，kd树等知识下篇讲解，这里总结一下本文讲的内容。</p>
+<h2><strong>三.本文的一点总结</strong></h2>
+<p>1.我们提出了k近邻算法，算法的核心思想是，即是给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例最邻近的K个实例，这K个实例的多数属于某个类，就把该输入实例分类到这个类中。<strong>更通俗说一遍算法的过程，来了一个新的输入实例，我们算出该实例与每一个训练点的距离（这里的复杂度为0(n)比较大，所以引出了下文的kd树等结构），然后找到前k个，这k个哪个类别数最多，我们就判断新的输入实例就是哪类！</strong></p>
+<p>2.与该实例最近邻的k个实例，这个最近邻的定义是通过不同<strong>距离函数</strong>来定义，我们最常用的是欧式距离。</p>
+<p>3.为了保证每个特征同等重要性，我们这里对每个特征进行<strong>归一化</strong>。</p>
+<p>4.k值的选取，既不能太大，也不能太小，何值为最好，需要实验调整参数确定！</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
