@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="![https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIeKiapf7cezqeEJZibvibBSzp1cF1zDkwphJIicicXpVBgE7TLDwKwdoZ9BA/640?wx_fmt=png&from=appmsg](https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIeKiapf7cezqeEJZibvibBSzp1cF1zDkwphJIicicXpVBgE7TLDwKwdoZ9BA/640?wx_fmt=png&from=appmsg)
+
+ --https://doi.org/10.1038/s41576-023-00618-5 IF: 39.1 Q1 B1
+
+Gene regulatory network inference in the era of single-cell multi-omics[1]
+
+## 研究团队和单位
+
+**Julio Saez-Rodriguez---Heidelberg University**
+
+![https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIiblndphkqlmKrFHFfQZWpicR8qDhNBpBhU2023HGq89TqgWE6L334XCQ/640?wx_fmt=png&from=appmsg](https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIiblndphkqlmKrFHFfQZWpicR8qDhNBpBhU2023HGq89TqgWE6L334XCQ/640?wx_fmt=png&from=appmsg)
+
+**Ricard Argelaguet    Altos Labs, Granta Park, Cambridge, UK**
+
+![https://mmbiz.qpic.cn/sz_mmbiz_jpg/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIBuXNSHNH7qxydqV2DOxg6Cx2HPLZzXyK8UYVfL7k2yfzZ6icK6uhELA/640?wx_fmt=jpeg&from=appmsg](https://mmbiz.qpic.cn/sz_mmbiz_jpg/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIBuXNSHNH7qxydqV2DOxg6Cx2HPLZzXyK8UYVfL7k2yfzZ6icK6uhELA/640?wx_fmt=jpeg&from=appmsg)
+
+染色质、转录因子和基因之间的相互作用产生了复杂的调控回路，可以把这调控回路表示为基因调控网络 （GRN），调控结果的表现形式之一是转录（基因表达）的改变。">
+<meta property="og:title" content="单细胞多组学时代的基因调控网络是什么 ？">
+<meta property="og:description" content="![https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIeKiapf7cezqeEJZibvibBSzp1cF1zDkwphJIicicXpVBgE7TLDwKwdoZ9BA/640?wx_fmt=png&from=appmsg](https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIeKiapf7cezqeEJZibvibBSzp1cF1zDkwphJIicicXpVBgE7TLDwKwdoZ9BA/640?wx_fmt=png&from=appmsg)
+
+ --https://doi.org/10.1038/s41576-023-00618-5 IF: 39.1 Q1 B1
+
+Gene regulatory network inference in the era of single-cell multi-omics[1]
+
+## 研究团队和单位
+
+**Julio Saez-Rodriguez---Heidelberg University**
+
+![https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIiblndphkqlmKrFHFfQZWpicR8qDhNBpBhU2023HGq89TqgWE6L334XCQ/640?wx_fmt=png&from=appmsg](https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIiblndphkqlmKrFHFfQZWpicR8qDhNBpBhU2023HGq89TqgWE6L334XCQ/640?wx_fmt=png&from=appmsg)
+
+**Ricard Argelaguet    Altos Labs, Granta Park, Cambridge, UK**
+
+![https://mmbiz.qpic.cn/sz_mmbiz_jpg/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIBuXNSHNH7qxydqV2DOxg6Cx2HPLZzXyK8UYVfL7k2yfzZ6icK6uhELA/640?wx_fmt=jpeg&from=appmsg](https://mmbiz.qpic.cn/sz_mmbiz_jpg/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIBuXNSHNH7qxydqV2DOxg6Cx2HPLZzXyK8UYVfL7k2yfzZ6icK6uhELA/640?wx_fmt=jpeg&from=appmsg)
+
+染色质、转录因子和基因之间的相互作用产生了复杂的调控回路，可以把这调控回路表示为基因调控网络 （GRN），调控结果的表现形式之一是转录（基因表达）的改变。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/dan-xi-bao-duo-zu-xue-shi-dai-de-ji-yin-diao-kong-wang-luo-shi-shen-me-%20%EF%BC%9F.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>单细胞多组学时代的基因调控网络是什么 ？</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">单细胞多组学时代的基因调控网络是什么 ？</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/34" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/02b710b029970698b6d3fbeba63ec9af75c71293b1258e087589bf49b01fc6cf/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49654b696170663763657a7165454a5a696276696242537a70316346317a446b7770684a496963696358705642674537544c44774b77646f5a3942412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/02b710b029970698b6d3fbeba63ec9af75c71293b1258e087589bf49b01fc6cf/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49654b696170663763657a7165454a5a696276696242537a70316346317a446b7770684a496963696358705642674537544c44774b77646f5a3942412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIeKiapf7cezqeEJZibvibBSzp1cF1zDkwphJIicicXpVBgE7TLDwKwdoZ9BA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIeKiapf7cezqeEJZibvibBSzp1cF1zDkwphJIicicXpVBgE7TLDwKwdoZ9BA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>--<a href="https://doi.org/10.1038/s41576-023-00618-5" rel="nofollow">https://doi.org/10.1038/s41576-023-00618-5</a> IF: 39.1 Q1 B1</p>
+<p>Gene regulatory network inference in the era of single-cell multi-omics[1]</p>
+<h2>研究团队和单位</h2>
+<p><strong>Julio Saez-Rodriguez---Heidelberg University</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b29690a7c6bc23f86f4fa79aa0b3e4d73a54cb11c2b0923bb09e391877695e31/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a4969626c6e6470686b716c6d4b7246484666515a5770696352387144684e42704268553230323348477138395471675745364c3333345843512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/b29690a7c6bc23f86f4fa79aa0b3e4d73a54cb11c2b0923bb09e391877695e31/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a4969626c6e6470686b716c6d4b7246484666515a5770696352387144684e42704268553230323348477138395471675745364c3333345843512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIiblndphkqlmKrFHFfQZWpicR8qDhNBpBhU2023HGq89TqgWE6L334XCQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIiblndphkqlmKrFHFfQZWpicR8qDhNBpBhU2023HGq89TqgWE6L334XCQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p><strong>Ricard Argelaguet    Altos Labs, Granta Park, Cambridge, UK</strong></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ceac1fdeae3d9c5c38b2e8460fcd5403eb73571907c4743e30c7e5c174075dfc/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f6a70672f523861687253514d4332464e644550367a536474567a55335247417965584a494275584e53484e483771787964715632444f78673643783248504c5a7a58794b38555956664c376b3279667a5a3669634b367568454c412f3634303f77785f666d743d6a7065672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/ceac1fdeae3d9c5c38b2e8460fcd5403eb73571907c4743e30c7e5c174075dfc/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f6a70672f523861687253514d4332464e644550367a536474567a55335247417965584a494275584e53484e483771787964715632444f78673643783248504c5a7a58794b38555956664c376b3279667a5a3669634b367568454c412f3634303f77785f666d743d6a7065672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_jpg/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIBuXNSHNH7qxydqV2DOxg6Cx2HPLZzXyK8UYVfL7k2yfzZ6icK6uhELA/640?wx_fmt=jpeg&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_jpg/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIBuXNSHNH7qxydqV2DOxg6Cx2HPLZzXyK8UYVfL7k2yfzZ6icK6uhELA/640?wx_fmt=jpeg&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>染色质、转录因子和基因之间的相互作用产生了复杂的调控回路，可以把这调控回路表示为基因调控网络 （GRN），调控结果的表现形式之一是转录（基因表达）的改变。</p>
+<p>转录主要由转录因子 (TFs) 调控，这些转录因子是能够结合到特定 DNA 序列（DNA 结合位点）上的蛋白质，它们可以影响基因的转录速率。</p>
+<p>基因组 DNA 紧密地与结构蛋白包装成核小体（染色质的基本单位）复合物，使得大多数基因对于转录机制是不可及的。为了使转录发生，基因转录起始位点附近的区域（启动子）需要通过把核小体移开使其暴露展现出来。</p>
+<p>DNA 可及性的改变可以通过所谓的先锋 TFs 的结合触发。其他 TFs 可以结合到 DNA 的远端顺式调控元件（cis-regulatory elements，CREs）上，并与辅助因子和其他蛋白质合作，共同使 RNA 聚合酶复合物聚集和稳定下来，从而发生转录(mRNA)。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/2aada437c2aa097f65f1d0efffa34d47d051dc103886fb53c94369989cbca530/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49673166683750555753476f6337764d74776570725a4648444f4a57373836473941706c4d49676758476245596b63316d5331793466772f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/2aada437c2aa097f65f1d0efffa34d47d051dc103886fb53c94369989cbca530/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49673166683750555753476f6337764d74776570725a4648444f4a57373836473941706c4d49676758476245596b63316d5331793466772f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIg1fh7PUWSGoc7vMtweprZFHDOJW786G9AplMIggXGbEYkc1mS1y4fw/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIg1fh7PUWSGoc7vMtweprZFHDOJW786G9AplMIggXGbEYkc1mS1y4fw/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>GRNs 是可解释的计算模型，用于展现基因调控细节，它们以网络的形式展示，也可以从数学角度定义为图。</p>
+<p>基因调控的多个组成部分，如 TFs、剪接因子、长非编码 RNA、微 RNA 和代谢物，都可以被纳入 GRNs。</p>
+<p>这篇综述重点关注它们最简单的表示形式，其中 GRN 的节点由基因组成，其中一些基因是 TFs，而 GRN 的边则代表基因之间的调控相互作用（其他可能的 GRN 表示形式另作讨论）。此外，揭示 GRN 的拓扑结构和动态性对于理解细胞身份的建立和维持是至关重要的，这对细胞命运工程和疾病预防具有重要意义。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9ac2ebeb0dc642d8a78a71ca579dcca7a22c27076a7973bbdbd3df1527197c17/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a493874363066594142547379534b7a366b4d734e4a5836707550513151334647794e635274366b65745a30665531656c6961596961334356412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/9ac2ebeb0dc642d8a78a71ca579dcca7a22c27076a7973bbdbd3df1527197c17/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a493874363066594142547379534b7a366b4d734e4a5836707550513151334647794e635274366b65745a30665531656c6961596961334356412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJI8t60fYABTsySKz6kMsNJX6puPQ1Q3FGyNcRt6ketZ0fU1eliaYia3CVA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJI8t60fYABTsySKz6kMsNJX6puPQ1Q3FGyNcRt6ketZ0fU1eliaYia3CVA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>GRNs 通常是实验验证后的调控事件数据库中搭建的，或者从 bulk 转录组数据中的基因共表达中推断出来。如果有足够的转录组数据，可以推断出更适合当前生物学问题的 GRNs，而不仅仅是从数据库中提取的 GRNs，因为这些通常过于通用。</p>
+<p>但是，转录组数据并未直接捕捉许多潜在的调控机制，如 TF 蛋白的丰度和 DNA 结合事件，TFs 与辅助因子的合作，替代性转录剪接，翻译后蛋白修饰事件以及基因组的可接触性和结构。</p>
+<p>测量这些基因调控的其他方面，具有生成更好地代表体内基因调控的 GRNs 的潜力。例如，包含染色质可及性数据可以微调 TF-基因链路，通过考虑基因是否是开放的并通过在 GRN 推断中包含 CREs。</p>
+<p>此外，bulk 测序数据在组织样本中的细胞类型中提供了混合的测量结果，因此无法分辨特定于某些细胞类型或细胞状态的调控程序。这种局限性已经通过使用单细胞技术克服，允许在不同细胞类型、分化轨迹和条件下推断 GRNs。由于这个原因，以及随着多模态测序技术的引入，最近出现了大量新的 GRN 推断方法</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/0047be43b5a79e19ae959882b85269dc0189b844e73edc3fa6a9fbb43fc3df97/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a4938726962757873785357797968614846367a4e63473375727639746b453848686b5636397139686e4964625235784164383737704877512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/0047be43b5a79e19ae959882b85269dc0189b844e73edc3fa6a9fbb43fc3df97/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a4938726962757873785357797968614846367a4e63473375727639746b453848686b5636397139686e4964625235784164383737704877512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJI8ribuxsxSWyyhaHF6zNcG3urv9tkE8HhkV69q9hnIdbR5xAd877pHwQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJI8ribuxsxSWyyhaHF6zNcG3urv9tkE8HhkV69q9hnIdbR5xAd877pHwQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>GRN 推断指的是通过计算方法从数据中总结基因调控，并将其转换为可解释的网络结构过程。它假设：GRN 的影响可以在分子数据中观察和测量到。</p>
+<p>GRN 中的相互作用可以是有向的或无向的（分别表示基因之间的因果关系或缺乏因果关系），带符号的（表示调控模式，积极或消极）和加权的（表示相互作用的强度）。</p>
+<h2>3.1 从转录组数据推断</h2>
+<p>在基因表达分析中，拟合模型的一种方法是通过其他基因的表达来解释某一基因的变异性。</p>
+<h3>3.1.1 WGCNA 方法</h3>
+<p>加权基因共表达网络分析（WGCNA）是最简单且流行的分析方法之一。它的主要功能是通过在转录组中进行成对相关性分析，识别共表达的基因模块。这些模块组成了一个基因共表达网络，其特点是相互作用为无向的，原因在于相关性的对称性。</p>
+<ul>
+<li>局限性：WGCNA 无法揭示因果调控的关系，这在某种程度上限制了其可解释性。此外，由于这种方法基于无监督学习，它往往产生大量假阳性关联，影响分析结果的精确度。</li>
+</ul>
+<h3>3.1.2 GENIE3 和 GRNBoost2</h3>
+<p>为了应对 WGCNA 的局限性，诸如 GENIE3 和 GRNBoost2 等方法被提出。这些方法基于先前的研究成果，区别转录因子 (TFs) 和目标基因，并训练模型，根据 TFs 的表达来预测目标基因的表达。</p>
+<p>这种方法大幅减少了需要考虑的相互作用数量，并将无向相互作用转化为有向连接，进而引入潜在的因果关系，使得调控网络的推断更加精准。</p>
+<h3>3.1.3 单纯依赖转录组数据的局限</h3>
+<ul>
+<li>
+<p>假阳性结果：仅从转录组推断调控网络可能会引入较多的假阳性</p>
+</li>
+<li>
+<p>忽略染色质可接触性等关键调控机制：在基因调控过程中，染色质的开放状态以及其它调控机制无法通过转录组数据充分捕捉。</p>
+</li>
+<li>
+<p>转录水平不等同于功能蛋白：许多生物过程是将转录水平转化为功能蛋白，单靠 mRNA 的表达信息无法全面反映基因调控的全貌。</p>
+</li>
+</ul>
+<h2>3.2 从 TF 结合数据或染色质可及性数据推断</h2>
+<p>在基因调控网络（GRNs）的构建中，除了传统的基因表达分析外，近年来一些测序技术，如染色质免疫共沉淀测序（ChIP-seq）和靶标切割与标记（CUT&amp;Tag），为转录因子（TFs）结合位点的精确测量提供了直接的数据支撑。</p>
+<h3>3.2.1 ChIP-seq 和 CUT&amp;Tag 技术</h3>
+<p>这些测序方法能够在基因组范围内直接检测 TFs 的结合情况，这些信息可以直接用于通过将 TF 结合位点分配到潜在目标基因来构建 GRNs。。</p>
+<p>局限性：</p>
+<ul>
+<li>
+<p>抗体依赖性：只能用于检测那些已有可用抗体的 TFs，因此无法覆盖全部转录因子。</p>
+</li>
+<li>
+<p>远端相互作用的忽略：由于技术限制，通常只能将绑定的 TFs 分配给最近的基因，忽略了已知与基因调控相关的远端相互作用，如增强子与基因的调控。</p>
+</li>
+</ul>
+<h3>3.2.2 利用染色质可及性数据进行推断</h3>
+<p>例如转座酶可及性染色质测序（ATAC-seq），由于操作相对简单且成本较低，ATAC-seq 成为推断染色质可接触性的主流技术。其它技术如 DNase-seq 和 NOME-seq 也可用于检测染色质的开放区域。</p>
+<p>利用染色质可及性数据的将 GRN 推断分为两步：</p>
+<ul>
+<li>
+<p>1.分配 TFs 到基因调控元件：通过 TF 结合motif数据库和motif匹配算法，预测哪些 TFs 与开放染色质区域（CREs，通常称为“峰”）结合。</p>
+</li>
+<li>
+<p>2.将调控元件分配给基因：将开放的 CREs 链接到距离一定基因组范围内的基因，通常基于增强子和启动子区域的典型相互作用距离。</p>
+</li>
+</ul>
+<p>motif数据库：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ecd3f62d7e877ab04522dfcd36c079f3e7861d3fbbd4fb94e002be4199b896f6/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49667963417863576d74584a456f4d52594e6356424946564469636b7730443061686750526e475338696349396467446c42566851435455512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/ecd3f62d7e877ab04522dfcd36c079f3e7861d3fbbd4fb94e002be4199b896f6/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49667963417863576d74584a456f4d52594e6356424946564469636b7730443061686750526e475338696349396467446c42566851435455512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIfycAxcWmtXJEoMRYNcVBIFVDickw0D0ahgPRnGS8icI9dgDlBVhQCTUQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIfycAxcWmtXJEoMRYNcVBIFVDickw0D0ahgPRnGS8icI9dgDlBVhQCTUQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>motif匹配算法:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/81160f90a593cfd362a9454a0732c45683d8c517157bf324c1a2749dd0e4abf8/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a4978433642634b6535696332397568666f6a55593750767369624d41316374304a676572543161744b366961393067354c70696241524e6f4563412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/81160f90a593cfd362a9454a0732c45683d8c517157bf324c1a2749dd0e4abf8/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a4978433642634b6535696332397568666f6a55593750767369624d41316374304a676572543161744b366961393067354c70696241524e6f4563412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIxC6BcKe5ic29uhfojUY7PvsibMA1ct0JgerT1atK6ia90g5LpibARNoEcA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIxC6BcKe5ic29uhfojUY7PvsibMA1ct0JgerT1atK6ia90g5LpibARNoEcA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>一些此类推断方法如 ATAC2GRN、LISA 和 SPIDER，它们假设如果基因的启动子区域是可接触的，那么该基因正在被转录，但这可能并不总是如此。</p>
+<h2>3.3 从单细胞转录组数据推断</h2>
+<h3>3.3.1 bulk组学数据的局限性</h3>
+<p>在基因调控网络（GRN）的推断中，传统的bulk组学数据方法已经可以覆盖全基因组范围的调控事件，但存在一些明显的局限性。</p>
+<ul>
+<li>
+<p>缺乏细胞类型或状态特异性：在混合样本（如组织）中，传统的bulk组学数据无法捕捉到基因调控网络的细胞类型或状态特异性。</p>
+</li>
+<li>
+<p>样本需求大且成本昂贵：GRN推断需要大量样本来生成足够的数据，尤其是在bulk分析中，数据获取的成本会非常高。</p>
+</li>
+</ul>
+<h3>3.3.2 单细胞技术推动 GRN 推断</h3>
+<p>随着单细胞技术的兴起，尤其是单细胞 RNA 测序（scRNA-seq），现在可以推断出特定细胞类型的TF-基因相互作用，并且这些GRNs在发育和条件变化过程中呈现出动态变化。</p>
+<ul>
+<li>
+<p>SCENIC：这是对 GRNBoost2 方法的扩展，能够通过TF-基因的共表达模式，生成特定细胞类型的GRN。此外，SCENIC还基于TF结合motif富集在基因启动子区域，进一步修剪GRN的边缘。</p>
+</li>
+<li>
+<p>拟时排序推断 GRN：拟时排序（pseudotime ordering）能够描述细胞发育、分化或疾病进展中的连续变化。方法如LEAP和SINCERITIES，基于拟时排序数据推断GRN中的基因之间的方向性。</p>
+</li>
+</ul>
+<h3>3.3.3 单细胞染色质可及性技术的进展</h3>
+<p>单细胞染色质可接触性测序技术（scATAC-seq）的进步，使得科研人员能够与scRNA-seq数据结合使用，从而提升GRN推断的精度。如果两种测序数据来自同一细胞，则可以用于 GRN 推断的多模态数据可以配对；如果来自不同的细胞，则可以不配对。</p>
+<p>一些方法不需要为每个细胞匹配染色质可及性和基因表达数据，因为它们要么汇总来自细胞组的读取，要么为每种模态独立构建 GRNs，然后再进行合并。</p>
+<p>其他方法将两种模态在同一细胞中同时建模，在这些“同时”方法中，即使数据未配对，如果两种模态通过整合方法匹配，仍然可以建模。</p>
+<p>如今，越来越多的方法结合了scRNA-seq和scATAC-seq数据进行GRN推断，如DeepMAPS、FigR、GLUE和scAI等，它们通过同时建模两种模态数据来重建更准确的GRN。</p>
+<h3>3.3.4 多模态GRN推断方法的建模策略</h3>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ed65502d32ed8d23a01907f0369fd15f77296da3e8e855a48295b99bf4a17ef3/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a497a396673655576445857576673786e696171744e68794f30446c4d4c4e6c4b6170674d306b35745336526e74305049577a7075443178412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/ed65502d32ed8d23a01907f0369fd15f77296da3e8e855a48295b99bf4a17ef3/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a497a396673655576445857576673786e696171744e68794f30446c4d4c4e6c4b6170674d306b35745336526e74305049577a7075443178412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIz9fseUvDXWWfsxniaqtNhyO0DlMLNlKapgM0k5tS6Rnt0PIWzpuD1xA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIz9fseUvDXWWfsxniaqtNhyO0DlMLNlKapgM0k5tS6Rnt0PIWzpuD1xA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<ol>
+<li>
+<p>TF与基因表达预测：通过TF的基因表达预测目标基因的表达，结合TF结合基序信息，将TF分配到可接触的调控元件（CREs）。</p>
+</li>
+<li>
+<p>基因组距离的影响：不同方法使用不同的基因组距离截止值将CREs分配给目标基因，距离的设定差异可能显著影响推断结果的准确性。</p>
+</li>
+</ol>
+<h3>3.3.5 建模需要考虑的问题:</h3>
+<ol start="3">
+<li>
+<p>TF 结合motif数据库: 不同数据库对 TFs 的覆盖范围不同</p>
+</li>
+<li>
+<p>预测算法建模结合的方式：不同方法在预测算法建模结合上也不同，即使使用类似的建模策略，GRN 推断方法之间的结果也可能有所不同。</p>
+</li>
+<li>
+<p>用什么motif匹配算法：大多数方法允许使用比默认值更广泛的 TF 结合motif数据库，但大多数方法固定使用的motif匹配算法。 而SCENIC+，则实现了三种算法：cisTarget、DEM 和 HOMER。</p>
+</li>
+<li>
+<p>距离截止值的差异：GRN 推断方法使用不同的基因组距离截止值将开放的染色质区域分配给目标基因。一些方法考虑近距离（高达 10 kb），其他方法则考虑中等距离（高达 100 kb），还有一些方法考虑远距离效应（高达 1,000 kb）。考虑到功能验证的相互作用在最靠近的距离上显著富集，并且在距离 100 kb 时急剧下降，距离截止值的差异可能会影响推断出的 GRN 结果。</p>
+</li>
+</ol>
+<h3>3.3.6 建模策略的多样性</h3>
+<p>GRN推断中，使用了不同的数学建模策略来生成最终的GRN结构：</p>
+<ol start="7">
+<li>
+<p>线性建模 vs 非线性建模：线性建模假设变量间存在简单的正比关系，而非线性建模可以捕捉复杂的相互作用，如协同效应。尽管基因表达是一个非线性过程，但线性建模由于其简洁性，仍然被广泛采用。</p>
+</li>
+<li>
+<p>显著性评估：无论是频率论还是贝叶斯统计框架，都可以用于评估调控相互作用的显著性。贝叶斯方法能够结合先验知识进行推断，但其计算资源需求较高。</p>
+</li>
+</ol>
+<h3>3.3.7 多模态GRN推断方法的分类</h3>
+<p>根据建模策略和接受的数据输入类型，不同的GRN推断方法可进行如下分类：</p>
+<ol start="9">
+<li>
+<p>频率回归：大多数方法旨在通过频率回归在不同组（通常是细胞类型）之间建模 GRNs。例如FigR和GRaNIE使用线性回归，DIRECT-NET和SCENIC+使用非线性回归（如随机森林），PECA和Symphony则采用贝叶斯建模。CellOracle、Inferelator 3.0 和 Pando 为用户提供了多种建模策略。</p>
+</li>
+<li>
+<p>轨迹推断：scMEGA和IReNA基于轨迹数据分别使用线性和非线性方式推断GRN。Dictys、scMTNI 和 TimeReg 使用细胞类型分组和轨迹数据的组合来为 GRN 建模提供信息，而 CellOracle 和 SCENIC+ 使用后者进行下游分析。</p>
+</li>
+<li>
+<p>条件特异性：ANANSE、sc-compReg和SCENIC+能够推断特定组（例如特定的细胞类型）的GRN，并在推断过程中利用基因对比统计数据。</p>
+</li>
+</ol>
+<h3>3.3.8 GRNs 推断方法汇总</h3>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/04b149dde3b14c5e973abd2b5aec632330701d3245550382399a15896f05b686/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49353076346b354b33696235637355436c726e4e48416c4e4c447255384558564a4c35696149754673384174496e4243766c6f6779513768672f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/04b149dde3b14c5e973abd2b5aec632330701d3245550382399a15896f05b686/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49353076346b354b33696235637355436c726e4e48416c4e4c447255384558564a4c35696149754673384174496e4243766c6f6779513768672f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJI50v4k5K3ib5csUClrnNHAlNLDrU8EXVJL5iaIuFs8AtInBCvlogyQ7hg/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJI50v4k5K3ib5csUClrnNHAlNLDrU8EXVJL5iaIuFs8AtInBCvlogyQ7hg/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/2cefa988bb6bc4d986eaed448dc71af56b0158bac5c67535c20b77183b0e3ace/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49676365364245796d6c6475646b6f515637394a633442633941754b4d676633636f6d736376644f7169624c4959714c6c6961584130396a672f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/2cefa988bb6bc4d986eaed448dc71af56b0158bac5c67535c20b77183b0e3ace/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49676365364245796d6c6475646b6f515637394a633442633941754b4d676633636f6d736376644f7169624c4959714c6c6961584130396a672f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIgce6BEymldudkoQV79Jc4Bc9AuKMgf3comscvdOqibLIYqLliaXA09jg/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIgce6BEymldudkoQV79Jc4Bc9AuKMgf3comscvdOqibLIYqLliaXA09jg/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/04d9f30b2b38e3f74d03d398062cf820472fe25b3105e84e85d7f69fe1b2a79a/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a4947534c4b5a726f573853346138416f595433416e69615961324564425054426c48374d6177306b457254425539383256664f5175696158772f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/04d9f30b2b38e3f74d03d398062cf820472fe25b3105e84e85d7f69fe1b2a79a/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a4947534c4b5a726f573853346138416f595433416e69615961324564425054426c48374d6177306b457254425539383256664f5175696158772f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIGSLKZroW8S4a8AoYT3AniaYa2EdBPTBlH7Maw0kErTBU982VfOQuiaXw/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIGSLKZroW8S4a8AoYT3AniaYa2EdBPTBlH7Maw0kErTBU982VfOQuiaXw/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<h2>4.1 拓扑分析</h2>
+<p>虽然 GRNs 是简单且可解释的基因调控模型，但它们仍然包含大量的基因，并且它们之间的相互作用数量可能更大。网络中心性测量可以帮助识别哪些 TFs 或基因对于网络的连接性或信息流动更为重要。</p>
+<p>网络中心性测量的示例包括度中心性、接近中心性、介数中心性和特征向量中心性。这些测量在不同的生物学背景中被用于识别驱动细胞命运改变的 TFs，例如在直接谱系重编程、人类心肌梗死和小鼠发育中。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/53946377fb4ec4e7c46e4bf4265938579224f37ca9c8f0ad708590dc1002c59c/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a497362517442514251524343377165664b637a435a6f6454564b4e79795a6d64714574464f32396f4274783459503269635a4870796737772f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/53946377fb4ec4e7c46e4bf4265938579224f37ca9c8f0ad708590dc1002c59c/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a497362517442514251524343377165664b637a435a6f6454564b4e79795a6d64714574464f32396f4274783459503269635a4870796737772f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIsbQtBQBQRCC7qefKczCZodTVKNyyZmdqEtFO29oBtx4YP2icZHpyg7w/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIsbQtBQBQRCC7qefKczCZodTVKNyyZmdqEtFO29oBtx4YP2icZHpyg7w/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>另一种方法基于谱图理论的技术，这些方法探索当网络被表示为矩阵时的性质。</p>
+<p>例如，应用于 GRNs 邻接矩阵的非负矩阵分解识别了在小鼠胚胎干细胞中协同驱动谱系转变的 TFs 组。同样，GRN 拓扑的聚类识别了在人类造血细胞分化和巨噬细胞对干扰素的反应中的已知调控因子。获得的基因调控模块随后可以被富集为基因集，以表征它们潜在的生物学功能。</p>
+<h2>4.2 比较分析</h2>
+<p>GRNs 的比较分析可以揭示驱动细胞类型、细胞状态、疾病状态、治疗方法和生物体之间差异的重连事件。最简单的比较分析方法是 GRNs 之间的 TF-基因相互作用的成对减法。</p>
+<p>它还被用来评估 TF-基因相互作用的进化保守性和跨物种的转录调控适应性。然而，由于 GRNs 稀疏且噪声较大，TF-基因相互作用的直接比较通常不够准确。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/aaf661303ba9ca94c2b0f706a9d2f53c156a8af557de23d0016317d75742b5f0/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a494b756961497a6b413170715a5351446963397979315a4249777a4168696134615848574a704c3336456c3258636d6b4d684a4c543145346c672f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/aaf661303ba9ca94c2b0f706a9d2f53c156a8af557de23d0016317d75742b5f0/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a494b756961497a6b413170715a5351446963397979315a4249777a4168696134615848574a704c3336456c3258636d6b4d684a4c543145346c672f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIKuiaIzkA1pqZSQDic9yy1ZBIwzAhia4aXHWJpL36El2XcmkMhJLT1E4lg/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIKuiaIzkA1pqZSQDic9yy1ZBIwzAhia4aXHWJpL36El2XcmkMhJLT1E4lg/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>使用主题建模策略（如潜在狄利克雷分配），一种最初为自然语言处理开发的无监督贝叶斯模型，可以生成密集、低维的表示，过滤 GRN 结构中的噪声，从而更准确地捕捉调控关系的差异。</p>
+<h2>4.3 TF 活性的推断</h2>
+<p>GRNs 可以与富集方法( GSEA、AUCell、VIPER等)结合，从转录组数据中推断 TF 活性。</p>
+<p>这种方法允许将观察到的基因表达与 GRN 拓扑结构集成，提取出哪些 TFs 在特定背景下可能具有相关作用。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/d0c66d4012576902f6b61e3a13da5680e77e945d83087a52689d59649a25b754/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a494374336f33417a72364a3639364462434e30764244383559356961676b696279435670627652734532426451417831753075467545436e672f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/d0c66d4012576902f6b61e3a13da5680e77e945d83087a52689d59649a25b754/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a494374336f33417a72364a3639364462434e30764244383559356961676b696279435670627652734532426451417831753075467545436e672f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJICt3o3Azr6J696DbCN0vBD85Y5iagkibyCVpbvRsE2BdQAx1u0uFuECng/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJICt3o3Azr6J696DbCN0vBD85Y5iagkibyCVpbvRsE2BdQAx1u0uFuECng/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<h2>4.4 细胞命运的扰动和预测</h2>
+<p>GRNs 可以通过迭代方式将 TF 表达传播到目标基因，来模拟基因表达值随时间的变化。在这个框架下，可以通过改变候选 TF 的表达来进行计算机内的扰动，然后观察在给定迭代次数后它如何影响生成的转录组。之后，可以将模拟值与局部邻近细胞的基因表达相比较，以估计细胞身份转变概率，类似于 RNA 速率分析。</p>
+<p>CellOracle 首次引入这一策略，揭示了 Zfp57 在生成和维持小鼠诱导的内胚层祖细胞中的作用，该策略后来通过体外扰动实验得到了验证。</p>
+<p>SCENIC+ 使用了类似的策略，识别出 RUNX3 作为可能驱动黑素细胞向间充质黑色素瘤细胞转变的因子，展示了 GRNs 捕捉和建模复杂调控事件的能力</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/c381ee40667fe9dd2b1a7ceeba5236c62dca0c15d5cbe83b9f3eac4ce5c4b460/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49395666636d4b6a564a6f35756e396a316962564234625367487534676f634c696156764448456963585545785178546f6f56344e364f7775412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/c381ee40667fe9dd2b1a7ceeba5236c62dca0c15d5cbe83b9f3eac4ce5c4b460/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49395666636d4b6a564a6f35756e396a316962564234625367487534676f634c696156764448456963585545785178546f6f56344e364f7775412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJI9VfcmKjVJo5un9j1ibVB4bSgHu4gocLiaVvDHEicXUExQxTooV4N6OwuA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJI9VfcmKjVJo5un9j1ibVB4bSgHu4gocLiaVvDHEicXUExQxTooV4N6OwuA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>尽管基因调控网络（GRN）没有一个明确的“基本事实”，但通过实验和分析可以验证GRN中的一些特定方面。以下是验证基因调控网络的几种关键方法：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9023498b512d41a5281def5f7dd913b61f0a82951508834622c7a09055990386/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49586a624c69616d6b30696358766b4a6d354c704e6178516561656c616f477930304c4248423957637535383561576b696347443242674748512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/9023498b512d41a5281def5f7dd913b61f0a82951508834622c7a09055990386/68747470733a2f2f6d6d62697a2e717069632e636e2f737a5f6d6d62697a5f706e672f523861687253514d4332464e644550367a536474567a55335247417965584a49586a624c69616d6b30696358766b4a6d354c704e6178516561656c616f477930304c4248423957637535383561576b696347443242674748512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIXjbLiamk0icXvkJm5LpNaxQeaelaoGy00LBHB9Wcu585aWkicGD2BgGHQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/sz_mmbiz_png/R8ahrSQMC2FNdEP6zSdtVzU3RGAyeXJIXjbLiamk0icXvkJm5LpNaxQeaelaoGy00LBHB9Wcu585aWkicGD2BgGHQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<h2>5.1 验证转录因子（TFs）之间的相互作用</h2>
+<ol start="12">
+<li>
+<p>蛋白质-蛋白质数据库查询：可以在蛋白质-蛋白质相互作用数据库中查询共享大量靶基因的TFs，并假设它们之间存在相互作用。</p>
+</li>
+<li>
+<p>蛋白质组学测定：TF蛋白的存在可以通过蛋白质组学实验确认，比如质谱分析。</p>
+</li>
+<li>
+<p>磷酸化实验：通过靶向磷酸化实验，评估TFs的激活状态，进一步确认其在基因调控中的功能。</p>
+</li>
+</ol>
+<h2>5.2 验证TF和顺式调控元件（CRE）之间的联系</h2>
+<ol start="15">
+<li>
+<p>结合测定：如染色质免疫沉淀后测序（ChIP-seq）、靶标和标记下切割（CUT&amp;Tag）以及CAP-SELEX，可以用于确认TF与CRE之间的结合。</p>
+</li>
+<li>
+<p>功能性CRE的验证：可以通过报告基因检测或基于CRISPR的扰动实验测试候选CRE的调节能力。另一种方法是基于进化保守性，假设功能性CRE在不同物种间是保守的，或者它们在全基因组关联研究（GWAS）确定的疾病相关基因座中富集。</p>
+</li>
+</ol>
+<h2>5.3 验证CRE与基因之间的联系</h2>
+<ol start="17">
+<li>
+<p>基因组构象测定：通过技术如Hi-C或超分辨率显微镜，可以捕获CRE与目标基因之间的三维物理关联。</p>
+</li>
+<li>
+<p>基于CRISPR的扰动实验：通过CRISPR技术对CRE或目标基因进行精确的基因编辑，以评估它们之间的调控关系。</p>
+</li>
+</ol>
+<ul>
+<li>3.表达数量性状位点（eQTL）分析：通过eQTL数据库，可以分析CRE与目标基因之间的表达关联，推断它们的调控作用。</li>
+</ul>
+<h2>6.1 整合转录与可接触性</h2>
+<p>多组学技术有助于表征基因调控，但由于染色质可及性和转录过程的不同动态特性，可能存在时间差异，导致数据整合的困难。通常假设在同一细胞中在单个时间点配对的染色质可接触性和转录组数据代表了这两个过程之间的相互作用。如果整合不足，可能会误导GRN的构建。</p>
+<p>新策略（如FigR）尝试解决这一问题。染色质可接触性与基因表达之间的时间差异以及协同效应等因素会导致非线性关系。虽然非线性模型能更好捕捉复杂关系，但线性模型仍因可解释性和计算效率较为常用。</p>
+<p>为了提高可解释性，SCENIC+ 和 IReNA 首先使用随机森林对调控相互作用进行非线性拟合，然后基于 TF 和基因转录本之间的相关性分析确定相互作用的符号。</p>
+<h2>6.2 单细胞数据的规模与稀疏性</h2>
+<p>单细胞数据尽管可以生成大量的表达谱，但稀疏性和噪声带来挑战，来自同一样本的细胞并不一定是独立的，也不能被认为是真正的生物学重复，因此，可能需要包含不同的样本才能获得有意义的 GRNs。</p>
+<p>目前的单细胞 GRN 推断方法构建了一个跨越细胞群体的聚合网络，并没有考虑到细胞可能来自不同的样本。而LIONESS方法在推断 GRNs 时模拟每个样本的贡献，可以生成样本特异性的GRN，但稀疏性问题仍未被所有方法充分考虑。</p>
+<p>对于配对的多组学技术，缺少一个系统的基准来比较它们与各自单组学技术的不同覆盖率和敏感性，填充方法可以用来减少“掉落”的数量（由 mRNA 或可接触 DNA 的采样不足引起）。</p>
+<p>将相似细胞汇聚成类批量表达谱或 metacell 的策略被证明是有益的。由于稀疏性，大多数计算管道将 scATAC-seq 数据视为二进制数据，分配基因组区域为对每个细胞是可及还是不可及。然而，DNA 可及性的真实状态更为复杂，并且可能涉及以动态方式波动的中间可及区域。因此，将染色质可及性数据视为二进制可能会对下游分析产生不利影响，处理可性的定量方法可能会改善 GRN 的重建。</p>
+<h2>6.3 3D基因组结构的影响</h2>
+<p>当前GRN推断使用基因组距离来过滤CRE与基因的关联，这种过滤的目的是减少每个基因的搜索空间，从而减少计算资源的需求，并减少基于大多数基因组相互作用是近距离的这一事实的假阳性相互作用，但这可能忽略远距离相互作用。</p>
+<p>Hi-C等技术可以捕获3D基因组结构，评估 CRE 是否可能调控基因。但其稀疏性和高成本依然是挑战。目前的计算方法已经被用来预测基于可接触性数据的基因组 3D 结构，如 scATAC-seq 数据。在 GRN 建模中的使用有潜力克服基于距离的截止值的限制。</p>
+<h2>6.4 TF结合预测的改进</h2>
+<p>TF结合预测依赖于现有的基序数据库，但部分TF缺乏结合数据。而且每个数据库的基序集合覆盖范围不同，可能会偏向生成的预测。</p>
+<p>新方法结合蛋白质相互作用数据或细胞类型等其它模态的信息，再结合深度学习的预测，能够提高TF结合预测的准确性。一旦模型训练完成，它们可以识别哪些核苷酸被预测为通过体内突变或机器学习策略（如 SHAP）来影响可及性。</p>
+<p>为了得出特定细胞类型的 TF 结合预测，这些方法结合了预测的核苷酸定量与结合基序。虽然这些策略有潜力将 GRN 推断情境化，但它们需要使用大量数据的预训练模型，且仍然限制于已知的 TF 结合基序。</p>
+<p>未来基于高质量细胞图谱的策略可能会取代传统的TF结合基序预测。</p>
+<h2>6.5 新兴的多组学技术</h2>
+<p>多组学技术如NEAT-seq、scChaRM-seq等通过整合多种数据模式，提升了GRN推断的精确度，降低假阳性。新的无靶标单细胞蛋白质组学技术如Phospho-seq可以分析功能性活性TF，进一步改善GRN建模。</p>
+<h2>6.6 GRN的基准测试</h2>
+<p>基因调控网络（GRN）的基准测试对评估新方法的准确性至关重要，尤其是结合多组学数据的技术。由于验证 GRN 缺乏统一的标准，研究者采用计算机生成的 GRN、转录因子结合实验、染色体构象捕获等方法来间接评估，但都存在局限。</p>
+<p>扰动实验提供因果性验证，但成本高、易受补偿机制影响。鉴于“金标准”难以实现，多个“银标准”评估策略成为首选。</p>
+<p>未来，基于开源平台的工具和竞赛(如DREAM)将进一步推动 GRN 推断方法的公平评估。</p>
+<h2>参考资料</h2>
+<p>[1]</p>
+<p>Badia-I-Mompel P, Wessels L, Müller-Dott S, et al. Gene regulatory network inference in the era of single-cell multi-omics. Nat Rev Genet. 2023;24(11):739-754. doi:10.1038/s41576-023-00618-5: IF: 39.1 Q1 B1</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
