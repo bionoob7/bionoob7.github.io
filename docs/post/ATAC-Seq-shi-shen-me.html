@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="ATAC-seq，全称 Assay for Transposase-Accessible Chromatin with high throughput sequencing，是 2013 年由斯坦福大学 William J. Greenleaf 和 Howard Y. Chang 实验室开发的用来研究染色质可及性（通常也理解为染色质的开放性）的方法。">
+<meta property="og:title" content="ATAC-Seq是什么">
+<meta property="og:description" content="ATAC-seq，全称 Assay for Transposase-Accessible Chromatin with high throughput sequencing，是 2013 年由斯坦福大学 William J. Greenleaf 和 Howard Y. Chang 实验室开发的用来研究染色质可及性（通常也理解为染色质的开放性）的方法。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/ATAC-Seq-shi-shen-me.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>ATAC-Seq是什么</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">ATAC-Seq是什么</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/40" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>ATAC-seq，全称 Assay for Transposase-Accessible Chromatin with high throughput sequencing，是 2013 年由斯坦福大学 William J. Greenleaf 和 Howard Y. Chang 实验室开发的用来研究染色质可及性（通常也理解为染色质的开放性）的方法。</p>
+<p>真核生物的核 DNA 并不是裸露的，而是组蛋白与之结合。DNA 一圈一圈地缠绕在 8 个组蛋白上，形成核小体，每个核小体占了约 147bp 的 DNA。一个个核小体构成了串珠样的结构，然后进一步折叠、聚合，并在其他架构蛋白的协助下，形成染色体。这样就能将超长的 DNA 链，折叠成很小很小的结构，塞进小小的细胞核里。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/a5a823a23431d111ee095be3de62141a73915d0410b30a4aca65b5c2d33a8e6a/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f7948337a5a5971724672544d326961417a7830577a627154485068323566374e6c796c4755654d58674d336151366a6673346643364563497069636962673979466b364d6d4d614a386b4b37433136504d5254684c714757412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/a5a823a23431d111ee095be3de62141a73915d0410b30a4aca65b5c2d33a8e6a/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f7948337a5a5971724672544d326961417a7830577a627154485068323566374e6c796c4755654d58674d336151366a6673346643364563497069636962673979466b364d6d4d614a386b4b37433136504d5254684c714757412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/yH3zZYqrFrTM2iaAzx0WzbqTHPh25f7NlylGUeMXgM3aQ6jfs4fC6EcIpicibg9yFk6MmMaJ8kK7C16PMRThLqGWA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/yH3zZYqrFrTM2iaAzx0WzbqTHPh25f7NlylGUeMXgM3aQ6jfs4fC6EcIpicibg9yFk6MmMaJ8kK7C16PMRThLqGWA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>但是在基因转录的过程中，并非需要完全解开 DNA 链的全部结构，而是只需部分解开，即表达基因的区域。这一步骤主要依赖于染色体组蛋白的修饰，尤其是乙酰化。被打开的染色质称为开放染色质（open chromatin）。一旦染色质打开，调控蛋白（例如转录因子）就有机会结合其中。染色质的可及性是指染色质打开的特性，主要由染色体组蛋白的修饰实现，因此染色质的可及性反映了调控因子与开放染色质结合的程度，与转录调控密切相关。通过研究特定细胞状态下开放的染色质区域，我们能够在 DNA 水平上了解其转录调控机制。</p>
+<h2>研究开放染色质区域的技术</h2>
+<p>传统的实验方法主要包括 MNase-seq 和 DNase-seq，它们的主要思路是：当染色质变得开放时，DNA 和组蛋白的聚集程度降低，导致一部分 DNA 暴露出来。失去蛋白质的保护后，这部分 DNA 可被 DNA 酶（如 MNase 或 DNase I）切割。随后，我们对切割后的 DNA 进行测序，并将其与已知的全基因组序列进行比较，以确定哪些序列被切割，哪些基因序列未受影响，从而确定开放的染色质区域。但是这两种方法存在明显的缺陷，主要表现在耗时费力和重复性差的问题。</p>
+<p>还有 FAIRE-Seq，先进行超声裂解，然后用酚-氯仿富集，不依赖酶和抗体，但弊端就是检测背景高，测序信噪比低，甲醛交联时间不好把握等等。</p>
+<p>ChIP-Seq 是揭示特定转录因子或蛋白复合物的结合区域，实际是研究 DNA 和蛋白质的相互作用，利用抗体将蛋白质和 DNA 一起富集，并对富集的 DNA 测序。</p>
+<p>整体的分析思路一致，这些技术找富集区域，对富集区域进行功能分析。</p>
+<p>相比起来，ATAC-seq 是用 Tn5 转座酶，操作起来也更加简单，重复性好，而且最重要的一点是实验只需要很少的细胞/组织量，出来的信号也更加漂亮，所以 ATAC-seq 目前已经是研究染色质开放性首选的技术方法。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/841b3c8e2b1adc9878d0655dfe83b1e80c13709b70a70ace4d7d430ccc0523ca/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f7948337a5a5971724672544d326961417a7830577a627154485068323566374e6c4155394f7452424d3673736f30566f6c6c6962775a453369616b71414e617538394873476b707a4a677130774c51484d596d5430524334772f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/841b3c8e2b1adc9878d0655dfe83b1e80c13709b70a70ace4d7d430ccc0523ca/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f7948337a5a5971724672544d326961417a7830577a627154485068323566374e6c4155394f7452424d3673736f30566f6c6c6962775a453369616b71414e617538394873476b707a4a677130774c51484d596d5430524334772f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/yH3zZYqrFrTM2iaAzx0WzbqTHPh25f7NlAU9OtRBM6sso0VollibwZE3iakqANau89HsGkpzJgq0wLQHMYmT0RC4w/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/yH3zZYqrFrTM2iaAzx0WzbqTHPh25f7NlAU9OtRBM6sso0VollibwZE3iakqANau89HsGkpzJgq0wLQHMYmT0RC4w/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<h2>ATAC-seq 技术</h2>
+<p>ATAC-seq 技术用到了一个转座酶 Tn5：DNA 转座是一种由 DNA 转座酶介导，把 DNA 序列从染色体的一个区域插入到另外一个区域的现象，类似于“剪切粘贴”。这个过程，也是需要插入位点的染色质是开放的，否则就会被一大坨高级结构给卡住。</p>
+<p>转座酶可以随机结合并切割染色质开放区的 DNA，并且可同时在切割位点插入接头序列。只要将携带已知 DNA 序列标签的转座复合物（即带红色和蓝色序列标签的 Tn5 转座酶）加入到细胞核中一起孵育，再利用已知序列标签进行 PCR 扩增即可形成文库，经过测序就可以获得染色质开放区的信息。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/f43be27fc894d2fcca1c43caeee11fa265a26f00e923910d5e44b10683e6f348/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f7948337a5a5971724672544d326961417a7830577a627154485068323566374e6c797767454869616b7830656e7078575565536963444c3061726a6a3771704d3049696361577831303258564c4f696368626b57447344525a74512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/f43be27fc894d2fcca1c43caeee11fa265a26f00e923910d5e44b10683e6f348/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f7948337a5a5971724672544d326961417a7830577a627154485068323566374e6c797767454869616b7830656e7078575565536963444c3061726a6a3771704d3049696361577831303258564c4f696368626b57447344525a74512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/yH3zZYqrFrTM2iaAzx0WzbqTHPh25f7NlywgEHiakx0enpxWUeSicDL0arjj7qpM0IicaWx102XVLOichbkWDsDRZtQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/yH3zZYqrFrTM2iaAzx0WzbqTHPh25f7NlywgEHiakx0enpxWUeSicDL0arjj7qpM0IicaWx102XVLOichbkWDsDRZtQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<h2>ATAC-seq 实验流程</h2>
+<p>一般来说包括以下几个步骤：</p>
+<ul>
+<li>
+<p>细胞核制备</p>
+</li>
+<li>
+<p>片段化及 DNA 提取</p>
+</li>
+<li>
+<p>PCR 扩增</p>
+</li>
+<li>
+<p>文库纯化</p>
+</li>
+<li>
+<p>高通量测序</p>
+</li>
+<li>
+<p>数据分析</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/1f310e76ac3ac70a1d5934529cf4a3e1d17faca3360ad0036ff672d960df8646/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f7948337a5a5971724672544d326961417a7830577a627154485068323566374e6c45496c393969636f6b6632377032635669626963623334356a3246497a637049447a7359593169625358567963736f736f38376c47437a6172672f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/1f310e76ac3ac70a1d5934529cf4a3e1d17faca3360ad0036ff672d960df8646/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f7948337a5a5971724672544d326961417a7830577a627154485068323566374e6c45496c393969636f6b6632377032635669626963623334356a3246497a637049447a7359593169625358567963736f736f38376c47437a6172672f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/yH3zZYqrFrTM2iaAzx0WzbqTHPh25f7NlEIl99icokf27p2cVibicb345j2FIzcpIDzsYY1ibSXVycsoso87lGCzarg/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/yH3zZYqrFrTM2iaAzx0WzbqTHPh25f7NlEIl99icokf27p2cVibicb345j2FIzcpIDzsYY1ibSXVycsoso87lGCzarg/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<h2>ATAC-seq 技术的优势</h2>
+<ul>
+<li>
+<p>所需细胞量较低，而且信噪比高、特异性强、耗时短</p>
+</li>
+<li>
+<p>满足动物、植物、人等样本的要求，具有很好的物种适应性</p>
+</li>
+<li>
+<p>单细胞测序技术是近几年研究的热点，通过对单个细胞的测序能够将表观遗传学研究个体化。常见的 ChIP-seq、DNase-seq、MNase-seq 等技术无法进行单细胞测序，而 ATAC-seq 经过实验验证，表明其能够进行单细胞测序</p>
+</li>
+</ul>
+<h2>ATAC-seq 技术的应用</h2>
+<p>那么说了这么半天的 ATAC-seq 归根到底是用来干嘛呢？主要有以下应用</p>
+<ul>
+<li>
+<p>染色质开放性图谱绘制，表观基因组图谱</p>
+</li>
+<li>
+<p>找调控生物学过程的关键转录因子</p>
+</li>
+<li>
+<p>找哪个转录因子调控了研究的基因</p>
+</li>
+<li>
+<p>找转录因子调控的靶基因</p>
+</li>
+<li>
+<p>得到不同组织或不同条件下对应可及性区域。</p>
+</li>
+<li>
+<p>得到核小体位置</p>
+</li>
+<li>
+<p>生成转录因子结合区域的特征 (footprinting)</p>
+</li>
+</ul>
+<p>ATAC-seq 适用于机制研究，探索信号通路、表型变化、疾病等与基因调控的相关性。并以其简便高效、重复性好等优点，成为研究染色质开放区的有效技术方法。</p>
+<p>在表观遗传研究中，ATAC-seq 能够探索表观修饰是否与研究目标有相关性，可通过 Open Chromatin 区域和 Motif 分析寻找参与基因调控的转录因子。ATAC-seq、CUT&amp;Tag 和 RNA-seq 等方法技术能够助力科研人员进行相关研究</p>
+<h2>ATAC-seq 的技术限制</h2>
+<ul>
+<li>
+<p>Tn5 通过插入剪断 DNA 并将测序接头连接到剪断的两个 DNA 片段的末端，因此对于一个 DNA 片段而言，其两端的接头连接是随机的，导致同一片段两端的接头有 50%的概率是同一接头。而只有连接不同接头的片段才可用于富集扩增及测序，因此一半的片段无法利用</p>
+</li>
+<li>
+<p>大量剪断的 DNA 由于片段过大，无法进行 PCR 富集</p>
+</li>
+<li>
+<p>Tn5 的活性受反应溶液的组成及反应条件影响，仍然需要优化以便提高剪切效果</p>
+</li>
+<li>
+<p>ATAC-seq 在植物细胞存中存在细胞壁、叶绿体线粒体等细胞器污染，缺少稳定遗传的细胞系等问题</p>
+</li>
+</ul></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
