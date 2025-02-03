@@ -1,5 +1,35 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Ma's bioinfo notebook</title><link>https://bionoob7.github.io</link><description>记录学习点滴</description><copyright>Ma's bioinfo notebook</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/103297347?v=4</url><title>avatar</title><link>https://bionoob7.github.io</link></image><lastBuildDate>Mon, 09 Dec 2024 01:48:11 +0000</lastBuildDate><managingEditor>Ma's bioinfo notebook</managingEditor><ttl>60</ttl><webMaster>Ma's bioinfo notebook</webMaster><item><title>小提琴图的美化🎻</title><link>https://bionoob7.github.io/post/xiao-ti-qin-tu-de-mei-hua-%F0%9F%8E%BB.html</link><description>```r&#13;
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Ma's bioinfo notebook</title><link>https://bionoob7.github.io</link><description>记录学习点滴</description><copyright>Ma's bioinfo notebook</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/103297347?v=4</url><title>avatar</title><link>https://bionoob7.github.io</link></image><lastBuildDate>Mon, 03 Feb 2025 02:08:47 +0000</lastBuildDate><managingEditor>Ma's bioinfo notebook</managingEditor><ttl>60</ttl><webMaster>Ma's bioinfo notebook</webMaster><item><title>Dimplot展示自己需要的类群</title><link>https://bionoob7.github.io/post/Dimplot-zhan-shi-zi-ji-xu-yao-de-lei-qun.html</link><description>**下图中间红色圈出来的中性粒细胞混入了其他细胞类型，如何美化一下？**
+
+![Image](https://github.com/user-attachments/assets/6e210d09-80f5-4f4d-84bf-e8ee79365c4b)
+
+## 代码实操
+
+```r
+library(Seurat)
+dir.create('~/gzh/20240530_umap_beautify')
+setwd('~/gzh/20240530_umap_beautify')
+load('~/gzh/pbmc3k_final_v4.rds')
+load('~/silicosis/silicosis_cluster_merge.rds')
+pbmc=All.merge#pbmc$group=ifelse(grepl(pattern = 'NS',pbmc$stim),'ns','treat')DimPlot(pbmc,label = TRUE,split.by = 'group')DimPlot(pbmc)
+
+DimPlot(pbmc,pt.size = 0.8)
+DimPlot(pbmc,shuffle =  TRUE,order = 'Neutrophil',pt.size = 0.8)
+```
+
+**结果如下，我们可以看到圆圈里的点显得很均一，看上去没有其他'混杂'的点了：**
+
+![Image](https://github.com/user-attachments/assets/a102a8e4-04d4-44e1-be42-1693d9c0ea63)
+
+最主要就是这三个参数，你可以调调看：
+
+- shuffle = TRUE
+- order = 'Neutrophil'
+- pt.size = 0.8
+
+## 我的感受
+
+**以前我对数据可视化的美观度有着极大的热情，总是追求那些看起来赏心悦目的图表。</description><guid isPermaLink="true">https://bionoob7.github.io/post/Dimplot-zhan-shi-zi-ji-xu-yao-de-lei-qun.html</guid><pubDate>Mon, 03 Feb 2025 02:08:22 +0000</pubDate></item><item><title>小提琴图的美化🎻</title><link>https://bionoob7.github.io/post/xiao-ti-qin-tu-de-mei-hua-%F0%9F%8E%BB.html</link><description>```r&#13;
 library(ggplot2)&#13;
 library(patchwork)&#13;
 library(grid)&#13;
