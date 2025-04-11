@@ -1,5 +1,83 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Ma's bioinfo notebook</title><link>https://bionoob7.github.io</link><description>记录学习点滴</description><copyright>Ma's bioinfo notebook</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/103297347?v=4</url><title>avatar</title><link>https://bionoob7.github.io</link></image><lastBuildDate>Wed, 05 Mar 2025 02:02:20 +0000</lastBuildDate><managingEditor>Ma's bioinfo notebook</managingEditor><ttl>60</ttl><webMaster>Ma's bioinfo notebook</webMaster><item><title>好看的小提琴图 R语言</title><link>https://bionoob7.github.io/post/hao-kan-de-xiao-ti-qin-tu-%20R-yu-yan.html</link><description>```r
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Ma's bioinfo notebook</title><link>https://bionoob7.github.io</link><description>记录学习点滴</description><copyright>Ma's bioinfo notebook</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/103297347?v=4</url><title>avatar</title><link>https://bionoob7.github.io</link></image><lastBuildDate>Fri, 11 Apr 2025 13:28:47 +0000</lastBuildDate><managingEditor>Ma's bioinfo notebook</managingEditor><ttl>60</ttl><webMaster>Ma's bioinfo notebook</webMaster><item><title>棒棒糖图 R语言</title><link>https://bionoob7.github.io/post/bang-bang-tang-tu-%20R-yu-yan.html</link><description>```r
+# 生成包含基因名称和表达量的数据框
+gene_data &lt;- data.frame(
+  Gene = c('TP53', 'BRCA1', 'EGFR', 'MYC', 'CDKN2A', 
+           'PTEN', 'KRAS', 'ALK', 'BRAF', 'ERBB2'),
+  Expression = round(runif(10, 1, 15), 1)  # 生成1-15之间的随机数，保留1位小数
+)
+```
+
+```r
+noob_lollipop_plot &lt;- function(data, name_col, value_col, colors = NULL) {
+  # 加载所需的包
+  library(ggplot2)
+  library(RColorBrewer)
+  
+  # 检查数据中是否包含指定的列
+  if (!name_col %in% names(data) || !value_col %in% names(data)) {
+    stop('Ensure that name_col and value_col exist in the data.')
+  }
+  
+  # 设置因子顺序为数据中的顺序
+  data[[name_col]] &lt;- factor(data[[name_col]], levels = unique(data[[name_col]]))
+  
+  # 如果没有提供颜色向量，则生成默认颜色
+  if (is.null(colors)) {
+    unique_levels &lt;- length(levels(data[[name_col]]))
+    if (unique_levels &lt;= 12) {
+      # 使用 Paired 调色板
+      colors &lt;- brewer.pal(unique_levels, 'Paired')
+    } else {
+      # 组合使用 Paired 和其他颜色
+      colors &lt;- c(brewer.pal(12, 'Paired'), rainbow(unique_levels - 12))
+    }
+    # 给颜色向量命名，分别对应每个因子水平
+    names(colors) &lt;- levels(data[[name_col]])
+  }
+  
+  # 创建棒棒糖图
+  p &lt;- ggplot(data, aes(x = .data[[value_col]], y = .data[[name_col]])) +  
+    # 添加彩色点
+    geom_point(aes(color = .data[[name_col]]), size = 10) +
+    # 周围带有边框的点，使其看起来像同心圆
+    geom_point(aes(color = .data[[name_col]]), size = 12, shape = 21, fill = NA) +
+    # 添加线段，连接起始点和彩色点，加粗线条
+    geom_segment(aes(x = 0, xend = .data[[value_col]], y = .data[[name_col]], 
+                     yend = .data[[name_col]], color = .data[[name_col]]), 
+                 linewidth = 2.5) +
+    # 手动设置颜色
+    scale_color_manual(values = colors) +
+    # 使用经典主题
+    theme_classic() +
+    # 自定义主题设置
+    theme(
+      legend.position = 'none',  # 不显示图例
+      panel.border = element_blank(),  # 去掉面板边框
+      axis.line = element_line(color = 'black'),  # 保留且设置坐标轴线颜色为黑色
+      panel.grid.major = element_blank(),  # 去掉主要网格线
+      panel.grid.minor = element_blank(),  # 去掉次要网格线
+      plot.margin = margin(1, 1, 1, 1, 'cm'),  # 设置画布边距
+      axis.title.x = element_text(size = 16, face = 'bold'),  # 设置X轴标题字体大小和字体加粗
+      axis.text.x = element_text(color = 'black',size = 16),  # 设置X轴标签字体大小
+      axis.text.y = element_text(color = 'black',size = 16),  # 设置Y轴标签字体大小
+      axis.title.y = element_text(size = 16, face = 'bold')   # 设置Y轴标题字体大小和加粗
+    ) +
+    # 动态设置x轴的范围
+    xlim(0, max(data[[value_col]]) + 0.5) +
+    # 添加标签，设置X轴标题
+    labs(x = value_col, y = '') +
+    # 添加文本标签，显示数值并设置文本位置和大小
+    geom_text(aes(label = .data[[value_col]]), hjust = -2, size = 4.5)
+  
+  # 显示图像
+  print(p)
+}
+
+noob_lollipop_plot(gene_data, 'Gene', 'Expression')
+```
+
+![Image](https://github.com/user-attachments/assets/00344a79-2f3c-4266-b719-1e3956842299)。</description><guid isPermaLink="true">https://bionoob7.github.io/post/bang-bang-tang-tu-%20R-yu-yan.html</guid><pubDate>Fri, 11 Apr 2025 13:28:19 +0000</pubDate></item><item><title>好看的小提琴图 R语言</title><link>https://bionoob7.github.io/post/hao-kan-de-xiao-ti-qin-tu-%20R-yu-yan.html</link><description>```r
 set.seed(123) 
 # 创建三个不同条件下的数据
 ctrl_data &lt;- data.frame(
