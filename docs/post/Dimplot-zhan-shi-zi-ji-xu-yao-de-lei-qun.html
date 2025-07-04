@@ -144,7 +144,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><p><strong>下图中间红色圈出来的中性粒细胞混入了其他细胞类型，如何美化一下？</strong></p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/6e210d09-80f5-4f4d-84bf-e8ee79365c4b"><img src="https://github.com/user-attachments/assets/6e210d09-80f5-4f4d-84bf-e8ee79365c4b" alt="Image" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/6e210d09-80f5-4f4d-84bf-e8ee79365c4b"><img src="https://github.com/user-attachments/assets/6e210d09-80f5-4f4d-84bf-e8ee79365c4b" alt="Image" style="max-width: 100%; height: auto;"></a></p>
 <h2>代码实操</h2>
 <div class="highlight highlight-source-r"><pre class="notranslate">library(<span class="pl-smi">Seurat</span>)
 dir.create(<span class="pl-s"><span class="pl-pds">"</span>~/gzh/20240530_umap_beautify<span class="pl-pds">"</span></span>)
@@ -156,7 +156,7 @@ load(<span class="pl-s"><span class="pl-pds">"</span>~/silicosis/silicosis_clust
 DimPlot(<span class="pl-smi">pbmc</span>,<span class="pl-v">pt.size</span> <span class="pl-k">=</span> <span class="pl-c1">0.8</span>)
 DimPlot(<span class="pl-smi">pbmc</span>,<span class="pl-v">shuffle</span> <span class="pl-k">=</span>  <span class="pl-c1">TRUE</span>,<span class="pl-v">order</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Neutrophil<span class="pl-pds">'</span></span>,<span class="pl-v">pt.size</span> <span class="pl-k">=</span> <span class="pl-c1">0.8</span>)</pre></div>
 <p><strong>结果如下，我们可以看到圆圈里的点显得很均一，看上去没有其他"混杂"的点了：</strong></p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/a102a8e4-04d4-44e1-be42-1693d9c0ea63"><img src="https://github.com/user-attachments/assets/a102a8e4-04d4-44e1-be42-1693d9c0ea63" alt="Image" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/a102a8e4-04d4-44e1-be42-1693d9c0ea63"><img src="https://github.com/user-attachments/assets/a102a8e4-04d4-44e1-be42-1693d9c0ea63" alt="Image" style="max-width: 100%; height: auto;"></a></p>
 <p>最主要就是这三个参数，你可以调调看：</p>
 <ul>
 <li>shuffle = TRUE</li>

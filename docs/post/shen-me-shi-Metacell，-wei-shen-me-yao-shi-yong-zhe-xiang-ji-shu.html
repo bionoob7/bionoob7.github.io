@@ -84,7 +84,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>通过将相同状态的细胞表达谱相加，每个metacell大大降低了抽样方差，并提供了更稳健的转录状态估计。需要注意的是，metacell并不是一个细胞类型（多个metacell可能属于相同的“类型”，甚至具有相同的“状态”，如果数据对这种状态进行了足够的过采样）。此外，metacell也不是细胞状态的参数模型。它只是对某种细胞状态的更稳健的描述。</p>
 <p>因此，metacell可以进一步像细胞一样进行分析，使用额外的方法对细胞类型进行分类、检测细胞轨迹和/或谱系、构建细胞行为的参数模型等。将metacell作为这些分析技术的输入应能同时受益于更加稳健、噪声更小的输入；并且在处理大规模数据（例如分析数百万个单细胞）时，由于需要分析的细胞数量减少了约100倍，因此效率更高。</p>
 <h2>Metacell方法示意</h2>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/04d8684a-1590-4d13-b6f9-654d168c4527"><img src="https://github.com/user-attachments/assets/04d8684a-1590-4d13-b6f9-654d168c4527" alt="image" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/04d8684a-1590-4d13-b6f9-654d168c4527"><img src="https://github.com/user-attachments/assets/04d8684a-1590-4d13-b6f9-654d168c4527" alt="image" style="max-width: 100%; height: auto;"></a></p>
 <p>读入expression matrix之后，首先选择高变异gene，利用这些gene，计算细胞与细胞之间的距离，对细胞进行聚类，聚类结果用K-nn graph显示。然后通过“subsample，计算距离，聚类”这一过程的循环（比如1000次），得到了1000张k-nn graph。然后根据这1000张k-nn graph，细胞聚类的稳定性，refine cell之间是否存在可信的edge。得到高可信的graph之后，在对graph进行切分，细分成sub-graph，那些不归于任何一个sub-graph、零散分布的cell，被判定为outlier cell，可能是doublet，细胞破损等原因造成的。最后每一个subgraph对应一个metacell，metacell内部包含的cells被认为是homogeneous的。不同的metacell之间可能是不同cell type，也可能是用一个cell type不同的cell type，总而言之，就是metacell之间是异质的。同时，作者利用几何平均值等数据处理方法，整合同一个metacell中所有cells的expression profile，给每一个metacell一个gene expression profile/vector 作为这个metacell的footprint.</p>
 <hr>
 <p>为了避免理解产生变差，附上英文原文</p>
