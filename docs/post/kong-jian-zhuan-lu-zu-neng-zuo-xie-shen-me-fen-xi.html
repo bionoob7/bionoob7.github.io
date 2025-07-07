@@ -74,7 +74,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><p>以10x Visium为主要例子，说明基于空间条形码测序数据的常见分析流程。</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1262cae2-6729-43f0-afd3-bafcbb96ee63"><img src="https://github.com/user-attachments/assets/1262cae2-6729-43f0-afd3-bafcbb96ee63" alt="image" style="max-width: 100%; height: auto;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1262cae2-6729-43f0-afd3-bafcbb96ee63"><img src="https://github.com/user-attachments/assets/1262cae2-6729-43f0-afd3-bafcbb96ee63" alt="image" style="max-width: 100%;"></a></p>
 <h3>预处理和表达增强</h3>
 <p>通常，在基于空间条形码的ST技术中，每个测序点都标记有spatial barcode与UMI，用于捕获RNA序列并测量相应位置的特定基因表达。然而，实验证据揭示了一种现象，称为“spot swapping”，即相邻点之间的交叉污染，这可能对ST分析构成挑战。因此，研究者开发了一个名为SpotClean的概率框架来减轻点交换在ST实验中的影响，并进一步增强下游分析[92]。这个概率模型通过去除点交换污染，为每个点的每个基因提供更准确的UMI计数估计。此外，SpotClean在标记基因识别和空间域检测方面显示出显著的改进。</p>
 <p>ST测序的低深度与较低的捕获效率相关，从而导致更高的dropout率。最近，一些计算工具被开发出来，通过聚合空间邻近点的表达数据来填补由于dropout导致的缺失表达水平。此外，这些方法中的一些在选择空间邻近点时还考虑了在组织学图像中观察到的组织结构的相似性。其中一种方法，Sprod，采用潜在图学习技术整合基因表达数据和成像数据，允许精确的ST基因表达的插补和去噪[93]。另一种方法，MIST，能够进行区域检测、边界检测和基于区域的缺失表达值的插补[94]。基于预定的区域，MIST利用基于区域的小批次低秩近似算法，通过平均所有小批次的结果来估计最终去噪的表达值。另一方面，GNTD是一种图引导的神经张量分解模型，旨在重建组织中的整个空间转录组[95]。GNTD采用分层张量结构和形式，通过三层神经网络的分层非线性分解，明确地建模高阶空间基因表达数据。该模型通过结合空间邻域关系和先前的基因功能模块，确保了ST表达数据的准确重建。插补后的空间转录组提供了更完整的基因表达图谱，促进了下游分析，如空间域检测、空间共表达基因簇的功能解释、差异表达分析、通路富集和细胞间相互作用推断。</p>
