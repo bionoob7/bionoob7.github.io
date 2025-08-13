@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/103297347?v=4"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="安装好R和RStudio之后，鼠标左键双击RStudio的图标，即可打开RStudio了。">
+<meta property="og:title" content="玩转R语言02-Rstudio使用介绍">
+<meta property="og:description" content="安装好R和RStudio之后，鼠标左键双击RStudio的图标，即可打开RStudio了。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bionoob7.github.io/post/wan-zhuan-R-yu-yan-02-Rstudio-shi-yong-jie-shao.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/103297347?v=4">
+<title>玩转R语言02-Rstudio使用介绍</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">玩转R语言02-Rstudio使用介绍</h1>
+<div class="title-right">
+    <a href="https://bionoob7.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/bionoob7/bionoob7.github.io/issues/7" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>安装好R和RStudio之后，鼠标左键双击RStudio的图标，即可打开RStudio了。</p>
+<p>我们可以先试一下R的计算功能，比如做一些加减乘数等数学运算。</p>
+<blockquote>
+<p>在编写代码前，请一定要记住<strong>必须把输入法改为英文模式</strong>，尤其是各种标点符号！</p>
+</blockquote>
+<h2>控制台和脚本窗口</h2>
+<p>在<code class="notranslate">Console</code>（中文：控制台）窗口中，大于号<code class="notranslate">&gt;</code>的后面，输入<code class="notranslate">1+1</code>，然后按回车键，就会给出计算结果。同理输入其他运算式，按回车键，都会立马得到结果。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/161bde8325148a4d976dcfe0949fe2299126a9b9d603493460e45ad548618478/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e786d4d574e69636a58353253706e68456d7873305574636a42337148524276444b32355351753755705a3744434d784633644539494b512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/161bde8325148a4d976dcfe0949fe2299126a9b9d603493460e45ad548618478/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e786d4d574e69636a58353253706e68456d7873305574636a42337148524276444b32355351753755705a3744434d784633644539494b512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNxmMWNicjX52SpnhEmxs0UtcjB3qHRBvDK25SQu7UpZ7DCMxF3dE9IKQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNxmMWNicjX52SpnhEmxs0UtcjB3qHRBvDK25SQu7UpZ7DCMxF3dE9IKQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<blockquote>
+<p>这个大于号<code class="notranslate">&gt;</code>叫<strong>命令提示符</strong>，提示你这里是输入代码的地方。</p>
+</blockquote>
+<p>R语言中的一些常见数学运算：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> + - * /</span>
+<span class="pl-c1">1</span><span class="pl-k">+</span><span class="pl-c1">1</span>
+<span class="pl-c1">1</span><span class="pl-k">-</span><span class="pl-c1">1</span>
+<span class="pl-c1">3</span><span class="pl-k">*</span><span class="pl-c1">2</span>
+<span class="pl-c1">10</span> <span class="pl-k">/</span> <span class="pl-c1">2</span>
+
+abs(<span class="pl-k">-</span><span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">#</span> 绝对值</span>
+sqrt(<span class="pl-c1">25</span>) <span class="pl-c"><span class="pl-c">#</span> 平方根</span>
+log(<span class="pl-c1">100</span>)
+log10(<span class="pl-c1">100</span>)
+log2(<span class="pl-c1">100</span>)
+exp(<span class="pl-c1">10</span>) <span class="pl-c"><span class="pl-c">#</span> 指数函数</span>
+
+ceiling(<span class="pl-c1">3.257</span>) <span class="pl-c"><span class="pl-c">#</span> 往上取整数</span>
+floor(<span class="pl-c1">3.257</span>) <span class="pl-c"><span class="pl-c">#</span> 往下取整数</span>
+round(<span class="pl-c1">3.275</span>, <span class="pl-v">digits</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>) <span class="pl-c"><span class="pl-c">#</span> 四舍五入</span></pre></div>
+<p>除了数学运算，还可以输入各种函数，比如输入<code class="notranslate">print("Hello, world")</code>，你可以尝试下。</p>
+<p>但是通常我们是不会直接在控制台窗口写代码的，而是在<strong>脚本窗口</strong>写代码，控制台用来查看代码输出结果。R脚本文件的扩展名为.R(或者.r)。</p>
+<p>以下是两种方式新建一个R脚本：</p>
+<p>方法一：依次点击左上角的File-New file-R Script，即可打开一个新的R脚本：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/981cf71394c842b98224982f7028e381cc0bbca71f12647d8d76647f09e48ceb/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f6a70672f74704143366c523834523842643739784338386569627476653468313543666c4e316462616461384569635937726136397742387531597073503336394e6d55503064746f627168654a6b54714142717076324f433051772f3634303f77785f666d743d6a706567"><img src="https://camo.githubusercontent.com/981cf71394c842b98224982f7028e381cc0bbca71f12647d8d76647f09e48ceb/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f6a70672f74704143366c523834523842643739784338386569627476653468313543666c4e316462616461384569635937726136397742387531597073503336394e6d55503064746f627168654a6b54714142717076324f433051772f3634303f77785f666d743d6a706567" alt="https://mmbiz.qpic.cn/mmbiz_jpg/tpAC6lR84R8Bd79xC88eibtve4h15CflN1dbada8EicY7ra69wB8u1YpsP369NmUP0dtobqheJkTqABqpv2OC0Qw/640?wx_fmt=jpeg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_jpg/tpAC6lR84R8Bd79xC88eibtve4h15CflN1dbada8EicY7ra69wB8u1YpsP369NmUP0dtobqheJkTqABqpv2OC0Qw/640?wx_fmt=jpeg" style="max-width: 100%;"></a></p>
+<p>方法二：点击New File小图标，再点击R script，也可以新建一个R脚本，两种方法完全一样。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/26bf9a55e604c5effb34a250aca3a20da4a36437f3693d5a057c6d09743c3f98/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6b337345306231763150313359794f516431756962534c32717069634d4f7950356963725a757a4667754536664471704475454d686b4557772f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/26bf9a55e604c5effb34a250aca3a20da4a36437f3693d5a057c6d09743c3f98/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6b337345306231763150313359794f516431756962534c32717069634d4f7950356963725a757a4667754536664471704475454d686b4557772f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNk3sE0b1v1P13YyOQd1uibSL2qpicMOyP5icrZuzFguE6fDqpDuEMhkEWw/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNk3sE0b1v1P13YyOQd1uibSL2qpicMOyP5icrZuzFguE6fDqpDuEMhkEWw/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>新建脚本文件后，我们就可以在脚本中写自己的代码了，这里写好的代码可以保存的，方便以后使用。如果你没保存，会有<code class="notranslate">*</code>提示，下面的保存按钮可以保存当前脚本（快捷键“control+s”），保存时可以修改这个脚本的名字：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/f4fd28f337e5e1053fa24774f8ec6d0f029256cc81a3232ad98c229b21a3ce1e/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e744c346149383251544f4a4b386433506b586e73776172424d78456d503365524142494f544d4f4a387835786c584c57376778754d672f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/f4fd28f337e5e1053fa24774f8ec6d0f029256cc81a3232ad98c229b21a3ce1e/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e744c346149383251544f4a4b386433506b586e73776172424d78456d503365524142494f544d4f4a387835786c584c57376778754d672f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNtL4aI82QTOJK8d3PkXnswarBMxEmP3eRABIOTMOJ8x5xlXLW7gxuMg/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNtL4aI82QTOJK8d3PkXnswarBMxEmP3eRABIOTMOJ8x5xlXLW7gxuMg/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>在这个脚本文件里可以写任何你想写的代码，比如上面我写了一个名字为<code class="notranslate">fruits</code>的向量，其中包括3个元素：apple、banana、watermelon。</p>
+<p>R语言中使用<code class="notranslate">&lt;-</code>作为复制符号，而不是<code class="notranslate">=</code>（但是使用<code class="notranslate">=</code>也可以，没有任何问题），以下两种写法都可以：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 两种写法都可以</span>
+<span class="pl-smi">a</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">3</span>
+<span class="pl-v">a</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>
+
+<span class="pl-smi">b</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">4</span>
+<span class="pl-v">b</span> <span class="pl-k">=</span> <span class="pl-c1">4</span>
+
+<span class="pl-smi">a</span><span class="pl-k">+</span><span class="pl-smi">b</span></pre></div>
+<blockquote>
+<p>上图脚本中前两行我写了很多中文，而且在每一行的前面都加了<code class="notranslate">#</code>，<code class="notranslate">#</code>表示这一行不是代码，不需要运行，你可以在<code class="notranslate">#</code>后面写任何你想写的东西，比如一些解释说明的话等。</p>
+</blockquote>
+<p>写好代码之后如果你要运行这个代码的话只需要把光标位置放在你要运行的代码的这一行，然后点击<code class="notranslate">Run</code>即可运行这行代码（也可以使用快捷键“control+enter”），代码运行结果会出现在<strong>控制台窗口</strong>：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/f86704dca3bed19629d405dcc4d1eb843b168570d65715d085fd814315f92041/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e594669617337354d62645779504f5242685445655a78336443335a46436b416c703832377569626a655863587a31636f66306c34586b4d412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/f86704dca3bed19629d405dcc4d1eb843b168570d65715d085fd814315f92041/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e594669617337354d62645779504f5242685445655a78336443335a46436b416c703832377569626a655863587a31636f66306c34586b4d412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNYFias75MbdWyPORBhTEeZx3dC3ZFCkAlp827uibjeXcXz1cof0l4XkMA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNYFias75MbdWyPORBhTEeZx3dC3ZFCkAlp827uibjeXcXz1cof0l4XkMA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>点击Run之后，代码运行结果会出现在控制台窗口：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/acda02c9a6cf735d3a4d74782c9b089962036941b1031770d235d155d113e124/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6963437059443359456a59487775474f4c3554396169624f614e69623267487750344a323263516449504d696377546961544b52544b70676265512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/acda02c9a6cf735d3a4d74782c9b089962036941b1031770d235d155d113e124/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e6963437059443359456a59487775474f4c3554396169624f614e69623267487750344a323263516449504d696377546961544b52544b70676265512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNicCpYD3YEjYHwuGOL5T9aibOaNib2gHwP4J22cQdIPMicwTiaTKRTKpgbeQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNicCpYD3YEjYHwuGOL5T9aibOaNib2gHwP4J22cQdIPMicwTiaTKRTKpgbeQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<blockquote>
+<p>光标位置在代码的开头、中间、结尾都没关系，RStudio都能识别出来，你也可以直接使用鼠标全部选中你要运行的代码，再点击Run，也可以达到一样的效果。</p>
+</blockquote>
+<p>如果命令提示符（也就是控制台窗口中的<code class="notranslate">&gt;</code>）变成了一个加号（+），这表示我们输入的代码不完整，它正在等你输入完整的代码，这种情况通常是因为我们输入的代码太长了，超过了1行的限制，或者代码中的标点符号（比如：括号，逗号等）不成对。此时按“Esc”即可退回到正常状态下。</p>
+<p>RStudio的一大优点就是有代码自动补全和语法高亮功能。</p>
+<p>当你输入代码时，编辑器会提供语法高亮和代码补全提示。你只要输入前3个字母，再按Tab键，即可显示所有可能的函数，按上下方向键可以选择你需要的函数，选好之后按enter键即可选中。鼠标停留在函数名字上即可显示该函数的用法：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/208311b31c7bf215b865674afa2eb7fe8cf4e8af085993e808051fd509e294af/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e70416b756f78644f30557378733467564a34486962414e766576486f4337506e3831326153734332686169626d7570574b754b714f7464412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/208311b31c7bf215b865674afa2eb7fe8cf4e8af085993e808051fd509e294af/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e70416b756f78644f30557378733467564a34486962414e766576486f4337506e3831326153734332686169626d7570574b754b714f7464412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNpAkuoxdO0Usxs4gVJ4HibANvevHoC7Pn812aSsC2haibmupWKuKqOtdA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNpAkuoxdO0Usxs4gVJ4HibANvevHoC7Pn812aSsC2haibmupWKuKqOtdA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>另一个常用的快捷键是赋值符号：<code class="notranslate">&lt;-</code>，它是由小于号<code class="notranslate">&lt;</code>和减号<code class="notranslate">-</code>组成的，在RStudio中可以通过快捷键<code class="notranslate">Alt+-</code>快速输入。</p>
+<h2>环境窗口和绘图窗口</h2>
+<p>当我们运行代码后，我们建立的对象（比如上面的<code class="notranslate">fruits</code>、<code class="notranslate">x</code>、<code class="notranslate">y</code>）会出现在<strong>Enviroment</strong>窗口中：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/cd0651266015255f91626621e226b8c70303a44509a271ec90b4469ff2728c2c/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e546c634a7752736961746961536f5253653741786e58656f6e58667a514233627a3069634d764c5577527368355345506a6a42696331534657512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/cd0651266015255f91626621e226b8c70303a44509a271ec90b4469ff2728c2c/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e546c634a7752736961746961536f5253653741786e58656f6e58667a514233627a3069634d764c5577527368355345506a6a42696331534657512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNTlcJwRsiatiaSoRSe7AxnXeonXfzQB3bz0icMvLUwRsh5SEPjjBic1SFWQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNTlcJwRsiatiaSoRSe7AxnXeonXfzQB3bz0icMvLUwRsh5SEPjjBic1SFWQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>当我们执行画图代码后，图形会出现在<strong>Plots</strong>窗口：</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/1fd0cc1f768dc7f29e72d26722c5ba97fe394566acacc6b937da533feac31824/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e746753664644337341756e684133436376306c3863657441704f72336f4d303966533639564c7375487756336579317757466a4c70512f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/1fd0cc1f768dc7f29e72d26722c5ba97fe394566acacc6b937da533feac31824/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e746753664644337341756e684133436376306c3863657441704f72336f4d303966533639564c7375487756336579317757466a4c70512f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNtgSfFD3sAunhA3Ccv0l8cetApOr3oM09fS69VLsuHwV3ey1wWFjLpQ/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNtgSfFD3sAunhA3Ccv0l8cetApOr3oM09fS69VLsuHwV3ey1wWFjLpQ/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p>清除当前环境中的某个对象，可以用：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">rm(<span class="pl-smi">xxx</span>) <span class="pl-c"><span class="pl-c">#</span> xxx是对象名字，rm是remove的缩写</span></pre></div>
+<p>如果要同时清除所有对象，可以直接点击Enviroment窗口中的小扫帚图标，也可以直接用：</p>
+<div class="highlight highlight-source-r"><pre class="notranslate">rm(<span class="pl-v">list</span> <span class="pl-k">=</span> ls()) <span class="pl-c"><span class="pl-c">#</span> ls()是list的缩写，意思是列出当前所有对象</span></pre></div>
+<h2>推荐的RStudio设置</h2>
+<p>点击<code class="notranslate">Tools</code>-<code class="notranslate">Global Options</code>，按照以下图片所示进行设置。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/47cfb83d1d783f43cc236147aca84dfc81e78de5e4b7f47a166614efa0c6e307/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e7964584f696162473063785458687a38654c753645764e663038506d32514652566f4b61466a6963337937696277466c30366e494e466a42672f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/47cfb83d1d783f43cc236147aca84dfc81e78de5e4b7f47a166614efa0c6e307/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e7964584f696162473063785458687a38654c753645764e663038506d32514652566f4b61466a6963337937696277466c30366e494e466a42672f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNydXOiabG0cxTXhz8eLu6EvNf08Pm2QFRVoKaFjic3y7ibwFl06nINFjBg/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNydXOiabG0cxTXhz8eLu6EvNf08Pm2QFRVoKaFjic3y7ibwFl06nINFjBg/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/361939ff4dd5803ce99770dc4b7718937a5c3dd6a9ecc6f437afab37512be733/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e4971665a69627152714562544555627a4a5939354f387971347863553465696369633662624f763964786435506379385039753545395147412f3634303f77785f666d743d706e672666726f6d3d6170706d7367"><img src="https://camo.githubusercontent.com/361939ff4dd5803ce99770dc4b7718937a5c3dd6a9ecc6f437afab37512be733/68747470733a2f2f6d6d62697a2e717069632e636e2f6d6d62697a5f706e672f74704143366c523834523842643739784338386569627476653468313543666c4e4971665a69627152714562544555627a4a5939354f387971347863553465696369633662624f763964786435506379385039753545395147412f3634303f77785f666d743d706e672666726f6d3d6170706d7367" alt="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNIqfZibqRqEbTEUbzJY95O8yq4xcU4eicic6bbOv9dxd5Pcy8P9u5E9QGA/640?wx_fmt=png&amp;from=appmsg" data-canonical-src="https://mmbiz.qpic.cn/mmbiz_png/tpAC6lR84R8Bd79xC88eibtve4h15CflNIqfZibqRqEbTEUbzJY95O8yq4xcU4eicic6bbOv9dxd5Pcy8P9u5E9QGA/640?wx_fmt=png&amp;from=appmsg" style="max-width: 100%;"></a></p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://bionoob7.github.io">Ma's bioinfo notebook</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","bionoob7/bionoob7.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
+
+</html>
